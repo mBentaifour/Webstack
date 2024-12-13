@@ -1,16 +1,21 @@
+Project Name
+
 # Bricolage Express - Guide d'utilisation rapide
 
-## Comment démarrer l'application
+## Application Web
 
-1. Double-cliquez sur le fichier `run.bat` dans le dossier principal
-2. Ouvrez votre navigateur et allez sur : http://localhost:8080
+Configuration
+Environment Variables
+You need to configure the following environment variables in the .env file:
 
-## Accès rapide au tableau de bord administrateur
-
-1. Allez sur : http://localhost:8080/admin
-2. Utilisez les identifiants suivants :
-   - Email : admin@admin.com
-   - Mot de passe : admin123
+FLASK_SECRET_KEY: A secure random secret key for Flask.
+DATABASE_URL: Path to the database (SQLite).
+MAIL_SERVER: SMTP server (e.g., smtp.gmail.com).
+MAIL_PORT: Mail server port (587 for Gmail).
+MAIL_USE_TLS: Use TLS encryption for mail.
+MAIL_USERNAME: Your email username.
+MAIL_PASSWORD: Your email app password.
+ADMIN_EMAIL: Admin email for managing the project.
 
 ## Fonctionnalités principales
 
@@ -19,7 +24,22 @@
 - 🛒 Gestion du panier
 - ⚙️ Administration des produits
 
-## Besoin d'aide ?
 
-En cas de problème, contactez le support technique.
-# Webstack
+License
+This project is licensed under the MIT License. See LICENSE for more details.
+
+Features
+User authentication and management.
+Database integration with SQLite.
+Email notifications using Gmail SMTP.
+Secure environment variable management with .env.
+
+Technologies Used
+Back-End: Flask, Python
+Database: SQLite
+Email Service: Gmail SMTP
+Environment Management: .env for environment variables
+Hosting/Development: Local development mode with Flask
+
+
+
