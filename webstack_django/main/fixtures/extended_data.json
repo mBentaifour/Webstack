@@ -1,0 +1,198 @@
+[
+    {
+        "model": "main.category",
+        "pk": 3,
+        "fields": {
+            "name": "Peinture et Décoration",
+            "slug": "peinture-et-decoration",
+            "description": "Tout pour vos projets de peinture et de décoration intérieure",
+            "featured_brands": ["Dulux Valentine", "Ripolin", "Crown"],
+            "discount_count": 4,
+            "tips": [
+                "Préparez bien vos surfaces avant de peindre",
+                "Utilisez toujours une sous-couche adaptée",
+                "Aérez bien pendant et après la peinture"
+            ],
+            "image_url": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f"
+        }
+    },
+    {
+        "model": "main.category",
+        "pk": 4,
+        "fields": {
+            "name": "Électricité",
+            "slug": "electricite",
+            "description": "Matériel électrique et solutions d'éclairage",
+            "featured_brands": ["Legrand", "Schneider", "Philips"],
+            "discount_count": 2,
+            "tips": [
+                "Coupez toujours le courant avant intervention",
+                "Faites appel à un professionnel pour les travaux complexes",
+                "Vérifiez la compatibilité des installations"
+            ],
+            "image_url": "https://images.unsplash.com/photo-1555664424-778a1e5e1b48"
+        }
+    },
+    {
+        "model": "main.category",
+        "pk": 5,
+        "fields": {
+            "name": "Quincaillerie",
+            "slug": "quincaillerie",
+            "description": "Vis, clous, chevilles et accessoires de fixation",
+            "featured_brands": ["Fischer", "Spax", "Spit"],
+            "discount_count": 1,
+            "tips": [
+                "Choisissez la bonne cheville selon votre mur",
+                "Utilisez une mèche adaptée au matériau",
+                "Pré-percez toujours pour éviter les fissures"
+            ],
+            "image_url": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 5,
+        "fields": {
+            "category": 3,
+            "name": "Peinture Mate Blanche 10L",
+            "slug": "peinture-mate-blanche-10l",
+            "description": "Peinture mate haute qualité pour murs et plafonds. Excellent pouvoir couvrant.",
+            "specifications": [
+                "Contenance: 10L",
+                "Rendement: 10m²/L",
+                "Temps de séchage: 2h",
+                "Lavable"
+            ],
+            "price": "49.99",
+            "old_price": "59.99",
+            "stock": 20,
+            "is_new": false,
+            "rating": "4.60"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 6,
+        "fields": {
+            "category": 3,
+            "name": "Kit Rouleaux et Pinceaux",
+            "slug": "kit-rouleaux-et-pinceaux",
+            "description": "Kit complet pour travaux de peinture avec rouleaux différentes tailles et pinceaux professionnels.",
+            "specifications": [
+                "2 rouleaux façade",
+                "3 pinceaux différentes tailles",
+                "1 bac à peinture",
+                "Manchon télescopique inclus"
+            ],
+            "price": "34.99",
+            "stock": 15,
+            "is_new": true,
+            "rating": "4.80"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 7,
+        "fields": {
+            "category": 4,
+            "name": "Pack 6 Spots LED Encastrables",
+            "slug": "pack-6-spots-led-encastrables",
+            "description": "Lot de 6 spots LED encastrables avec transformateur. Éclairage moderne et économique.",
+            "specifications": [
+                "Puissance: 6W par spot",
+                "Température: 3000K (blanc chaud)",
+                "Diamètre: 90mm",
+                "Durée de vie: 25000h"
+            ],
+            "price": "79.99",
+            "old_price": "99.99",
+            "stock": 12,
+            "is_new": true,
+            "rating": "4.90"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 8,
+        "fields": {
+            "category": 4,
+            "name": "Tableau Électrique 3 Rangées",
+            "slug": "tableau-electrique-3-rangees",
+            "description": "Tableau électrique pré-équipé avec disjoncteur différentiel et protection foudre.",
+            "specifications": [
+                "3 rangées",
+                "Capacité: 39 modules",
+                "IP40",
+                "Conforme NF C 15-100"
+            ],
+            "price": "129.99",
+            "stock": 8,
+            "is_new": false,
+            "rating": "4.70"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 9,
+        "fields": {
+            "category": 5,
+            "name": "Kit 1000 Vis Universelles",
+            "slug": "kit-1000-vis-universelles",
+            "description": "Assortiment de vis universelles en acier zingué. Idéal pour tous types de travaux.",
+            "specifications": [
+                "1000 pièces",
+                "Tailles: 3.5 à 5mm",
+                "Longueurs: 16 à 70mm",
+                "Boîte de rangement incluse"
+            ],
+            "price": "24.99",
+            "stock": 30,
+            "is_new": false,
+            "rating": "4.50"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 10,
+        "fields": {
+            "category": 5,
+            "name": "Set Chevilles Multi-matériaux",
+            "slug": "set-chevilles-multi-materiaux",
+            "description": "Kit de chevilles pour tous types de murs : plâtre, béton, brique.",
+            "specifications": [
+                "200 pièces",
+                "4 tailles différentes",
+                "Compatible vis 4-8mm",
+                "Guide de perçage inclus"
+            ],
+            "price": "19.99",
+            "old_price": "24.99",
+            "stock": 25,
+            "is_new": true,
+            "rating": "4.85"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 11,
+        "fields": {
+            "category": 2,
+            "name": "Dévisseuse Bosch",
+            "slug": "devisseuse-bosch",
+            "description": "Dévisseuse sans fil Bosch PSR 1800 LI-2 avec batterie 18V. Idéale pour les travaux de vissage et perçage.",
+            "specifications": [
+                "Batterie 18V - 1.5 Ah",
+                "2 vitesses",
+                "Couple max: 38 Nm",
+                "Mandrin auto-lock 10mm",
+                "Marque: Bosch"
+            ],
+            "price": "80.00",
+            "stock": 15,
+            "is_new": true,
+            "rating": "4.50",
+            "is_active": true
+        }
+    }
+]
