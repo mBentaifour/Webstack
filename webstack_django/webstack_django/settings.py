@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'webstack_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',  # Correspond à -d postgres
+        'USER': 'postgres.hbqpplveyaofcqtuippl',  # Correspond à -U postgres.hbqpplveyaofcqtuippl
+        'PASSWORD': '<U1rzsxyWpChr0UEx>',  # Mot de passe que vous avez configuré dans Supabase
+        'HOST': 'aws-0-eu-central-1.pooler.supabase.com',  # Correspond à -h
+        'PORT': '6543',  # Correspond à -p
     }
 }
 
