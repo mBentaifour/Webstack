@@ -1,6 +1,8 @@
-Django==5.1.4
+Django==4.2.17
 django-crispy-forms==2.1  # Équivalent à Flask-WTF
 django-allauth==0.60.1    # Équivalent à Flask-Login
 python-dotenv==1.0.0
 psycopg2-binary==2.9.9    # Pour PostgreSQL si utilisé
 django-environ==0.11.2    # Pour la gestion des variables d'environnement
+crispy-bootstrap4
+Pillow
