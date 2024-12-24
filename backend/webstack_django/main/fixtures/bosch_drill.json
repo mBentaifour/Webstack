@@ -1,0 +1,44 @@
+[
+    {
+        "model": "main.category",
+        "pk": 2,
+        "fields": {
+            "name": "Outillage",
+            "slug": "outillage",
+            "description": "Tout l'outillage nécessaire pour vos travaux",
+            "featured_brands": ["Bosch", "DeWalt", "Makita"],
+            "discount_count": 2,
+            "tips": [
+                "Choisissez des outils adaptés à votre usage",
+                "Privilégiez la qualité pour une meilleure durabilité",
+                "Pensez à la sécurité avant tout"
+            ],
+            "created_at": "2024-12-15T22:00:00Z",
+            "updated_at": "2024-12-15T22:00:00Z"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 10,
+        "fields": {
+            "category": 2,
+            "name": "Dévisseuse Bosch",
+            "slug": "devisseuse-bosch",
+            "description": "Dévisseuse sans fil Bosch PSR 1800 LI-2 avec batterie 18V. Idéale pour les travaux de vissage et perçage.",
+            "specifications": [
+                "Batterie 18V - 1.5 Ah",
+                "2 vitesses",
+                "Couple max: 38 Nm",
+                "Mandrin auto-lock 10mm",
+                "Marque: Bosch"
+            ],
+            "price": "80.00",
+            "stock": 15,
+            "is_new": true,
+            "rating": "4.50",
+            "is_active": true,
+            "created_at": "2024-12-15T22:00:00Z",
+            "updated_at": "2024-12-15T22:00:00Z"
+        }
+    }
+]

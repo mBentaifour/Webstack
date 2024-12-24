@@ -1,0 +1,121 @@
+[
+    {
+        "model": "main.category",
+        "pk": 1,
+        "fields": {
+            "name": "Plomberie",
+            "slug": "plomberie",
+            "description": "Tout pour vos travaux de plomberie",
+            "featured_brands": ["Grohe", "Roca", "Ideal Standard"],
+            "discount_count": 2,
+            "tips": [
+                "Pensez à couper l'eau avant de commencer les travaux",
+                "Utilisez du ruban téflon pour les raccords",
+                "Vérifiez l'absence de fuites après installation"
+            ],
+            "image_url": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39"
+        }
+    },
+    {
+        "model": "main.category",
+        "pk": 2,
+        "fields": {
+            "name": "Outillage",
+            "slug": "outillage",
+            "description": "Les meilleurs outils pour vos travaux",
+            "featured_brands": ["Bosch", "DeWalt", "Makita"],
+            "discount_count": 3,
+            "tips": [
+                "Entretenez régulièrement vos outils",
+                "Rangez vos outils dans un endroit sec",
+                "Portez des équipements de protection"
+            ],
+            "image_url": "https://images.unsplash.com/photo-1581244277943-fe4a9c777189"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 1,
+        "fields": {
+            "category": 1,
+            "name": "Évier Inox Simple",
+            "slug": "evier-inox-simple",
+            "description": "Évier en acier inoxydable de haute qualité. Design moderne et fonctionnel.",
+            "specifications": [
+                "Dimensions: 80x50cm",
+                "Profondeur: 20cm",
+                "Matériau: Inox 18/10",
+                "Installation: À poser"
+            ],
+            "price": "79.99",
+            "stock": 15,
+            "is_new": true,
+            "rating": "4.50",
+            "image_url": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 2,
+        "fields": {
+            "category": 1,
+            "name": "Évier Inox avec Égouttoir",
+            "slug": "evier-inox-avec-egouttoir",
+            "description": "Évier en acier inoxydable avec égouttoir intégré. Installation facile.",
+            "specifications": [
+                "Dimensions: 100x50cm",
+                "Profondeur: 20cm",
+                "Matériau: Inox 18/10",
+                "Installation: À poser",
+                "Égouttoir: Intégré"
+            ],
+            "price": "89.99",
+            "stock": 10,
+            "is_new": false,
+            "rating": "4.80",
+            "image_url": "https://images.unsplash.com/photo-1513694203232-719a280e022f"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 3,
+        "fields": {
+            "category": 2,
+            "name": "Perceuse Sans Fil 18V",
+            "slug": "perceuse-sans-fil-18v",
+            "description": "Perceuse-visseuse sans fil professionnelle avec 2 batteries lithium-ion.",
+            "specifications": [
+                "Tension: 18V",
+                "Capacité: 13mm",
+                "2 Batteries incluses",
+                "Couple max: 60Nm"
+            ],
+            "price": "149.99",
+            "stock": 8,
+            "is_new": true,
+            "rating": "4.90",
+            "image_url": "https://images.unsplash.com/photo-1504148455328-c376907d081c"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 4,
+        "fields": {
+            "category": 2,
+            "name": "Boîte à Outils Complete",
+            "slug": "boite-a-outils-complete",
+            "description": "Kit complet d'outils à main avec boîte de rangement robuste.",
+            "specifications": [
+                "108 pièces",
+                "Boîte métallique",
+                "Outils en acier chrome-vanadium",
+                "Garantie à vie"
+            ],
+            "price": "129.99",
+            "stock": 5,
+            "is_new": false,
+            "rating": "4.70",
+            "image_url": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc"
+        }
+    }
+]

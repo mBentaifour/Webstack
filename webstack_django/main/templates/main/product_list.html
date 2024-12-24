@@ -1,4 +1,4 @@
-{% extends 'main/base.html' %}
+{% extends 'main:base.html' %}
 
 {% block title %}Nos Produits - Droguerie Express{% endblock %}
 
@@ -100,7 +100,7 @@
                         <option>Nouveautés</option>
                     </select>
                 </div>
-                <span class="text-muted">{{ products.count }} produits trouvés</span>
+                <span class="text-muted">{{ products|length }} produits trouvés</span>
             </div>
 
             <!-- Products Grid -->
@@ -120,10 +120,12 @@
                             Rupture
                             {% endif %}
                         </div>
-                        {% if product.image %}
+                        {% if product.image_url %}
                         <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" loading="lazy">
-                        {% else %}
+                        {% elif product.thumbnail_url %}
                         <img src="{{ product.thumbnail_url }}" class="card-img-top" alt="{{ product.name }}" loading="lazy">
+                        {% else %}
+                        <img src="/static/images/placeholder.jpg" class="card-img-top" alt="{{ product.name }}" loading="lazy">
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ product.name }}</h5>
@@ -135,7 +137,7 @@
                                     {% endif %}
                                     <span class="price">{{ product.price }}€</span>
                                 </div>
-                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary">
+                                <a href="{% url 'main:product_detail' product.slug %}" class="btn btn-primary">
                                     <i class="fas fa-shopping-cart me-1"></i>Voir
                                 </a>
                             </div>
@@ -153,7 +155,7 @@
             </div>
 
             <!-- Pagination -->
-            {% if is_paginated %}
+            {% if page_obj %}
             <nav class="mt-4">
                 <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
@@ -188,6 +190,26 @@
     
     priceRange.addEventListener('input', function() {
         priceValue.textContent = this.value + '€';
+    });
+
+    // Filtres
+    document.querySelector('button.btn-primary').addEventListener('click', function() {
+        const selectedCategories = Array.from(document.querySelectorAll('input[id^="cat"]:checked')).map(cb => cb.value);
+        const selectedBrands = Array.from(document.querySelectorAll('input[id^="brand"]:checked')).map(cb => cb.value);
+        const price = document.getElementById('priceRange').value;
+        const inStock = document.getElementById('inStock').checked;
+        const onSale = document.getElementById('onSale').checked;
+
+        // Construire l'URL avec les paramètres
+        const params = new URLSearchParams();
+        if (selectedCategories.length) params.append('categories', selectedCategories.join(','));
+        if (selectedBrands.length) params.append('brands', selectedBrands.join(','));
+        params.append('max_price', price);
+        if (inStock) params.append('in_stock', 'true');
+        if (onSale) params.append('on_sale', 'true');
+
+        // Rediriger avec les filtres
+        window.location.href = '?' + params.toString();
     });
 </script>
 {% endblock %}

@@ -1,0 +1,59 @@
+[
+    {
+        "model": "main.category",
+        "pk": 1,
+        "fields": {
+            "name": "Plomberie",
+            "slug": "plomberie",
+            "description": "Tout pour vos travaux de plomberie",
+            "featured_brands": ["Grohe", "Roca", "Ideal Standard"],
+            "discount_count": 0,
+            "tips": [
+                "Pensez à couper l'eau avant de commencer les travaux",
+                "Utilisez du ruban téflon pour les raccords",
+                "Vérifiez l'absence de fuites après installation"
+            ]
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 1,
+        "fields": {
+            "category": 1,
+            "name": "Évier Inox Simple",
+            "slug": "evier-inox-simple",
+            "description": "Évier en acier inoxydable de haute qualité. Design moderne et fonctionnel.",
+            "specifications": [
+                "Dimensions: 80x50cm",
+                "Profondeur: 20cm",
+                "Matériau: Inox 18/10",
+                "Installation: À poser"
+            ],
+            "price": "79.99",
+            "stock": 15,
+            "is_new": true,
+            "rating": "4.50"
+        }
+    },
+    {
+        "model": "main.product",
+        "pk": 2,
+        "fields": {
+            "category": 1,
+            "name": "Évier Inox avec Égouttoir",
+            "slug": "evier-inox-avec-egouttoir",
+            "description": "Évier en acier inoxydable avec égouttoir intégré. Installation facile.",
+            "specifications": [
+                "Dimensions: 100x50cm",
+                "Profondeur: 20cm",
+                "Matériau: Inox 18/10",
+                "Installation: À poser",
+                "Égouttoir: Intégré"
+            ],
+            "price": "89.99",
+            "stock": 10,
+            "is_new": false,
+            "rating": "4.80"
+        }
+    }
+]

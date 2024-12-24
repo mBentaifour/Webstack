@@ -7,9 +7,9 @@
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'main:home' %}" class="text-decoration-none">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'main:product_list' %}" class="text-decoration-none">Accueil</a></li>
             <li class="breadcrumb-item"><a href="{% url 'main:category_list' %}" class="text-decoration-none">Rayons</a></li>
-            <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}" class="text-decoration-none">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'main:category_detail' product.category.slug %}" class="text-decoration-none">{{ product.category.name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
         </ol>
     </nav>
@@ -19,10 +19,12 @@
         <!-- Product Images -->
         <div class="col-md-6 mb-4">
             <div class="card">
-                {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" id="mainImage">
+                {% if product.image_url %}
+                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" id="mainImage">
+                {% elif product.thumbnail_url %}
+                <img src="{{ product.thumbnail_url }}" class="card-img-top" alt="{{ product.name }}" id="mainImage">
                 {% else %}
-                <img src="https://via.placeholder.com/600x400" class="card-img-top" alt="{{ product.name }}" id="mainImage">
+                <img src="/static/images/placeholder.jpg" class="card-img-top" alt="{{ product.name }}" id="mainImage">
                 {% endif %}
                 
                 {% if product.additional_images %}
@@ -109,25 +111,21 @@
                     <!-- Product Description -->
                     <div class="mb-4">
                         <h5 class="mb-3">Description</h5>
-                        <p class="text-muted">{{ product.description }}</p>
+                        <p>{{ product.description }}</p>
                     </div>
 
-                    <!-- Specifications -->
+                    <!-- Product Specifications -->
                     {% if product.specifications %}
                     <div class="mb-4">
                         <h5 class="mb-3">Caractéristiques</h5>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <tbody>
-                                    {% for spec in product.specifications %}
-                                    <tr>
-                                        <th class="w-50 bg-light">{{ spec.name }}</th>
-                                        <td>{{ spec.value }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                        <ul class="list-group">
+                            {% for spec in product.specifications %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>{{ spec.name }}</span>
+                                <span class="text-muted">{{ spec.value }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                     {% endif %}
                 </div>
@@ -135,40 +133,56 @@
         </div>
     </div>
 
-    <!-- Related Products -->
-    <div class="related-products mt-5">
-        <h2 class="mb-4">Produits similaires</h2>
-        <div class="row g-4">
-            {% for related_product in related_products %}
-            <div class="col-md-3">
-                <div class="card product-card h-100">
-                    {% if related_product.discount > 0 %}
-                    <div class="discount-badge">-{{ related_product.discount }}%</div>
-                    {% endif %}
-                    {% if related_product.image %}
-                    <img src="{{ related_product.image.url }}" class="card-img-top" alt="{{ related_product.name }}">
-                    {% else %}
-                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="{{ related_product.name }}">
-                    {% endif %}
+    <!-- Reviews Section -->
+    <div class="reviews mt-5">
+        <h2 class="mb-4">Avis clients</h2>
+        
+        <!-- Add Review Form -->
+        {% if user.is_authenticated %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Donnez votre avis</h5>
+                <form method="post" action="{% url 'main:add_review' product.slug %}">
+                    {% csrf_token %}
+                    {{ review_form.as_p }}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane me-2"></i>Envoyer
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Reviews List -->
+        {% if reviews %}
+        <div class="row">
+            {% for review in reviews %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">{{ related_product.name }}</h5>
-                        <p class="card-text text-muted">{{ related_product.description|truncatewords:10 }}</p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div class="price-container">
-                                {% if related_product.old_price %}
-                                <span class="old-price">{{ related_product.old_price }}€</span>
-                                {% endif %}
-                                <span class="price">{{ related_product.price }}€</span>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="mb-0">{{ review.user_id }}</h6>
+                                <small class="text-muted">{{ review.created_at|date:"d/m/Y" }}</small>
                             </div>
-                            <a href="{{ related_product.get_absolute_url }}" class="btn btn-primary">
-                                <i class="fas fa-shopping-cart me-1"></i>Voir
-                            </a>
+                            <div class="rating">
+                                {% for i in "12345"|make_list %}
+                                <i class="fas fa-star {% if forloop.counter <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                {% endfor %}
+                            </div>
                         </div>
+                        <p class="card-text">{{ review.comment }}</p>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            Aucun avis pour ce produit pour le moment.
+        </div>
+        {% endif %}
     </div>
 </div>
 

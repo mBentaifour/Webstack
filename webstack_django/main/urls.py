@@ -6,6 +6,7 @@ app_name = 'main'
 
 urlpatterns = [
     path('', views.product_list, name='home'),
+    path('products/', views.product_list, name='product_list'),  # Ajout de la nouvelle route
     path('product/<slug:slug>/', views.product_detail, name='product_detail'),
     path('categories/', views.category_list, name='category_list'),
     path('category/<slug:slug>/', views.category_detail, name='category_detail'),
