@@ -1,0 +1,130 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Mon Profil - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <!-- Menu latéral -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Menu</h5>
+                    <div class="list-group">
+                        <a href="{% url 'main:profile' %}" class="list-group-item list-group-item-action active">
+                            Mon Profil
+                        </a>
+                        <a href="{% url 'main:edit_profile' %}" class="list-group-item list-group-item-action">
+                            Modifier mon profil
+                        </a>
+                        <a href="{% url 'main:order_list' %}" class="list-group-item list-group-item-action">
+                            Mes commandes
+                        </a>
+                        <a href="{% url 'main:notifications' %}" class="list-group-item list-group-item-action">
+                            Notifications
+                            {% if notifications %}
+                            <span class="badge bg-primary float-end">{{ notifications|length }}</span>
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="col-md-9">
+            <!-- Informations du profil -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Informations personnelles</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Nom complet:</strong> {{ user.profile.full_name|default:"Non renseigné" }}</p>
+                            <p><strong>Email:</strong> {{ user.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Téléphone:</strong> {{ user.profile.phone|default:"Non renseigné" }}</p>
+                            <p><strong>Adresse:</strong> {{ user.profile.address|default:"Non renseignée" }}</p>
+                        </div>
+                    </div>
+                    <a href="{% url 'main:edit_profile' %}" class="btn btn-primary">Modifier mon profil</a>
+                </div>
+            </div>
+
+            <!-- Dernières commandes -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Dernières commandes</h4>
+                    {% if orders %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>N° Commande</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.created_at|date:"d/m/Y" }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ order.status|lower }}">
+                                            {{ order.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ order.total_amount }} €</td>
+                                    <td>
+                                        <a href="{% url 'main:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                            Détails
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="{% url 'main:order_list' %}" class="btn btn-outline-primary">Voir toutes mes commandes</a>
+                    {% else %}
+                    <p>Vous n'avez pas encore de commande.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Dernières notifications -->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Notifications récentes</h4>
+                    {% if notifications %}
+                    <div class="list-group">
+                        {% for notification in notifications %}
+                        <div class="list-group-item {% if not notification.read %}list-group-item-primary{% endif %}">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ notification.title }}</h5>
+                                <small>{{ notification.created_at|timesince }}</small>
+                            </div>
+                            <p class="mb-1">{{ notification.message }}</p>
+                            {% if not notification.read %}
+                            <form method="post" action="{% url 'main:mark_notification_read' notification.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-primary">Marquer comme lu</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'main:notifications' %}" class="btn btn-outline-primary mt-3">Voir toutes les notifications</a>
+                    {% else %}
+                    <p>Vous n'avez pas de notification.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,216 +1,223 @@
-{% extends 'main:base.html' %}
+{% extends 'main/base.html' %}
+{% load static %}
 
-{% block title %}Nos Produits - Droguerie Express{% endblock %}
+{% block title %}Nos Produits - Droguerie Électrique{% endblock %}
 
 {% block content %}
-<div class="container">
-    <!-- Hero Section -->
-    <div class="bg-primary text-white p-5 mb-4 rounded-3 shadow">
-        <div class="container-fluid py-3">
-            <h1 class="display-5 fw-bold">Nos Produits</h1>
-            <p class="col-md-8 fs-4">Découvrez notre large gamme de produits de qualité pour tous vos projets.</p>
-        </div>
-    </div>
-
-    <!-- Filters Section -->
-    <div class="row mb-4">
+<div class="container py-4">
+    <div class="row">
+        <!-- Sidebar Filters -->
         <div class="col-md-3">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title mb-3">Filtres</h5>
-                    
-                    <!-- Categories -->
-                    <div class="mb-4">
-                        <h6 class="mb-2">Catégories</h6>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="all">
-                            <label class="form-check-label" for="all">
-                                Toutes les catégories
-                            </label>
+                    <h5 class="card-title mb-4">Filtres</h5>
+                    <form id="filterForm" method="get" action="{% url 'main:product_list' %}">
+                        <!-- Categories -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Catégories</h6>
+                            {% for category in categories %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="category" 
+                                       value="{{ category.id }}" id="cat{{ category.id }}"
+                                       {% if category.id in selected_category|split:',' %}checked{% endif %}>
+                                <label class="form-check-label d-flex justify-content-between align-items-center" 
+                                       for="cat{{ category.id }}">
+                                    {{ category.name }}
+                                    <span class="badge bg-primary rounded-pill">{{ category.product_count }}</span>
+                                </label>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% for category in categories %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="{{ category.id }}" id="cat{{ category.id }}">
-                            <label class="form-check-label" for="cat{{ category.id }}">
-                                {{ category.name }}
-                            </label>
-                        </div>
-                        {% endfor %}
-                    </div>
 
-                    <!-- Price Range -->
-                    <div class="mb-4">
-                        <h6 class="mb-2">Prix</h6>
-                        <div class="range">
-                            <input type="range" class="form-range" min="0" max="1000" id="priceRange">
-                            <div class="d-flex justify-content-between">
-                                <span>0€</span>
-                                <span id="priceValue">500€</span>
-                                <span>1000€</span>
+                        <!-- Brands -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Marques</h6>
+                            {% for brand in brands %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="brand" 
+                                       value="{{ brand.id }}" id="brand{{ brand.id }}"
+                                       {% if brand.id in selected_brand|split:',' %}checked{% endif %}>
+                                <label class="form-check-label d-flex justify-content-between align-items-center" 
+                                       for="brand{{ brand.id }}">
+                                    {{ brand.name }}
+                                    <span class="badge bg-secondary rounded-pill">{{ brand.product_count }}</span>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Prix</h6>
+                            <div class="range">
+                                <input type="range" class="form-range" min="0" max="1000" step="10"
+                                       id="priceRange" value="{{ max_price|default:1000 }}">
+                                <div class="d-flex justify-content-between">
+                                    <span>0€</span>
+                                    <span id="priceValue">{{ max_price|default:1000 }}€</span>
+                                </div>
+                                <input type="hidden" name="min_price" id="minPrice" value="{{ min_price|default:0 }}">
+                                <input type="hidden" name="max_price" id="maxPrice" value="{{ max_price|default:1000 }}">
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Brands -->
-                    <div class="mb-4">
-                        <h6 class="mb-2">Marques</h6>
-                        {% for brand in brands %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="{{ brand.id }}" id="brand{{ brand.id }}">
-                            <label class="form-check-label" for="brand{{ brand.id }}">
-                                {{ brand.name }}
-                            </label>
-                        </div>
-                        {% endfor %}
-                    </div>
-
-                    <!-- Stock Status -->
-                    <div class="mb-4">
-                        <h6 class="mb-2">Disponibilité</h6>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="in_stock" id="inStock">
-                            <label class="form-check-label" for="inStock">
-                                En stock
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="on_sale" id="onSale">
-                            <label class="form-check-label" for="onSale">
-                                En promotion
-                            </label>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-primary w-100">
-                        <i class="fas fa-filter me-2"></i>Appliquer les filtres
-                    </button>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-filter me-2"></i>Appliquer les filtres
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
 
+        <!-- Products Grid -->
         <div class="col-md-9">
             <!-- Sort Bar -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="d-flex align-items-center">
                     <span class="me-2">Trier par :</span>
-                    <select class="form-select w-auto">
-                        <option>Popularité</option>
-                        <option>Prix croissant</option>
-                        <option>Prix décroissant</option>
-                        <option>Nouveautés</option>
+                    <select class="form-select" name="sort" onchange="this.form.submit()">
+                        <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Plus récents</option>
+                        <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Prix croissant</option>
+                        <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Prix décroissant</option>
                     </select>
                 </div>
-                <span class="text-muted">{{ products|length }} produits trouvés</span>
+                <div class="text-muted">
+                    {{ products|length }} produit(s) trouvé(s)
+                </div>
             </div>
 
-            <!-- Products Grid -->
+            {% if products %}
             <div class="row g-4">
                 {% for product in products %}
                 <div class="col-md-4">
                     <div class="card product-card h-100">
-                        {% if product.discount > 0 %}
-                        <div class="discount-badge">-{{ product.discount }}%</div>
+                        {% if product.stock <= 0 %}
+                        <div class="stock-badge bg-danger">Rupture de stock</div>
+                        {% elif product.stock <= 5 %}
+                        <div class="stock-badge bg-warning">Stock limité</div>
                         {% endif %}
-                        <div class="stock-badge {% if product.stock > 10 %}in-stock{% elif product.stock > 0 %}low-stock{% else %}out-of-stock{% endif %}">
-                            {% if product.stock > 10 %}
-                            En stock
-                            {% elif product.stock > 0 %}
-                            Stock limité
+
+                        <div class="position-relative">
+                            {% if product.image_url %}
+                            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
                             {% else %}
-                            Rupture
+                            <img src="{% static 'main/images/default-product.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+                            {% endif %}
+
+                            {% if product.promotion_price %}
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-danger">
+                                    -{{ product.discount_percentage|floatformat:0 }}%
+                                </span>
+                            </div>
                             {% endif %}
                         </div>
-                        {% if product.image_url %}
-                        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" loading="lazy">
-                        {% elif product.thumbnail_url %}
-                        <img src="{{ product.thumbnail_url }}" class="card-img-top" alt="{{ product.name }}" loading="lazy">
-                        {% else %}
-                        <img src="/static/images/placeholder.jpg" class="card-img-top" alt="{{ product.name }}" loading="lazy">
-                        {% endif %}
+
                         <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text text-muted">{{ product.description|truncatewords:20 }}</p>
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <div class="price-container">
-                                    {% if product.old_price %}
-                                    <span class="old-price">{{ product.old_price }}€</span>
-                                    {% endif %}
-                                    <span class="price">{{ product.price }}€</span>
+                            <h5 class="card-title mb-1">{{ product.name }}</h5>
+                            {% if product.brand %}
+                            <p class="text-muted small mb-2">{{ product.brand.name }}</p>
+                            {% endif %}
+                            <p class="card-text text-muted">{{ product.description|truncatechars:100 }}</p>
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        {% if product.promotion_price %}
+                                        <span class="text-danger fw-bold">{{ product.promotion_price }}€</span>
+                                        <small class="text-muted text-decoration-line-through ms-2">
+                                            {{ product.price }}€
+                                        </small>
+                                        {% else %}
+                                        <span class="price-tag">{{ product.price }}€</span>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{% url 'main:product_detail' product.slug %}" class="btn btn-outline-primary">
+                                        <i class="fas fa-eye me-1"></i>Voir
+                                    </a>
                                 </div>
-                                <a href="{% url 'main:product_detail' product.slug %}" class="btn btn-primary">
-                                    <i class="fas fa-shopping-cart me-1"></i>Voir
-                                </a>
                             </div>
                         </div>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="col-12">
-                    <div class="alert alert-info" role="alert">
-                        <i class="fas fa-info-circle me-2"></i>
-                        Aucun produit ne correspond à vos critères de recherche.
                     </div>
                 </div>
                 {% endfor %}
             </div>
 
             <!-- Pagination -->
-            {% if page_obj %}
-            <nav class="mt-4">
+            {% if show_pagination %}
+            <nav class="mt-4" aria-label="Navigation des pages">
                 <ul class="pagination justify-content-center">
-                    {% if page_obj.has_previous %}
+                    {% if current_page > 1 %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédent</a>
+                        <a class="page-link" href="?page=1{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ current_page|add:'-1' }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
                     </li>
                     {% endif %}
 
-                    {% for num in page_obj.paginator.page_range %}
-                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    {% for p in page_range %}
+                    <li class="page-item {% if p == current_page %}active{% endif %}">
+                        <a class="page-link" href="?page={{ p }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            {{ p }}
+                        </a>
                     </li>
                     {% endfor %}
 
-                    {% if page_obj.has_next %}
+                    {% if current_page < total_pages %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a>
+                        <a class="page-link" href="?page={{ current_page|add:'1' }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ total_pages }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
                     </li>
                     {% endif %}
                 </ul>
             </nav>
             {% endif %}
+
+            {% else %}
+            <div class="text-center py-5">
+                <img src="{% static 'main/images/no-results.svg' %}" alt="Aucun résultat" class="mb-4" style="max-width: 200px;">
+                <h3>Aucun produit trouvé</h3>
+                <p class="text-muted">Essayez de modifier vos filtres de recherche.</p>
+                <a href="{% url 'main:product_list' %}" class="btn btn-primary">
+                    <i class="fas fa-redo me-2"></i>Réinitialiser les filtres
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
+{% endblock %}
 
 {% block extra_js %}
 <script>
     // Price Range Slider
     const priceRange = document.getElementById('priceRange');
     const priceValue = document.getElementById('priceValue');
-    
-    priceRange.addEventListener('input', function() {
-        priceValue.textContent = this.value + '€';
-    });
+    const maxPrice = document.getElementById('maxPrice');
 
-    // Filtres
-    document.querySelector('button.btn-primary').addEventListener('click', function() {
-        const selectedCategories = Array.from(document.querySelectorAll('input[id^="cat"]:checked')).map(cb => cb.value);
-        const selectedBrands = Array.from(document.querySelectorAll('input[id^="brand"]:checked')).map(cb => cb.value);
-        const price = document.getElementById('priceRange').value;
-        const inStock = document.getElementById('inStock').checked;
-        const onSale = document.getElementById('onSale').checked;
+    if (priceRange) {
+        priceRange.addEventListener('input', function() {
+            priceValue.textContent = this.value + '€';
+            maxPrice.value = this.value;
+        });
+    }
 
-        // Construire l'URL avec les paramètres
-        const params = new URLSearchParams();
-        if (selectedCategories.length) params.append('categories', selectedCategories.join(','));
-        if (selectedBrands.length) params.append('brands', selectedBrands.join(','));
-        params.append('max_price', price);
-        if (inStock) params.append('in_stock', 'true');
-        if (onSale) params.append('on_sale', 'true');
-
-        // Rediriger avec les filtres
-        window.location.href = '?' + params.toString();
+    // Auto-submit on filter change
+    document.querySelectorAll('#filterForm input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            document.getElementById('filterForm').submit();
+        });
     });
 </script>
-{% endblock %}
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from ..models import Category, Product
-from ..forms import ProductForm, ReviewForm
+from main.models import Category, Product
+from main.forms import ProductForm, ReviewForm
 
 class ProductFormTest(TestCase):
     def setUp(self):

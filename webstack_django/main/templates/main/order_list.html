@@ -1,0 +1,138 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Mes Commandes - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <!-- Menu latéral -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Menu</h5>
+                    <div class="list-group">
+                        <a href="{% url 'main:profile' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user me-2"></i> Mon Profil
+                        </a>
+                        <a href="{% url 'main:edit_profile' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-edit me-2"></i> Modifier mon profil
+                        </a>
+                        <a href="{% url 'main:order_list' %}" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-shopping-bag me-2"></i> Mes commandes
+                        </a>
+                        <a href="{% url 'main:notifications' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-bell me-2"></i> Notifications
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des commandes -->
+        <div class="col-md-9">
+            {% if orders %}
+            <div class="mb-4">
+                <h4>Mes commandes</h4>
+                <p class="text-muted">Historique de vos commandes</p>
+            </div>
+            
+            {% for order in orders %}
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <h5 class="mb-0">Commande #{{ order.id }}</h5>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i> {{ order.created_at|date:"d/m/Y à H:i" }}
+                        </small>
+                    </div>
+                    <span class="status-badge status-{{ order.status }}">
+                        {{ order.status|title }}
+                    </span>
+                </div>
+                <div class="order-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-box fa-2x text-primary me-3"></i>
+                                <div>
+                                    <small class="text-muted d-block">Articles</small>
+                                    <strong>{{ order.order_items|length }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-euro-sign fa-2x text-success me-3"></i>
+                                <div>
+                                    <small class="text-muted d-block">Total</small>
+                                    <strong>{{ order.total_amount }} €</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                            <a href="{% url 'main:order_detail' order.id %}" 
+                               class="btn btn-primary">
+                                <i class="fas fa-eye me-2"></i> Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if orders.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page|add:'-1' }}" aria-label="Previous">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">{{ page }}</span>
+                    </li>
+                    
+                    {% if orders|length >= 10 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page|add:'1' }}" aria-label="Next">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+            {% else %}
+            <div class="order-card text-center py-5">
+                <div class="mb-4">
+                    <i class="fas fa-shopping-bag fa-4x text-muted"></i>
+                </div>
+                <h4>Aucune commande</h4>
+                <p class="text-muted">Vous n'avez pas encore passé de commande</p>
+                <a href="{% url 'main:product_list' %}" class="btn btn-primary">
+                    <i class="fas fa-shopping-cart me-2"></i> Commencer vos achats
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation d'entrée pour les cartes
+    const cards = document.querySelectorAll('.order-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

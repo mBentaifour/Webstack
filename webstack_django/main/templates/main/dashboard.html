@@ -1,0 +1,244 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Tableau de bord - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <!-- Menu latéral -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Menu</h5>
+                    <div class="list-group">
+                        <a href="{% url 'main:profile' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user me-2"></i> Mon Profil
+                        </a>
+                        <a href="{% url 'main:dashboard' %}" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-chart-line me-2"></i> Tableau de bord
+                        </a>
+                        <a href="{% url 'main:order_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-shopping-bag me-2"></i> Mes commandes
+                        </a>
+                        <a href="{% url 'main:notifications' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-bell me-2"></i> Notifications
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="col-md-9">
+            <!-- En-tête -->
+            <div class="mb-4">
+                <h3>Tableau de bord</h3>
+                <p class="text-muted">Aperçu de votre activité sur Droguerie Express</p>
+            </div>
+
+            <!-- Cartes de statistiques -->
+            <div class="row mb-4">
+                <!-- Total des commandes -->
+                <div class="col-md-4">
+                    <div class="order-card h-100">
+                        <div class="order-body">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+                                    <i class="fas fa-shopping-bag fa-2x text-primary"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Total des commandes</h6>
+                                    <h3 class="mb-0">{{ stats.total_orders }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Montant total dépensé -->
+                <div class="col-md-4">
+                    <div class="order-card h-100">
+                        <div class="order-body">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+                                    <i class="fas fa-euro-sign fa-2x text-success"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Total dépensé</h6>
+                                    <h3 class="mb-0">{{ stats.total_spent }} €</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commandes récentes -->
+                <div class="col-md-4">
+                    <div class="order-card h-100">
+                        <div class="order-body">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3">
+                                    <i class="fas fa-clock fa-2x text-info"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Commandes (30j)</h6>
+                                    <h3 class="mb-0">{{ stats.recent_orders }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphiques -->
+            <div class="row mb-4">
+                <!-- Distribution des statuts -->
+                <div class="col-md-6">
+                    <div class="order-card h-100">
+                        <div class="order-header">
+                            <h5 class="mb-0">Statuts des commandes</h5>
+                        </div>
+                        <div class="order-body">
+                            <canvas id="statusChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produits les plus commandés -->
+                <div class="col-md-6">
+                    <div class="order-card h-100">
+                        <div class="order-header">
+                            <h5 class="mb-0">Top 5 des produits</h5>
+                        </div>
+                        <div class="order-body">
+                            <canvas id="productsChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activité récente -->
+            <div class="order-card">
+                <div class="order-header">
+                    <h5 class="mb-0">Activité récente</h5>
+                </div>
+                <div class="order-body">
+                    <div class="timeline">
+                        {% for activity in stats.recent_activity|slice:":5" %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6>Commande #{{ activity.id }}</h6>
+                                <p>
+                                    <span class="status-badge status-{{ activity.status }}">
+                                        {{ activity.status|title }}
+                                    </span>
+                                    <span class="ms-2">{{ activity.total_amount }} €</span>
+                                    <small class="text-muted ms-2">
+                                        {{ activity.created_at|date:"d/m/Y H:i" }}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation d'entrée pour les cartes
+    const cards = document.querySelectorAll('.order-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+    });
+
+    // Données pour le graphique des statuts
+    const statusData = {{ stats.status_distribution|safe }};
+    const statusLabels = Object.keys(statusData);
+    const statusValues = Object.values(statusData);
+    const statusColors = {
+        'pending': '#ffc107',
+        'processing': '#17a2b8',
+        'shipped': '#0d6efd',
+        'delivered': '#28a745',
+        'cancelled': '#dc3545'
+    };
+
+    // Graphique des statuts
+    new Chart(document.getElementById('statusChart'), {
+        type: 'doughnut',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusValues,
+                backgroundColor: statusLabels.map(status => statusColors[status]),
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                }
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    });
+
+    // Données pour le graphique des produits
+    const productData = {{ stats.top_products|safe }};
+    const productLabels = productData.map(item => item.name);
+    const productValues = productData.map(item => item.quantity);
+
+    // Graphique des produits
+    new Chart(document.getElementById('productsChart'), {
+        type: 'bar',
+        data: {
+            labels: productLabels,
+            datasets: [{
+                label: 'Quantité commandée',
+                data: productValues,
+                backgroundColor: '#0d6efd',
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuart'
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

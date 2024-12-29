@@ -1,0 +1,164 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Commande #{{ order.id }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <!-- Menu latéral -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Menu</h5>
+                    <div class="list-group">
+                        <a href="{% url 'main:profile' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user me-2"></i> Mon Profil
+                        </a>
+                        <a href="{% url 'main:edit_profile' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-edit me-2"></i> Modifier mon profil
+                        </a>
+                        <a href="{% url 'main:order_list' %}" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-shopping-bag me-2"></i> Mes commandes
+                        </a>
+                        <a href="{% url 'main:notifications' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-bell me-2"></i> Notifications
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Détails de la commande -->
+        <div class="col-md-9">
+            <!-- En-tête de la commande -->
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <h4 class="mb-0">Commande #{{ order.id }}</h4>
+                        <small class="text-muted">Commandé le {{ order.created_at|date:"d/m/Y à H:i" }}</small>
+                    </div>
+                    <span class="status-badge status-{{ order.status }}">
+                        {{ order.status|title }}
+                    </span>
+                </div>
+                <div class="order-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3">Informations de commande</h6>
+                            <p><i class="fas fa-calendar me-2"></i> {{ order.created_at|date:"d/m/Y H:i" }}</p>
+                            <p><i class="fas fa-hashtag me-2"></i> #{{ order.id }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3">Résumé</h6>
+                            <p><i class="fas fa-euro-sign me-2"></i> Total: {{ order.total_amount }} €</p>
+                            <p><i class="fas fa-box me-2"></i> Articles: {{ order.order_items|length }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Articles de la commande -->
+                    <h5 class="mb-4">Articles commandés</h5>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Quantité</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.order_items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.product.image_url %}
+                                            <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}"
+                                                 class="me-3 rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-0">{{ item.product.name }}</h6>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-tag me-1"></i> {{ item.product.category.name }}
+                                                    <i class="fas fa-building ms-2 me-1"></i> {{ item.product.brand.name }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ item.price }} €</td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ item.quantity }}</span>
+                                    </td>
+                                    <td><strong>{{ item.price|multiply:item.quantity }} €</strong></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="order-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Total</h5>
+                        <h4 class="mb-0">{{ order.total_amount }} €</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline de suivi -->
+            <div class="order-card mt-4">
+                <div class="order-header">
+                    <h5 class="mb-0">Suivi de commande</h5>
+                </div>
+                <div class="order-body">
+                    <div class="timeline">
+                        <div class="timeline-item active">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6>Commande reçue</h6>
+                                <p>{{ order.created_at|date:"d/m/Y H:i" }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item {% if order.status == 'processing' or order.status == 'shipped' or order.status == 'delivered' %}active{% endif %}">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6>En cours de traitement</h6>
+                                <p>Votre commande est en cours de préparation</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item {% if order.status == 'shipped' or order.status == 'delivered' %}active{% endif %}">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6>Expédiée</h6>
+                                <p>Votre commande est en route</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item {% if order.status == 'delivered' %}active{% endif %}">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6>Livrée</h6>
+                                <p>Votre commande a été livrée</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation d'entrée pour les cartes
+    const cards = document.querySelectorAll('.order-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.2}s`;
+    });
+});
+</script>
+{% endblock %}

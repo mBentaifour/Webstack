@@ -1,0 +1,76 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Modifier mon profil - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <!-- Menu latéral -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Menu</h5>
+                    <div class="list-group">
+                        <a href="{% url 'main:profile' %}" class="list-group-item list-group-item-action">
+                            Mon Profil
+                        </a>
+                        <a href="{% url 'main:edit_profile' %}" class="list-group-item list-group-item-action active">
+                            Modifier mon profil
+                        </a>
+                        <a href="{% url 'main:order_list' %}" class="list-group-item list-group-item-action">
+                            Mes commandes
+                        </a>
+                        <a href="{% url 'main:notifications' %}" class="list-group-item list-group-item-action">
+                            Notifications
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire d'édition -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Modifier mon profil</h4>
+                    
+                    {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Nom complet</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" 
+                                   value="{{ profile.full_name|default:'' }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Téléphone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   value="{{ profile.phone|default:'' }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Adresse</label>
+                            <textarea class="form-control" id="address" name="address" 
+                                      rows="3">{{ profile.address|default:'' }}</textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                        <a href="{% url 'main:profile' %}" class="btn btn-outline-secondary">Annuler</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

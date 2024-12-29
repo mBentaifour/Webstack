@@ -1,0 +1,81 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">{{ title }}</h1>
+
+    {% if promotions %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for promotion in promotions %}
+        <div class="col">
+            <div class="card h-100 promotion-card">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-danger">-{{ promotion.discount_percentage }}%</span>
+                </div>
+                {% if promotion.product.image_url %}
+                <img src="{{ promotion.product.image_url }}" class="card-img-top" alt="{{ promotion.product.name }}"
+                     style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-box fa-3x text-secondary"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ promotion.product.name }}</h5>
+                    <p class="card-text text-muted">{{ promotion.product.description|truncatewords:20 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-decoration-line-through text-muted">{{ promotion.product.price }}€</span>
+                            <span class="ms-2 text-danger fw-bold">
+                                {{ promotion.discounted_price }}€
+                            </span>
+                        </div>
+                        <a href="{% url 'main:product_detail' promotion.product.slug %}" class="btn btn-primary">
+                            <i class="fas fa-eye me-2"></i>Voir
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <small class="text-muted">
+                        <i class="fas fa-clock me-1"></i>
+                        Expire le {{ promotion.end_date|date:"d/m/Y" }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        Aucune promotion n'est disponible pour le moment.
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.promotion-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.promotion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.badge {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.card-img-top {
+    border-top-left-radius: var(--bs-card-border-radius);
+    border-top-right-radius: var(--bs-card-border-radius);
+}
+</style>
+{% endblock %}

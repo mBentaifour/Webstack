@@ -1,0 +1,165 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Mon Panier - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Mon Panier</h1>
+
+    {% if cart and cart.items %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    {% for item in cart.items %}
+                    <div class="cart-item mb-3 pb-3 border-bottom">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                {% if item.product.image_url %}
+                                <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="img-fluid">
+                                {% else %}
+                                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ item.product.name }}" class="img-fluid">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <h5>{{ item.product.name }}</h5>
+                                <p class="text-muted">{{ item.product.category.name }}</p>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="quantity-controls">
+                                    <button class="btn btn-sm btn-outline-secondary update-quantity" 
+                                            data-product-id="{{ item.product.id }}" 
+                                            data-action="decrease">-</button>
+                                    <span class="mx-2">{{ item.quantity }}</span>
+                                    <button class="btn btn-sm btn-outline-secondary update-quantity" 
+                                            data-product-id="{{ item.product.id }}" 
+                                            data-action="increase">+</button>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <p class="mb-0">{{ item.total_price }}€</p>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <button class="btn btn-danger btn-sm remove-item" 
+                                        data-product-id="{{ item.product.id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Résumé de la commande</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Sous-total</span>
+                        <span>{{ cart.subtotal }}€</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Frais de livraison</span>
+                        <span>{{ cart.shipping_cost }}€</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total</strong>
+                        <strong>{{ cart.total }}€</strong>
+                    </div>
+                    <a href="{% url 'main:checkout' %}" class="btn btn-primary w-100">
+                        Passer la commande
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+        <h3>Votre panier est vide</h3>
+        <p class="text-muted">Découvrez nos produits et commencez vos achats !</p>
+        <a href="{% url 'main:product_list' %}" class="btn btn-primary">
+            Voir les produits
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion de la mise à jour des quantités
+    document.querySelectorAll('.update-quantity').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            const action = this.dataset.action;
+            updateCartItem(productId, action);
+        });
+    });
+
+    // Gestion de la suppression d'articles
+    document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            removeCartItem(productId);
+        });
+    });
+
+    // Fonction de mise à jour du panier
+    function updateCartItem(productId, action) {
+        fetch(`/cart/update/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ action: action })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+
+    // Fonction de suppression d'article
+    function removeCartItem(productId) {
+        fetch(`/cart/remove/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+
+    // Fonction pour récupérer le token CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

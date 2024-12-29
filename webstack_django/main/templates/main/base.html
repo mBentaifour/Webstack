@@ -3,126 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Droguerie Express{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>{% block title %}Droguerie Électrique{% endblock %}</title>
+    
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static 'css/navigation.css' %}" rel="stylesheet">
+    <link href="{% static 'main/css/style.css' %}" rel="stylesheet">
+    
     <style>
+        /* Custom styles */
         :root {
-            --primary-color: #e63312;
-            --secondary-color: #2d4356;
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
         }
-        
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-        
+
         .navbar {
-            background: var(--primary-color);
-            padding: 1rem 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .navbar-brand {
+            font-weight: 600;
             font-size: 1.5rem;
-            font-weight: bold;
         }
 
         .nav-link {
             font-weight: 500;
-            color: white !important;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
         }
 
         .nav-link:hover {
-            color: #ffd700 !important;
-            transform: translateY(-2px);
+            color: var(--primary-color) !important;
+        }
+
+        .footer {
+            background: #343a40;
+            color: white;
+            padding: 3rem 0;
+            margin-top: 3rem;
         }
 
         .search-form {
             position: relative;
-            max-width: 400px;
         }
 
         .search-form .form-control {
-            padding: 0.75rem 2.5rem;
-            border-radius: 25px;
-            background-color: white;
-            border: none;
-            color: var(--secondary-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .search-form .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-color);
+            padding-right: 3rem;
+            border-radius: 2rem;
         }
 
         .search-form .btn {
-            border-radius: 25px;
-            padding: 0.75rem 1.5rem;
-            background-color: var(--secondary-color);
+            position: absolute;
+            right: 0;
+            top: 0;
+            border-radius: 0 2rem 2rem 0;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary-color);
             color: white;
-            border: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .search-form .btn:hover {
-            background-color: #1a2634;
-            transform: translateY(-2px);
-        }
-
-        .container {
-            max-width: 1200px;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .alert {
-            border-radius: 10px;
-            border: none;
-        }
-
-        .product-card .card-img-top {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        
-        .product-card:hover .card-img-top {
-            transform: scale(1.05);
-        }
-
-        .product-card {
-            overflow: hidden;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .product-card:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
         }
     </style>
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'main:product_list' %}">
-                <i class="fas fa-tools me-2"></i>Droguerie Express
+            <a class="navbar-brand" href="{% url 'main:home' %}">
+                <i class="fas fa-tools me-2"></i>Droguerie Électrique
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -130,74 +92,105 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'main:product_list' %}">
-                            <i class="fas fa-box me-1"></i>Nos Produits
+                        <a class="nav-link {% if request.resolver_match.url_name == 'product_list' %}active{% endif %}" href="{% url 'main:product_list' %}">
+                            <i class="fas fa-box me-1"></i>Produits
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'main:category_list' %}">
-                            <i class="fas fa-th-large me-1"></i>Catégories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-percentage me-1"></i>Promotions
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-info-circle me-1"></i>Conseils
+                        <a class="nav-link {% if request.resolver_match.url_name == 'category_list' %}active{% endif %}" href="{% url 'main:category_list' %}">
+                            <i class="fas fa-th-list me-1"></i>Catégories
                         </a>
                     </li>
                 </ul>
-                <form class="search-form d-flex" action="{% url 'main:search' %}" method="get">
-                    <i class="fas fa-search search-icon"></i>
-                    <input class="form-control me-2" type="search" name="q" placeholder="Rechercher un produit, une marque...">
-                    <button class="btn" type="submit">Rechercher</button>
+
+                <!-- Barre de recherche -->
+                <form class="search-form d-flex mx-3" action="{% url 'main:search' %}" method="GET">
+                    <input class="form-control" type="search" name="q" placeholder="Rechercher un produit..." aria-label="Search">
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                 </form>
+
+                <!-- Menu utilisateur -->
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="{% url 'main:cart' %}">
+                            <i class="fas fa-shopping-cart"></i>
+                            {% if cart_count %}
+                            <span class="cart-badge">{{ cart_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>{{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'main:dashboard' %}"><i class="fas fa-chart-line me-2"></i>Tableau de bord</a></li>
+                            <li><a class="dropdown-item" href="{% url 'main:profile' %}"><i class="fas fa-user-cog me-2"></i>Mon profil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt me-1"></i>Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-plus me-1"></i>Inscription</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        {% block content %}{% endblock %}
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
     </div>
+    {% endif %}
 
-    <footer class="bg-light mt-5 py-4">
+    <!-- Contenu principal -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <h5 class="text-secondary">Droguerie Express</h5>
-                    <p class="text-muted">Votre partenaire bricolage et rénovation</p>
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">À propos de nous</h5>
+                    <p>Droguerie Électrique est votre partenaire de confiance pour tous vos besoins en matériel électrique et outillage.</p>
                 </div>
-                <div class="col-md-4">
-                    <h5 class="text-secondary">Liens utiles</h5>
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">Liens rapides</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-muted">À propos</a></li>
-                        <li><a href="#" class="text-muted">Contact</a></li>
-                        <li><a href="#" class="text-muted">Conditions générales</a></li>
+                        <li><a href="{% url 'main:home' %}" class="text-white">Accueil</a></li>
+                        <li><a href="{% url 'main:product_list' %}" class="text-white">Produits</a></li>
+                        <li><a href="{% url 'main:category_list' %}" class="text-white">Catégories</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <h5 class="text-secondary">Suivez-nous</h5>
-                    <div class="social-links">
-                        <a href="#" class="text-muted me-3"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-muted me-3"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-muted"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
+                    <h5 class="mb-3">Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone me-2"></i>+33 1 23 45 67 89</li>
+                        <li><i class="fas fa-envelope me-2"></i>contact@droguerie-electrique.fr</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i>123 Rue de l'Électricité, Paris</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/navigation.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

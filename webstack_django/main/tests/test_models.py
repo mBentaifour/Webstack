@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from django.core.files.uploadedfile import SimpleUploadedFile
-from ..models import Category, Brand, Product, Review, Inventory
+from main.models import Category, Brand, Product, Review, Inventory
 from decimal import Decimal
 
 class CategoryModelTest(TestCase):
