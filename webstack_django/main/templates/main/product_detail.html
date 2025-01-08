@@ -1,0 +1,196 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ product.name }} - Droguerie Express{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main:product_list' %}" class="text-decoration-none">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'main:category_list' %}" class="text-decoration-none">Rayons</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'main:category_detail' product.category.slug %}" class="text-decoration-none">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Product Details -->
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                {% if product.image_url %}
+                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" id="mainImage">
+                {% elif product.thumbnail_url %}
+                <img src="{{ product.thumbnail_url }}" class="card-img-top" alt="{{ product.name }}" id="mainImage">
+                {% else %}
+                <img src="/static/images/placeholder.jpg" class="card-img-top" alt="{{ product.name }}" id="mainImage">
+                {% endif %}
+                
+                {% if product.additional_images %}
+                <div class="card-body">
+                    <div class="row g-2">
+                        {% for image in product.additional_images %}
+                        <div class="col-3">
+                            <img src="{{ image }}" class="img-thumbnail thumbnail-image" alt="{{ product.name }}" onclick="changeMainImage(this.src)">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title h2 mb-3">{{ product.name }}</h1>
+                    
+                    {% if product.brand %}
+                    <p class="text-muted mb-3">
+                        <i class="fas fa-industry me-2"></i>
+                        Marque : <strong>{{ product.brand.name }}</strong>
+                    </p>
+                    {% endif %}
+
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-2">
+                            {% if product.old_price %}
+                            <span class="old-price h5 mb-0 me-2">{{ product.old_price }}€</span>
+                            {% endif %}
+                            <span class="price h3 mb-0">{{ product.price }}€</span>
+                            {% if product.discount > 0 %}
+                            <span class="badge bg-danger ms-2">-{{ product.discount }}%</span>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">Prix TTC</small>
+                    </div>
+
+                    <!-- Stock Status -->
+                    <div class="mb-4">
+                        {% if product.stock > 10 %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>En stock
+                        </div>
+                        {% elif product.stock > 0 %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-circle me-2"></i>Stock limité ({{ product.stock }} restants)
+                        </div>
+                        {% else %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-times-circle me-2"></i>Rupture de stock
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Add to Cart -->
+                    <div class="mb-4">
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <input type="number" class="form-control" value="1" min="1" max="{{ product.stock }}">
+                            </div>
+                            <div class="col-8">
+                                <button class="btn btn-primary w-100 {% if product.stock == 0 %}disabled{% endif %}">
+                                    <i class="fas fa-shopping-cart me-2"></i>Ajouter au panier
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="d-flex gap-2 mb-4">
+                        <button class="btn btn-outline-primary flex-grow-1">
+                            <i class="far fa-heart me-2"></i>Favoris
+                        </button>
+                        <button class="btn btn-outline-primary flex-grow-1">
+                            <i class="fas fa-share-alt me-2"></i>Partager
+                        </button>
+                    </div>
+
+                    <!-- Product Description -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Description</h5>
+                        <p>{{ product.description }}</p>
+                    </div>
+
+                    <!-- Product Specifications -->
+                    {% if product.specifications %}
+                    <div class="mb-4">
+                        <h5 class="mb-3">Caractéristiques</h5>
+                        <ul class="list-group">
+                            {% for spec in product.specifications %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>{{ spec.name }}</span>
+                                <span class="text-muted">{{ spec.value }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews mt-5">
+        <h2 class="mb-4">Avis clients</h2>
+        
+        <!-- Add Review Form -->
+        {% if user.is_authenticated %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Donnez votre avis</h5>
+                <form method="post" action="{% url 'main:add_review' product.slug %}">
+                    {% csrf_token %}
+                    {{ review_form.as_p }}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane me-2"></i>Envoyer
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Reviews List -->
+        {% if reviews %}
+        <div class="row">
+            {% for review in reviews %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="mb-0">{{ review.user_id }}</h6>
+                                <small class="text-muted">{{ review.created_at|date:"d/m/Y" }}</small>
+                            </div>
+                            <div class="rating">
+                                {% for i in "12345"|make_list %}
+                                <i class="fas fa-star {% if forloop.counter <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="card-text">{{ review.comment }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            Aucun avis pour ce produit pour le moment.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    function changeMainImage(src) {
+        document.getElementById('mainImage').src = src;
+    }
+</script>
+{% endblock %}
+{% endblock %}

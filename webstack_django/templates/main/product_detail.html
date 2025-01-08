@@ -1,68 +1,216 @@
-{% extends "base.html" %}
+{% extends 'main/base.html' %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ product.name }} - Droguerie Express{% endblock %}
 
 {% block content %}
-<div class="container">
-    <nav aria-label="breadcrumb" class="mt-3">
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Accueil</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'main:home' %}?category={{ product.category }}">{{ product.get_category_display }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+            <li class="breadcrumb-item"><a href="{% url 'main:category_detail' product.category.slug %}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active">{{ product.name }}</li>
         </ol>
     </nav>
 
-    <div class="row mt-4">
+    <div class="row g-5">
+        <!-- Image du produit -->
         <div class="col-md-6">
-            {% if product.image %}
-            <img src="{{ product.image.url }}" class="img-fluid rounded main-image" alt="{{ product.name }}"
-                 onclick="window.open(this.src)" style="cursor: pointer;">
-            {% else %}
-            <div class="no-image-placeholder bg-light rounded d-flex align-items-center justify-content-center" style="height: 400px;">
-                <i class="fas fa-image fa-3x text-muted"></i>
-            </div>
-            {% endif %}
-        </div>
-        <div class="col-md-6">
-            <h1 class="mb-4">{{ product.name }}</h1>
-            <div class="mb-3">
-                <span class="badge bg-primary">{{ product.get_category_display }}</span>
-                {% if product.stock > 0 %}
-                    <span class="badge bg-success">En stock ({{ product.stock }})</span>
+            <div class="card border-0 shadow-sm">
+                {% if product.image_url %}
+                <img src="{{ product.image_url }}" class="img-fluid rounded" alt="{{ product.name }}" 
+                     style="max-height: 500px; width: 100%; object-fit: contain;">
                 {% else %}
-                    <span class="badge bg-danger">Rupture de stock</span>
+                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 500px;">
+                    <i class="fas fa-image text-muted" style="font-size: 5rem;"></i>
+                </div>
                 {% endif %}
             </div>
-            <p class="lead mb-4">{{ product.price }} €</p>
+        </div>
+
+        <!-- Informations produit -->
+        <div class="col-md-6">
+            <h1 class="mb-4">{{ product.name }}</h1>
+            
+            <!-- Prix et stock -->
             <div class="mb-4">
-                {{ product.description|linebreaks }}
+                <h2 class="text-primary mb-3">{{ product.price }} €</h2>
+                {% if product.stock > 0 %}
+                <span class="badge bg-success"><i class="fas fa-check me-1"></i>En stock</span>
+                <small class="text-muted ms-2">{{ product.stock }} unités disponibles</small>
+                {% else %}
+                <span class="badge bg-danger"><i class="fas fa-times me-1"></i>Rupture de stock</span>
+                {% endif %}
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+                <h5>Description</h5>
+                <p>{{ product.description|linebreaks }}</p>
+            </div>
+
+            <!-- Caractéristiques -->
+            <div class="mb-4">
+                <h5>Caractéristiques</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-tag me-2 text-primary"></i>
+                        <strong>Marque:</strong> {{ product.brand.name }}
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-box me-2 text-primary"></i>
+                        <strong>Référence:</strong> {{ product.reference }}
+                    </li>
+                    {% if product.weight %}
+                    <li class="mb-2">
+                        <i class="fas fa-weight-hanging me-2 text-primary"></i>
+                        <strong>Poids:</strong> {{ product.weight }} kg
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-cart me-2"></i>Ajouter au panier
+                </button>
+                <button class="btn btn-outline-primary">
+                    <i class="far fa-heart me-2"></i>Ajouter aux favoris
+                </button>
             </div>
         </div>
     </div>
 
-    {% if related_products %}
-    <div class="row mt-5">
-        <h3 class="mb-4">Produits similaires</h3>
-        {% for related in related_products %}
-        <div class="col-md-3 mb-4">
-            <div class="card h-100">
-                {% if related.thumbnail %}
-                <img src="{{ related.thumbnail_url }}" class="card-img-top" alt="{{ related.name }}"
-                     style="height: 200px; object-fit: cover;">
-                {% else %}
-                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                    <i class="fas fa-image fa-2x text-muted"></i>
+    <!-- Avis clients -->
+    <section class="mt-5">
+        <h3 class="mb-4">Avis clients</h3>
+        <div class="row">
+            <div class="col-md-8">
+                {% for review in product.reviews.all %}
+                <div class="card mb-3 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="mb-0">{{ review.user.username }}</h6>
+                                <small class="text-muted">{{ review.created_at|date:"d/m/Y" }}</small>
+                            </div>
+                            <div class="text-warning">
+                                {% for i in review.rating|get_range %}
+                                <i class="fas fa-star"></i>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="card-text">{{ review.comment }}</p>
+                    </div>
                 </div>
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ related.name }}</h5>
-                    <p class="card-text">{{ related.price }} €</p>
-                    <a href="{% url 'main:product_detail' related.id %}" class="btn btn-outline-primary">Voir le produit</a>
+                {% empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucun avis pour le moment
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Formulaire d'avis -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Donnez votre avis</h5>
+                        <form method="post" action="{% url 'main:add_review' product.slug %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">Note</label>
+                                <select name="rating" class="form-select" required>
+                                    <option value="">Choisir une note</option>
+                                    <option value="5">5 étoiles - Excellent</option>
+                                    <option value="4">4 étoiles - Très bien</option>
+                                    <option value="3">3 étoiles - Bien</option>
+                                    <option value="2">2 étoiles - Moyen</option>
+                                    <option value="1">1 étoile - Décevant</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Commentaire</label>
+                                <textarea name="comment" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-paper-plane me-2"></i>Publier
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+    </section>
+
+    <!-- Produits similaires -->
+    <section class="mt-5">
+        <h3 class="mb-4">Produits similaires</h3>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for similar_product in similar_products %}
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm product-card">
+                    {% if similar_product.image_url %}
+                    <img src="{{ similar_product.image_url }}" class="card-img-top" alt="{{ similar_product.name }}"
+                         style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                         style="height: 200px;">
+                        <i class="fas fa-image text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ similar_product.name }}</h5>
+                        <p class="card-text text-primary fw-bold">{{ similar_product.price }} €</p>
+                        <a href="{% url 'main:product_detail' similar_product.slug %}" 
+                           class="btn btn-outline-primary w-100">
+                            <i class="fas fa-eye me-2"></i>Voir le produit
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-card {
+        transition: transform 0.3s ease;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .breadcrumb-item a {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+    
+    .breadcrumb-item.active {
+        color: var(--secondary-color);
+    }
+    
+    .btn-primary {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover {
+        background: #d42e10;
+        border-color: #d42e10;
+    }
+    
+    .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .btn-outline-primary:hover {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+</style>
 {% endblock %}

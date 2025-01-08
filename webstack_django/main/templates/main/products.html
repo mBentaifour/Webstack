@@ -1,0 +1,249 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Nos Produits</h1>
+    
+    <!-- Filtres -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Filtres</h5>
+                    <form method="get">
+                        <!-- Catégories -->
+                        <div class="mb-3">
+                            <h6>Catégories</h6>
+                            {% for category in categories %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="category" value="{{ category.id }}" id="cat{{ category.id }}"
+                                    {% if category.id in selected_categories %}checked{% endif %}>
+                                <label class="form-check-label" for="cat{{ category.id }}">
+                                    {{ category.name }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Marques -->
+                        <div class="mb-3">
+                            <h6>Marques</h6>
+                            {% for brand in brands %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="brand" value="{{ brand.id }}" id="brand{{ brand.id }}"
+                                    {% if brand.id in selected_brands %}checked{% endif %}>
+                                <label class="form-check-label" for="brand{{ brand.id }}">
+                                    {{ brand.name }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Prix -->
+                        <div class="mb-3">
+                            <h6>Prix</h6>
+                            <div class="row">
+                                <div class="col">
+                                    <input type="number" class="form-control" name="min_price" placeholder="Min" value="{{ min_price }}">
+                                </div>
+                                <div class="col">
+                                    <input type="number" class="form-control" name="max_price" placeholder="Max" value="{{ max_price }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stock -->
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="in_stock" value="1" id="inStock"
+                                    {% if in_stock %}checked{% endif %}>
+                                <label class="form-check-label" for="inStock">
+                                    En stock uniquement
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Appliquer les filtres</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des produits -->
+        <div class="col-md-9">
+            <div class="row mb-3">
+                <div class="col">
+                    <select class="form-select" name="sort" id="sort">
+                        <option value="popularity">Popularité</option>
+                        <option value="price_asc">Prix croissant</option>
+                        <option value="price_desc">Prix décroissant</option>
+                        <option value="name">Nom</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for product in products %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if product.image_url %}
+                        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <img src="{% static 'images/placeholder.jpg' %}" class="card-img-top" alt="Image non disponible" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                            
+                            <!-- Prix et promotion -->
+                            <div class="mb-2">
+                                {% if product.promotion_price %}
+                                <span class="text-decoration-line-through text-muted">{{ product.price }}€</span>
+                                <span class="text-danger fw-bold ms-2">{{ product.promotion_price }}€</span>
+                                {% else %}
+                                <span class="fw-bold">{{ product.price }}€</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Stock -->
+                            <div class="mb-3">
+                                {% if product.stock > 0 %}
+                                <span class="badge bg-success">En stock ({{ product.stock }})</span>
+                                {% else %}
+                                <span class="badge bg-danger">Rupture de stock</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Note moyenne -->
+                            <div class="mb-3">
+                                <div class="stars">
+                                    {% for i in "12345" %}
+                                    <i class="bi bi-star{% if forloop.counter <= product.average_rating %}-fill{% endif %} text-warning"></i>
+                                    {% endfor %}
+                                    <span class="ms-1">({{ product.review_count }})</span>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'product_detail' product.slug %}" class="btn btn-outline-primary">Voir détails</a>
+                                {% if product.stock > 0 %}
+                                <button class="btn btn-primary add-to-cart" data-product-id="{{ product.id }}">
+                                    <i class="bi bi-cart-plus"></i> Ajouter au panier
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if products.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.previous_page_number }}">Précédent</a>
+                    </li>
+                    {% endif %}
+
+                    {% for i in products.paginator.page_range %}
+                    <li class="page-item {% if products.number == i %}active{% endif %}">
+                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.next_page_number }}">Suivant</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Toast pour les notifications -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion du tri
+        const sortSelect = document.getElementById('sort');
+        sortSelect.addEventListener('change', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('sort', this.value);
+            window.location.search = urlParams.toString();
+        });
+
+        // Gestion du panier
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.dataset.productId;
+                // Appel à l'API pour ajouter au panier
+                fetch('/api/cart/add/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: 1
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    showToast(data.message);
+                    // Mettre à jour le compteur du panier si nécessaire
+                })
+                .catch(error => {
+                    showToast('Erreur lors de l\'ajout au panier');
+                });
+            });
+        });
+
+        // Fonction pour afficher les toasts
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastBody = toast.querySelector('.toast-body');
+            toastBody.textContent = message;
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+
+        // Fonction pour récupérer le token CSRF
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock %}

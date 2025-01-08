@@ -1,0 +1,180 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ category.name }} - Droguerie Express{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main:product_list' %}" class="text-decoration-none">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'main:category_list' %}" class="text-decoration-none">Rayons</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Category Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-4 mb-3">{{ category.name }}</h1>
+            <p class="lead text-muted">{{ category.description }}</p>
+            <div class="d-flex gap-3 mb-4">
+                {% if category.discount_count > 0 %}
+                <span class="badge bg-danger fs-6">
+                    <i class="fas fa-tag me-1"></i>{{ category.discount_count }} promotions
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        {% if category.image_url %}
+        <div class="col-md-4">
+            <img src="{{ category.image_url }}" alt="{{ category.name }}" class="img-fluid rounded shadow">
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Filters and Sort -->
+    <div class="bg-light p-3 rounded mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="d-flex gap-2 flex-wrap">
+                    <!-- Price Range -->
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="form-label mb-0">Prix :</label>
+                        <input type="number" class="form-control form-control-sm" placeholder="Min" style="width: 80px;" id="priceMin">
+                        <span>-</span>
+                        <input type="number" class="form-control form-control-sm" placeholder="Max" style="width: 80px;" id="priceMax">
+                    </div>
+
+                    <!-- Stock Filter -->
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inStockOnly">
+                        <label class="form-check-label" for="inStockOnly">En stock uniquement</label>
+                    </div>
+
+                    <!-- Promotions Filter -->
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="onSaleOnly">
+                        <label class="form-check-label" for="onSaleOnly">En promotion</label>
+                    </div>
+
+                    <!-- Sort -->
+                    <select class="form-select form-select-sm" style="width: auto;" id="sortBy">
+                        <option value="">Trier par</option>
+                        <option value="price_asc">Prix croissant</option>
+                        <option value="price_desc">Prix décroissant</option>
+                        <option value="name">Nom</option>
+                        <option value="popularity">Popularité</option>
+                    </select>
+
+                    <button class="btn btn-primary btn-sm" id="applyFilters">
+                        <i class="fas fa-filter me-1"></i>Appliquer
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <span class="text-muted">{{ products|length }} produits trouvés</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="row g-4">
+        {% for product in products %}
+        <div class="col-md-4">
+            <div class="card product-card h-100">
+                {% if product.discount > 0 %}
+                <div class="discount-badge">-{{ product.discount }}%</div>
+                {% endif %}
+                <div class="stock-badge {% if product.stock > 10 %}in-stock{% elif product.stock > 0 %}low-stock{% else %}out-of-stock{% endif %}">
+                    {% if product.stock > 10 %}
+                    En stock
+                    {% elif product.stock > 0 %}
+                    Stock limité
+                    {% else %}
+                    Rupture
+                    {% endif %}
+                </div>
+                {% if product.image_url %}
+                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                {% elif product.thumbnail_url %}
+                <img src="{{ product.thumbnail_url }}" class="card-img-top" alt="{{ product.name }}">
+                {% else %}
+                <img src="/static/images/placeholder.jpg" class="card-img-top" alt="{{ product.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted">{{ product.description|truncatewords:20 }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="price-container">
+                            {% if product.old_price %}
+                            <span class="old-price">{{ product.old_price }}€</span>
+                            {% endif %}
+                            <span class="price">{{ product.price }}€</span>
+                        </div>
+                        <a href="{% url 'main:product_detail' product.slug %}" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart me-1"></i>Voir
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                Aucun produit n'est disponible dans cette catégorie pour le moment.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Tips Section -->
+    {% if category.tips %}
+    <div class="mt-5">
+        <h2 class="mb-4">Conseils et astuces</h2>
+        <div class="row g-4">
+            {% for tip in category.tips %}
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas {% if tip.icon %}{{ tip.icon }}{% else %}fa-lightbulb{% endif %} me-2 text-primary"></i>
+                            {{ tip.title }}
+                        </h5>
+                        <p class="card-text">{{ tip.description }}</p>
+                        {% if tip.url %}
+                        <a href="{{ tip.url }}" class="btn btn-outline-primary">Lire plus</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+    document.getElementById('applyFilters').addEventListener('click', function() {
+        const priceMin = document.getElementById('priceMin').value;
+        const priceMax = document.getElementById('priceMax').value;
+        const inStockOnly = document.getElementById('inStockOnly').checked;
+        const onSaleOnly = document.getElementById('onSaleOnly').checked;
+        const sortBy = document.getElementById('sortBy').value;
+
+        // Construire l'URL avec les paramètres
+        const params = new URLSearchParams();
+        if (priceMin) params.append('price_min', priceMin);
+        if (priceMax) params.append('price_max', priceMax);
+        if (inStockOnly) params.append('in_stock', 'true');
+        if (onSaleOnly) params.append('on_sale', 'true');
+        if (sortBy) params.append('sort', sortBy);
+
+        // Rediriger avec les filtres
+        window.location.href = '?' + params.toString();
+    });
+</script>
+{% endblock %}
+{% endblock %}
