@@ -7974,3 +7974,40 @@ INFO 2025-01-08 16:01:26,977 supabase_adapter 12968 12460 Connexion � Supabase �
 INFO 2025-01-08 16:01:27,021 supabase_adapter 6684 11016 Connexion � Supabase �tablie avec succ�s
 INFO 2025-01-08 16:01:27,089 supabase_adapter 16212 2632 Connexion � Supabase �tablie avec succ�s
 INFO 2025-01-08 16:01:27,204 supabase_adapter 11936 13372 Connexion � Supabase �tablie avec succ�s
+ERROR 2025-01-08 20:26:28,039 supabase_config 3246 140344653952832 Erreur lors de la création du client Supabase: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+INFO 2025-01-08 20:28:40,649 supabase_config 3254 140373755512640 Client Supabase créé avec succès
+INFO 2025-01-08 20:28:40,738 supabase_adapter 3254 140373755512640 Connexion à Supabase établie avec succès
+INFO 2025-01-08 20:31:22,936 supabase_config 3256 139621263484736 Client Supabase créé avec succès
+INFO 2025-01-08 20:31:23,033 supabase_adapter 3256 139621263484736 Connexion à Supabase établie avec succès
+INFO 2025-01-08 20:35:09,834 autoreload 3260 140489754093376 Watching for file changes with StatReloader
+INFO 2025-01-08 20:35:12,734 supabase_config 3260 140489754093376 Client Supabase créé avec succès
+INFO 2025-01-08 20:35:12,743 supabase_adapter 3260 140489754093376 Connexion à Supabase établie avec succès
+INFO 2025-01-08 20:46:00,538 autoreload 3268 139967310874432 Watching for file changes with StatReloader
+INFO 2025-01-08 20:46:03,335 supabase_config 3268 139967310874432 Client Supabase créé avec succès
+INFO 2025-01-08 20:46:03,433 supabase_adapter 3268 139967310874432 Connexion à Supabase établie avec succès
+INFO 2025-01-08 20:47:54,932 autoreload 3274 139708224915264 Watching for file changes with StatReloader
+INFO 2025-01-08 20:47:57,941 supabase_config 3274 139708224915264 Client Supabase créé avec succès
+INFO 2025-01-08 20:47:58,037 supabase_adapter 3274 139708224915264 Connexion à Supabase établie avec succès
+INFO 2025-01-08 20:52:28,737 autoreload 3282 140001217783616 Watching for file changes with StatReloader
+INFO 2025-01-08 20:52:31,736 supabase_config 3282 140001217783616 Client Supabase créé avec succès
+INFO 2025-01-08 20:52:31,832 supabase_adapter 3282 140001217783616 Connexion à Supabase établie avec succès
+INFO 2025-01-08 20:57:50,839 autoreload 3288 140701611919168 Watching for file changes with StatReloader
+INFO 2025-01-08 20:57:53,836 supabase_config 3288 140701611919168 Client Supabase créé avec succès
+INFO 2025-01-08 20:57:53,937 supabase_adapter 3288 140701611919168 Connexion à Supabase établie avec succès
+INFO 2025-01-08 21:32:39,739 autoreload 3334 140151237388096 Watching for file changes with StatReloader
+INFO 2025-01-08 21:32:42,835 supabase_config 3334 140151237388096 Client Supabase créé avec succès
+INFO 2025-01-08 21:32:42,936 supabase_adapter 3334 140151237388096 Connexion à Supabase établie avec succès
+INFO 2025-01-08 21:34:42,342 autoreload 3339 140505134511936 Watching for file changes with StatReloader
+INFO 2025-01-08 21:34:45,035 supabase_config 3339 140505134511936 Client Supabase créé avec succès
+INFO 2025-01-08 21:34:45,136 supabase_adapter 3339 140505134511936 Connexion à Supabase établie avec succès
+INFO 2025-01-08 21:35:47,438 supabase_config 3342 140460129052480 Client Supabase créé avec succès
+INFO 2025-01-08 21:35:47,535 supabase_adapter 3342 140460129052480 Connexion à Supabase établie avec succès
+INFO 2025-01-08 21:37:05,333 autoreload 3348 140215969933120 Watching for file changes with StatReloader
+INFO 2025-01-08 21:37:07,932 supabase_config 3348 140215969933120 Client Supabase créé avec succès
+INFO 2025-01-08 21:37:07,942 supabase_adapter 3348 140215969933120 Connexion à Supabase établie avec succès
+INFO 2025-01-08 21:38:19,936 autoreload 3353 139826486130496 Watching for file changes with StatReloader
+INFO 2025-01-08 21:38:23,134 supabase_config 3353 139826486130496 Client Supabase créé avec succès
+INFO 2025-01-08 21:38:23,238 supabase_adapter 3353 139826486130496 Connexion à Supabase établie avec succès
+INFO 2025-01-08 22:07:14,632 autoreload 3363 140100975187776 Watching for file changes with StatReloader
+INFO 2025-01-08 22:07:17,834 supabase_config 3363 140100975187776 Client Supabase créé avec succès
+INFO 2025-01-08 22:07:17,941 supabase_adapter 3363 140100975187776 Connexion à Supabase établie avec succès
