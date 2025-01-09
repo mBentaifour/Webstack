@@ -8011,3 +8011,793 @@ INFO 2025-01-08 21:38:23,238 supabase_adapter 3353 139826486130496 Connexion Ã  
 INFO 2025-01-08 22:07:14,632 autoreload 3363 140100975187776 Watching for file changes with StatReloader
 INFO 2025-01-08 22:07:17,834 supabase_config 3363 140100975187776 Client Supabase crÃ©Ã© avec succÃ¨s
 INFO 2025-01-08 22:07:17,941 supabase_adapter 3363 140100975187776 Connexion Ã  Supabase Ã©tablie avec succÃ¨s
+INFO 2025-01-09 05:48:45,006 supabase_config 4576 4884 Client Supabase créé avec succès
+INFO 2025-01-09 05:48:45,513 supabase_adapter 4576 4884 Connexion à Supabase établie avec succès
+ERROR 2025-01-09 05:54:07,079 supabase_config 11448 11552 Erreur lors de la création du client Supabase: Les variables d'environnement SUPABASE_URL et SUPABASE_KEY sont requises
+INFO 2025-01-09 05:54:34,148 supabase_config 1668 9724 Client Supabase créé avec succès
+INFO 2025-01-09 05:54:34,634 supabase_adapter 1668 9724 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:01:01,619 supabase_config 11828 8964 Client Supabase créé avec succès
+INFO 2025-01-09 06:01:02,196 supabase_adapter 11828 8964 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:05:27,723 supabase_config 11468 7096 Client Supabase créé avec succès
+INFO 2025-01-09 06:05:28,298 supabase_adapter 11468 7096 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:06:43,084 supabase_config 6872 12012 Client Supabase créé avec succès
+INFO 2025-01-09 06:06:43,696 supabase_adapter 6872 12012 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:07:09,135 supabase_config 2576 8880 Client Supabase créé avec succès
+INFO 2025-01-09 06:07:09,727 supabase_adapter 2576 8880 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:12:21,117 supabase_config 14648 13884 Client Supabase créé avec succès
+INFO 2025-01-09 06:12:21,688 supabase_adapter 14648 13884 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:12:52,267 supabase_config 11296 7272 Client Supabase créé avec succès
+INFO 2025-01-09 06:12:52,869 supabase_adapter 11296 7272 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:20:11,142 supabase_config 14780 9572 Client Supabase créé avec succès
+INFO 2025-01-09 06:20:11,799 supabase_adapter 14780 9572 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:20:35,112 supabase_config 14836 2576 Client Supabase créé avec succès
+INFO 2025-01-09 06:20:35,724 supabase_adapter 14836 2576 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:20:49,873 supabase_config 13776 6932 Client Supabase créé avec succès
+INFO 2025-01-09 06:20:50,500 supabase_adapter 13776 6932 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:21:01,167 supabase_config 11392 13248 Client Supabase créé avec succès
+INFO 2025-01-09 06:21:01,813 supabase_adapter 11392 13248 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:21:12,823 supabase_config 8168 6068 Client Supabase créé avec succès
+INFO 2025-01-09 06:21:13,470 supabase_adapter 8168 6068 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:22:03,167 supabase_config 13852 4936 Client Supabase créé avec succès
+INFO 2025-01-09 06:22:03,763 supabase_adapter 13852 4936 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:22:14,984 supabase_config 12788 14040 Client Supabase créé avec succès
+INFO 2025-01-09 06:22:15,541 supabase_adapter 12788 14040 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:31:50,026 supabase_config 516 5056 Client Supabase créé avec succès
+INFO 2025-01-09 06:31:50,620 supabase_adapter 516 5056 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:32:12,381 supabase_config 4736 6572 Client Supabase créé avec succès
+INFO 2025-01-09 06:32:12,959 supabase_adapter 4736 6572 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:32:23,759 supabase_config 10308 4100 Client Supabase créé avec succès
+INFO 2025-01-09 06:32:24,311 supabase_adapter 10308 4100 Connexion à Supabase établie avec succès
+INFO 2025-01-09 06:39:25,339 supabase_config 15528 14412 Client Supabase créé avec succès
+INFO 2025-01-09 06:39:25,894 supabase_adapter 15528 14412 Connexion à Supabase établie avec succès
+WARNING 2025-01-09 06:39:32,581 log 15528 14412 Unauthorized: /products/
+WARNING 2025-01-09 06:39:34,255 log 15528 14412 Unauthorized: /products/
+WARNING 2025-01-09 06:39:35,884 log 15528 14412 Unauthorized: /products/
+WARNING 2025-01-09 06:39:37,503 log 15528 14412 Unauthorized: /products/
+WARNING 2025-01-09 06:39:39,085 log 15528 14412 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 06:39:40,676 log 15528 14412 Unauthorized: /products/
+WARNING 2025-01-09 06:39:42,284 log 15528 14412 Unauthorized: /products/
+WARNING 2025-01-09 06:39:44,142 log 15528 14412 Unauthorized: /products/
+INFO 2025-01-09 06:44:29,092 supabase_config 8892 13428 Client Supabase créé avec succès
+INFO 2025-01-09 06:44:30,155 supabase_adapter 8892 13428 Connexion à Supabase établie avec succès
+WARNING 2025-01-09 06:44:38,940 log 8892 13428 Unauthorized: /products/
+WARNING 2025-01-09 06:44:42,576 log 8892 13428 Unauthorized: /products/
+WARNING 2025-01-09 06:44:46,403 log 8892 13428 Unauthorized: /products/
+WARNING 2025-01-09 06:44:49,969 log 8892 13428 Unauthorized: /products/
+WARNING 2025-01-09 06:44:53,703 log 8892 13428 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 06:44:57,499 log 8892 13428 Unauthorized: /products/
+WARNING 2025-01-09 06:45:01,081 log 8892 13428 Unauthorized: /products/
+WARNING 2025-01-09 06:45:04,626 log 8892 13428 Unauthorized: /products/
+INFO 2025-01-09 06:47:22,168 supabase_config 12296 14360 Client Supabase créé avec succès
+WARNING 2025-01-09 06:47:30,735 log 12296 14360 Unauthorized: /products/
+WARNING 2025-01-09 06:47:34,263 log 12296 14360 Unauthorized: /products/
+WARNING 2025-01-09 06:47:37,568 log 12296 14360 Unauthorized: /products/
+WARNING 2025-01-09 06:47:41,028 log 12296 14360 Unauthorized: /products/
+WARNING 2025-01-09 06:47:44,397 log 12296 14360 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 06:47:47,814 log 12296 14360 Unauthorized: /products/
+WARNING 2025-01-09 06:47:51,152 log 12296 14360 Unauthorized: /products/
+WARNING 2025-01-09 06:47:54,487 log 12296 14360 Unauthorized: /products/
+INFO 2025-01-09 07:05:35,123 supabase_config 9200 8624 Client Supabase créé avec succès
+INFO 2025-01-09 07:09:20,663 supabase_config 14580 13784 Client Supabase créé avec succès
+INFO 2025-01-09 07:18:05,284 supabase_config 3956 10460 Client Supabase créé avec succès
+INFO 2025-01-09 07:23:13,117 supabase_config 6924 4588 Client Supabase créé avec succès
+ERROR 2025-01-09 07:23:19,672 log 6924 4588 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 742, in product_search
+    return render(request, 'main/product_search.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: main/product_search.html
+ERROR 2025-01-09 07:23:23,286 log 6924 4588 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 742, in product_search
+    return render(request, 'main/product_search.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: main/product_search.html
+ERROR 2025-01-09 07:23:26,562 log 6924 4588 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 742, in product_search
+    return render(request, 'main/product_search.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: main/product_search.html
+WARNING 2025-01-09 07:23:30,468 log 6924 4588 Unauthorized: /products/
+WARNING 2025-01-09 07:23:34,017 log 6924 4588 Unauthorized: /products/
+WARNING 2025-01-09 07:23:37,609 log 6924 4588 Unauthorized: /products/
+WARNING 2025-01-09 07:23:41,066 log 6924 4588 Unauthorized: /products/
+WARNING 2025-01-09 07:23:44,546 log 6924 4588 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 07:23:48,228 log 6924 4588 Unauthorized: /products/
+WARNING 2025-01-09 07:23:52,124 log 6924 4588 Unauthorized: /products/
+WARNING 2025-01-09 07:23:56,056 log 6924 4588 Unauthorized: /products/
+INFO 2025-01-09 07:26:17,523 supabase_config 6380 13116 Client Supabase créé avec succès
+ERROR 2025-01-09 07:26:23,342 log 6380 13116 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 19, in _wrapped_view
+    auth = SupabaseAuth()
+           ^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\supabase_auth.py", line 14, in __init__
+    self.client: Client = create_client(url, key)
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 295, in create_client
+    return SyncClient.create(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 97, in create
+    client = cls(supabase_url, supabase_key, options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 58, in __init__
+    raise SupabaseException("Invalid API key")
+supabase._sync.client.SupabaseException: Invalid API key
+ERROR 2025-01-09 07:26:25,667 log 6380 13116 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 19, in _wrapped_view
+    auth = SupabaseAuth()
+           ^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\supabase_auth.py", line 14, in __init__
+    self.client: Client = create_client(url, key)
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 295, in create_client
+    return SyncClient.create(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 97, in create
+    client = cls(supabase_url, supabase_key, options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 58, in __init__
+    raise SupabaseException("Invalid API key")
+supabase._sync.client.SupabaseException: Invalid API key
+ERROR 2025-01-09 07:26:27,669 log 6380 13116 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 19, in _wrapped_view
+    auth = SupabaseAuth()
+           ^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\supabase_auth.py", line 14, in __init__
+    self.client: Client = create_client(url, key)
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 295, in create_client
+    return SyncClient.create(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 97, in create
+    client = cls(supabase_url, supabase_key, options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 58, in __init__
+    raise SupabaseException("Invalid API key")
+supabase._sync.client.SupabaseException: Invalid API key
+WARNING 2025-01-09 07:26:30,815 log 6380 13116 Unauthorized: /products/
+WARNING 2025-01-09 07:26:33,048 log 6380 13116 Unauthorized: /products/
+WARNING 2025-01-09 07:26:35,173 log 6380 13116 Unauthorized: /products/
+WARNING 2025-01-09 07:26:37,381 log 6380 13116 Unauthorized: /products/
+WARNING 2025-01-09 07:26:39,573 log 6380 13116 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 07:26:41,719 log 6380 13116 Unauthorized: /products/
+WARNING 2025-01-09 07:26:44,119 log 6380 13116 Unauthorized: /products/
+WARNING 2025-01-09 07:26:46,403 log 6380 13116 Unauthorized: /products/
+INFO 2025-01-09 07:33:52,112 supabase_config 14860 15128 Client Supabase créé avec succès
+ERROR 2025-01-09 07:33:57,305 supabase_adapter 14860 15128 Erreur lors de l'initialisation de Supabase: Invalid API key
+ERROR 2025-01-09 07:33:57,307 log 14860 15128 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 19, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 743, in product_search
+    return render(request, 'main/product_search.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 173, in render
+    with context.bind_template(self):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\context.py", line 254, in bind_template
+    updates.update(processor(self.request))
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\context_processors.py", line 7, in navigation
+    db = SupabaseAdapter()
+         ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\supabase_adapter.py", line 28, in __init__
+    self.supabase = create_client(self.supabase_url, self.supabase_key)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 295, in create_client
+    return SyncClient.create(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 97, in create
+    client = cls(supabase_url, supabase_key, options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 58, in __init__
+    raise SupabaseException("Invalid API key")
+supabase._sync.client.SupabaseException: Invalid API key
+ERROR 2025-01-09 07:33:59,548 supabase_adapter 14860 15128 Erreur lors de l'initialisation de Supabase: Invalid API key
+ERROR 2025-01-09 07:33:59,548 log 14860 15128 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 19, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 743, in product_search
+    return render(request, 'main/product_search.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 173, in render
+    with context.bind_template(self):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\context.py", line 254, in bind_template
+    updates.update(processor(self.request))
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\context_processors.py", line 7, in navigation
+    db = SupabaseAdapter()
+         ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\supabase_adapter.py", line 28, in __init__
+    self.supabase = create_client(self.supabase_url, self.supabase_key)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 295, in create_client
+    return SyncClient.create(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 97, in create
+    client = cls(supabase_url, supabase_key, options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 58, in __init__
+    raise SupabaseException("Invalid API key")
+supabase._sync.client.SupabaseException: Invalid API key
+ERROR 2025-01-09 07:34:01,727 supabase_adapter 14860 15128 Erreur lors de l'initialisation de Supabase: Invalid API key
+ERROR 2025-01-09 07:34:01,728 log 14860 15128 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 19, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 743, in product_search
+    return render(request, 'main/product_search.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 173, in render
+    with context.bind_template(self):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\context.py", line 254, in bind_template
+    updates.update(processor(self.request))
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\context_processors.py", line 7, in navigation
+    db = SupabaseAdapter()
+         ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\supabase_adapter.py", line 28, in __init__
+    self.supabase = create_client(self.supabase_url, self.supabase_key)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 295, in create_client
+    return SyncClient.create(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 97, in create
+    client = cls(supabase_url, supabase_key, options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\supabase\_sync\client.py", line 58, in __init__
+    raise SupabaseException("Invalid API key")
+supabase._sync.client.SupabaseException: Invalid API key
+WARNING 2025-01-09 07:34:04,525 log 14860 15128 Unauthorized: /products/
+WARNING 2025-01-09 07:34:06,884 log 14860 15128 Unauthorized: /products/
+WARNING 2025-01-09 07:34:09,106 log 14860 15128 Unauthorized: /products/
+WARNING 2025-01-09 07:34:11,319 log 14860 15128 Unauthorized: /products/
+WARNING 2025-01-09 07:34:13,585 log 14860 15128 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 07:34:15,735 log 14860 15128 Unauthorized: /products/
+WARNING 2025-01-09 07:34:18,048 log 14860 15128 Unauthorized: /products/
+WARNING 2025-01-09 07:34:20,235 log 14860 15128 Unauthorized: /products/
+INFO 2025-01-09 07:46:04,148 supabase_config 14128 16124 Client Supabase créé avec succès
+ERROR 2025-01-09 07:46:13,769 log 14128 16124 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 19, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 743, in product_search
+    return render(request, 'main/product_search.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 208, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 177, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'dashboard' not found. 'dashboard' is not a valid view function or pattern name.
+ERROR 2025-01-09 07:46:19,807 log 14128 16124 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 19, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 743, in product_search
+    return render(request, 'main/product_search.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 208, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 177, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'dashboard' not found. 'dashboard' is not a valid view function or pattern name.
+ERROR 2025-01-09 07:46:24,696 log 14128 16124 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 19, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 743, in product_search
+    return render(request, 'main/product_search.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 208, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 177, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'dashboard' not found. 'dashboard' is not a valid view function or pattern name.
+WARNING 2025-01-09 07:46:30,126 log 14128 16124 Unauthorized: /products/
+WARNING 2025-01-09 07:46:35,057 log 14128 16124 Unauthorized: /products/
+WARNING 2025-01-09 07:46:39,831 log 14128 16124 Unauthorized: /products/
+WARNING 2025-01-09 07:46:44,634 log 14128 16124 Unauthorized: /products/
+WARNING 2025-01-09 07:46:49,344 log 14128 16124 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 07:46:54,098 log 14128 16124 Unauthorized: /products/
+WARNING 2025-01-09 07:46:58,779 log 14128 16124 Unauthorized: /products/
+WARNING 2025-01-09 07:47:03,574 log 14128 16124 Unauthorized: /products/
+INFO 2025-01-09 07:51:22,784 supabase_config 12992 15960 Client Supabase créé avec succès
+ERROR 2025-01-09 07:51:32,323 log 12992 15960 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 18, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 712, in product_search
+    Q(name__icontains=query) |
+    ^
+NameError: name 'Q' is not defined
+ERROR 2025-01-09 07:51:37,576 log 12992 15960 Internal Server Error: /products/search/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\decorators.py", line 18, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\views.py", line 712, in product_search
+    Q(name__icontains=query) |
+    ^
+NameError: name 'Q' is not defined
+WARNING 2025-01-09 07:51:49,168 log 12992 15960 Unauthorized: /products/
+WARNING 2025-01-09 07:51:54,011 log 12992 15960 Unauthorized: /products/
+WARNING 2025-01-09 07:52:00,070 log 12992 15960 Unauthorized: /products/
+WARNING 2025-01-09 07:52:05,532 log 12992 15960 Unauthorized: /products/
+WARNING 2025-01-09 07:52:12,758 log 12992 15960 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 07:52:18,137 log 12992 15960 Unauthorized: /products/
+WARNING 2025-01-09 07:52:23,460 log 12992 15960 Unauthorized: /products/
+WARNING 2025-01-09 07:52:30,511 log 12992 15960 Unauthorized: /products/
+INFO 2025-01-09 07:54:21,768 supabase_config 13232 13656 Client Supabase créé avec succès
+INFO 2025-01-09 07:55:53,504 supabase_config 15668 14684 Client Supabase créé avec succès
+WARNING 2025-01-09 07:56:16,053 log 15668 14684 Unauthorized: /products/
+WARNING 2025-01-09 07:56:22,860 log 15668 14684 Unauthorized: /products/
+WARNING 2025-01-09 07:56:29,124 log 15668 14684 Unauthorized: /products/
+WARNING 2025-01-09 07:56:35,175 log 15668 14684 Unauthorized: /products/
+WARNING 2025-01-09 07:56:41,813 log 15668 14684 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 07:56:47,809 log 15668 14684 Unauthorized: /products/
+WARNING 2025-01-09 07:56:53,775 log 15668 14684 Unauthorized: /products/
+WARNING 2025-01-09 07:56:59,707 log 15668 14684 Unauthorized: /products/
+INFO 2025-01-09 08:05:49,713 supabase_config 4168 12964 Client Supabase créé avec succès
+WARNING 2025-01-09 08:06:11,762 log 4168 12964 Unauthorized: /products/
+WARNING 2025-01-09 08:06:17,625 log 4168 12964 Unauthorized: /products/
+WARNING 2025-01-09 08:06:23,298 log 4168 12964 Unauthorized: /products/
+WARNING 2025-01-09 08:06:29,054 log 4168 12964 Unauthorized: /products/
+WARNING 2025-01-09 08:06:34,874 log 4168 12964 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 08:06:41,876 log 4168 12964 Unauthorized: /products/
+WARNING 2025-01-09 08:06:48,012 log 4168 12964 Unauthorized: /products/
+WARNING 2025-01-09 08:06:54,598 log 4168 12964 Unauthorized: /products/
+INFO 2025-01-09 08:10:06,439 supabase_config 14980 14488 Client Supabase créé avec succès
+WARNING 2025-01-09 08:10:31,279 log 14980 14488 Unauthorized: /products/
+WARNING 2025-01-09 08:10:37,577 log 14980 14488 Unauthorized: /products/
+WARNING 2025-01-09 08:10:43,826 log 14980 14488 Unauthorized: /products/
+WARNING 2025-01-09 08:10:50,048 log 14980 14488 Unauthorized: /products/
+WARNING 2025-01-09 08:10:56,134 log 14980 14488 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 08:11:02,292 log 14980 14488 Unauthorized: /products/
+WARNING 2025-01-09 08:11:08,393 log 14980 14488 Unauthorized: /products/
+WARNING 2025-01-09 08:11:14,547 log 14980 14488 Unauthorized: /products/
+INFO 2025-01-09 08:13:56,003 supabase_config 11852 1128 Client Supabase créé avec succès
+WARNING 2025-01-09 08:14:18,736 log 11852 1128 Unauthorized: /products/
+WARNING 2025-01-09 08:14:24,515 log 11852 1128 Unauthorized: /products/
+WARNING 2025-01-09 08:14:30,385 log 11852 1128 Unauthorized: /products/
+WARNING 2025-01-09 08:14:36,236 log 11852 1128 Unauthorized: /products/
+WARNING 2025-01-09 08:14:42,321 log 11852 1128 Unauthorized: /product/marteau-de-charpentier-stanley/
+WARNING 2025-01-09 08:14:48,344 log 11852 1128 Unauthorized: /products/
+WARNING 2025-01-09 08:14:54,248 log 11852 1128 Unauthorized: /products/
+WARNING 2025-01-09 08:15:00,084 log 11852 1128 Unauthorized: /products/
+INFO 2025-01-09 08:20:13,218 supabase_config 7836 9884 Client Supabase créé avec succès
+INFO 2025-01-09 08:22:33,448 supabase_config 15556 14408 Client Supabase créé avec succès
+ERROR 2025-01-09 08:22:55,873 log 15556 14408 Internal Server Error: /products/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\tests\middleware.py", line 15, in __call__
+    request.user.is_authenticated = True
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\functional.py", line 311, in __setattr__
+    setattr(self._wrapped, name, value)
+AttributeError: property 'is_authenticated' of 'User' object has no setter
+ERROR 2025-01-09 08:23:02,767 log 15556 14408 Internal Server Error: /products/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\tests\middleware.py", line 15, in __call__
+    request.user.is_authenticated = True
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\functional.py", line 311, in __setattr__
+    setattr(self._wrapped, name, value)
+AttributeError: property 'is_authenticated' of 'User' object has no setter
+ERROR 2025-01-09 08:23:08,942 log 15556 14408 Internal Server Error: /products/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\tests\middleware.py", line 15, in __call__
+    request.user.is_authenticated = True
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\functional.py", line 311, in __setattr__
+    setattr(self._wrapped, name, value)
+AttributeError: property 'is_authenticated' of 'User' object has no setter
+ERROR 2025-01-09 08:23:14,778 log 15556 14408 Internal Server Error: /products/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\tests\middleware.py", line 15, in __call__
+    request.user.is_authenticated = True
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\functional.py", line 311, in __setattr__
+    setattr(self._wrapped, name, value)
+AttributeError: property 'is_authenticated' of 'User' object has no setter
+ERROR 2025-01-09 08:23:20,590 log 15556 14408 Internal Server Error: /product/marteau-de-charpentier-stanley/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\tests\middleware.py", line 15, in __call__
+    request.user.is_authenticated = True
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\functional.py", line 311, in __setattr__
+    setattr(self._wrapped, name, value)
+AttributeError: property 'is_authenticated' of 'User' object has no setter
+ERROR 2025-01-09 08:23:26,329 log 15556 14408 Internal Server Error: /products/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\tests\middleware.py", line 15, in __call__
+    request.user.is_authenticated = True
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\functional.py", line 311, in __setattr__
+    setattr(self._wrapped, name, value)
+AttributeError: property 'is_authenticated' of 'User' object has no setter
+ERROR 2025-01-09 08:23:31,867 log 15556 14408 Internal Server Error: /products/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\tests\middleware.py", line 15, in __call__
+    request.user.is_authenticated = True
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\functional.py", line 311, in __setattr__
+    setattr(self._wrapped, name, value)
+AttributeError: property 'is_authenticated' of 'User' object has no setter
+ERROR 2025-01-09 08:23:37,604 log 15556 14408 Internal Server Error: /products/
+Traceback (most recent call last):
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bentaifour\Desktop\Webstack\webstack_django\main\tests\middleware.py", line 15, in __call__
+    request.user.is_authenticated = True
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bentaifour\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\functional.py", line 311, in __setattr__
+    setattr(self._wrapped, name, value)
+AttributeError: property 'is_authenticated' of 'User' object has no setter

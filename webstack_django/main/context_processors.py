@@ -1,9 +1,20 @@
 from .supabase_adapter import SupabaseAdapter
+import os
 
 def navigation(request):
     """
     Context processor pour ajouter les données de navigation à tous les templates
     """
+    # Skip Supabase initialization in test mode
+    if os.environ.get('TESTING') == 'True':
+        return {
+            'nav_categories': [],
+            'notifications': [],
+            'notifications_count': 0,
+            'cart': None,
+            'breadcrumb': []
+        }
+        
     db = SupabaseAdapter()
     
     # Récupérer les catégories pour le menu

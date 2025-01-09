@@ -1,241 +1,259 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from unittest.mock import patch
-from main.supabase_adapter import SupabaseAdapter
+from django.test import TestCase
+from django.core import mail
+from django.contrib.auth.models import User
+from decimal import Decimal
+from main.models import Category, Brand, Product, Inventory, SupabaseUser
+from main.stock_alerts import (
+    check_low_stock,
+    send_stock_alert,
+    process_stock_movement,
+    generate_stock_report
+)
+from .test_settings import test_settings, override_settings
 
-User = get_user_model()
-
-class StockAlertsTests(TestCase):
+@override_settings(**test_settings)
+class StockAlertsTest(TestCase):
     def setUp(self):
-        # Créer un utilisateur admin
-        self.admin_user = User.objects.create_superuser(
+        # Création des utilisateurs
+        self.admin_user = User.objects.create_user(
             username='admin',
-            email='admin@test.com',
-            password='testpass123'
+            email='admin@example.com',
+            password='adminpass123',
+            is_staff=True
         )
-        
-        # Créer un utilisateur normal
-        self.normal_user = User.objects.create_user(
-            username='user',
-            email='user@test.com',
-            password='testpass123'
+        self.supabase_user = SupabaseUser.objects.create(
+            user=self.admin_user,
+            supabase_uid='admin123'
         )
-        
-        self.client = Client()
-        
-        # Mock data pour les alertes
-        self.mock_alert = {
-            'id': 'test-alert-id',
-            'product_id': 'test-product-id',
-            'type': 'low_stock',
-            'message': 'Stock bas pour Test Product',
-            'current_stock': 5,
-            'threshold': 10,
-            'status': 'pending',
-            'created_at': '2024-01-01T00:00:00',
-            'products': {'name': 'Test Product'}
+
+        # Création des catégories
+        self.categories = {
+            'hand_tools': Category.objects.create(
+                name='Outils à main',
+                category_type='hand_tools'
+            ),
+            'power_tools': Category.objects.create(
+                name='Outils électriques',
+                category_type='power_tools'
+            )
         }
 
-    def test_stock_alerts_view_admin_access(self):
-        """Test que seuls les admins peuvent accéder à la vue des alertes."""
-        self.client.login(username='admin', password='testpass123')
-        
-        with patch.object(SupabaseAdapter, 'get_stock_alerts') as mock_get:
-            mock_get.return_value = {'success': True, 'data': [self.mock_alert]}
-            response = self.client.get(reverse('main:stock_alerts'))
-            
-            self.assertEqual(response.status_code, 200)
-            self.assertTemplateUsed(response, 'main/stock_alerts.html')
-            self.assertContains(response, 'Test Product')
-
-    def test_stock_alerts_view_user_access_denied(self):
-        """Test que les utilisateurs normaux ne peuvent pas accéder aux alertes."""
-        self.client.login(username='user', password='testpass123')
-        
-        response = self.client.get(reverse('main:stock_alerts'))
-        self.assertEqual(response.status_code, 302)  # Redirection
-        self.assertRedirects(response, reverse('main:home'))
-
-    def test_process_stock_alert_success(self):
-        """Test le traitement réussi d'une alerte."""
-        self.client.login(username='admin', password='testpass123')
-        
-        with patch.object(SupabaseAdapter, 'update_stock_alert_status') as mock_update:
-            mock_update.return_value = {'success': True, 'data': self.mock_alert}
-            
-            response = self.client.post(
-                reverse('main:process_stock_alert', args=['test-alert-id']),
-                {'action': 'process'}
+        # Création des marques
+        self.brands = {
+            'stanley': Brand.objects.create(
+                name='Stanley',
+                quality_tier='premium'
+            ),
+            'dewalt': Brand.objects.create(
+                name='DeWalt',
+                quality_tier='professional'
             )
-            
-            self.assertEqual(response.status_code, 302)
-            self.assertRedirects(response, reverse('main:stock_alerts'))
-            mock_update.assert_called_once()
+        }
 
-    def test_check_stock_levels_success(self):
-        """Test la vérification manuelle des niveaux de stock."""
-        self.client.login(username='admin', password='testpass123')
-        
-        with patch.object(SupabaseAdapter, 'check_stock_levels') as mock_check:
-            mock_check.return_value = {
-                'success': True,
-                'data': {'alerts_created': 2, 'alerts': []}
-            }
-            
-            response = self.client.post(reverse('main:check_stock_levels'))
-            
-            self.assertEqual(response.status_code, 302)
-            self.assertRedirects(response, reverse('main:stock_alerts'))
-            mock_check.assert_called_once()
+        # Création des produits
+        self.products = {
+            'hammer': Product.objects.create(
+                category=self.categories['hand_tools'],
+                brand=self.brands['stanley'],
+                name='Marteau de charpentier',
+                price=Decimal('49.99'),
+                stock=2,
+                min_stock_alert=5
+            ),
+            'drill': Product.objects.create(
+                category=self.categories['power_tools'],
+                brand=self.brands['dewalt'],
+                name='Perceuse sans fil 18V',
+                price=Decimal('299.99'),
+                stock=1,
+                min_stock_alert=3
+            ),
+            'screwdriver': Product.objects.create(
+                category=self.categories['hand_tools'],
+                brand=self.brands['stanley'],
+                name='Tournevis cruciforme',
+                price=Decimal('9.99'),
+                stock=20,
+                min_stock_alert=5
+            )
+        }
 
-    def test_invalid_alert_action(self):
-        """Test qu'une action invalide est rejetée."""
-        self.client.login(username='admin', password='testpass123')
+    def test_check_low_stock(self):
+        low_stock_products = check_low_stock()
+        self.assertEqual(len(low_stock_products), 2)
+        self.assertIn(self.products['hammer'], low_stock_products)
+        self.assertIn(self.products['drill'], low_stock_products)
+        self.assertNotIn(self.products['screwdriver'], low_stock_products)
+
+    def test_send_stock_alert(self):
+        product = self.products['hammer']
+        send_stock_alert(product)
         
-        response = self.client.post(
-            reverse('main:process_stock_alert', args=['test-alert-id']),
-            {'action': 'invalid_action'}
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            f'Alerte stock bas - {product.name}'
+        )
+        self.assertIn(str(product.stock), mail.outbox[0].body)
+        self.assertIn(str(product.min_stock_alert), mail.outbox[0].body)
+
+    def test_process_stock_movement(self):
+        product = self.products['hammer']
+        initial_stock = product.stock
+        
+        # Test d'ajout de stock
+        movement = process_stock_movement(
+            product=product,
+            quantity=5,
+            reason='purchase',
+            notes='Réapprovisionnement',
+            user=self.admin_user
         )
         
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('main:stock_alerts'))
-
-    def test_get_stock_alerts_with_filter(self):
-        """Test le filtrage des alertes par statut."""
-        self.client.login(username='admin', password='testpass123')
+        product.refresh_from_db()
+        self.assertEqual(product.stock, initial_stock + 5)
+        self.assertEqual(movement.quantity_changed, 5)
+        self.assertEqual(movement.reason, 'purchase')
         
-        with patch.object(SupabaseAdapter, 'get_stock_alerts') as mock_get:
-            mock_get.return_value = {'success': True, 'data': [self.mock_alert]}
-            
-            response = self.client.get(
-                reverse('main:stock_alerts'),
-                {'status': 'pending'}
-            )
-            
-            self.assertEqual(response.status_code, 200)
-            mock_get.assert_called_with(status='pending')
-
-    def test_stock_alerts_api_error(self):
-        """Test la gestion des erreurs de l'API."""
-        self.client.login(username='admin', password='testpass123')
+        # Test de retrait de stock
+        movement = process_stock_movement(
+            product=product,
+            quantity=-2,
+            reason='sale',
+            notes='Vente en magasin',
+            user=self.admin_user
+        )
         
-        with patch.object(SupabaseAdapter, 'get_stock_alerts') as mock_get:
-            mock_get.return_value = {
-                'success': False,
-                'error': "Erreur de l'API"
-            }
-            
-            response = self.client.get(reverse('main:stock_alerts'))
-            
-            self.assertEqual(response.status_code, 302)
-            self.assertRedirects(response, reverse('main:dashboard'))
+        product.refresh_from_db()
+        self.assertEqual(product.stock, initial_stock + 3)
+        self.assertEqual(movement.quantity_changed, -2)
+        self.assertEqual(movement.reason, 'sale')
 
-    def test_check_stock_levels_api_error(self):
-        """Test la gestion des erreurs lors de la vérification des stocks."""
-        self.client.login(username='admin', password='testpass123')
+    def test_generate_stock_report(self):
+        """Test la génération d'un rapport de stock."""
+        # Création de mouvements de stock
+        process_stock_movement(
+            product=self.products['hammer'],
+            quantity=5,
+            reason='purchase',
+            notes='Réapprovisionnement',
+            user=self.admin_user
+        )
+        process_stock_movement(
+            product=self.products['drill'],
+            quantity=-1,
+            reason='sale',
+            notes='Vente',
+            user=self.admin_user
+        )
         
-        with patch.object(SupabaseAdapter, 'check_stock_levels') as mock_check:
-            mock_check.return_value = {
-                'success': False,
-                'error': "Erreur de l'API"
-            }
-            
-            response = self.client.post(reverse('main:check_stock_levels'))
-            
-            self.assertEqual(response.status_code, 302)
-            self.assertRedirects(response, reverse('main:stock_alerts'))
+        report = generate_stock_report()
+        
+        # Vérification du rapport
+        self.assertIn('Produits en stock bas', report['summary']['alerts'])
+        self.assertIn('Mouvements de stock récents', report['summary']['alerts'])
+        self.assertEqual(len(report['low_stock']), 1)  # Seulement la perceuse
+        self.assertEqual(len(report['movements']), 2)
+        
+        # Vérification des détails du rapport
+        drill_data = next(p for p in report['low_stock'] if p['name'] == 'Perceuse sans fil 18V')
+        self.assertEqual(drill_data['stock'], 0)
+        self.assertEqual(drill_data['min_stock_alert'], 3)
 
-import unittest
-from unittest.mock import patch, MagicMock
-from main.stock.stock_alert_manager import StockAlertManager
-import logging
-
-logging.disable(logging.CRITICAL)
-
-class TestStockAlertManager(unittest.TestCase):
+@override_settings(**test_settings)
+class CategoryStockAlertsTest(TestCase):
     def setUp(self):
-        self.stock_alert_manager = StockAlertManager()
-        self.test_alert_data = {
-            "product_id": "test_product_id",
-            "threshold": 5,
-            "user_id": "test_user_id",
-            "is_active": True
+        self.category = Category.objects.create(
+            name='Outils à main',
+            category_type='hand_tools'
+        )
+        self.brand = Brand.objects.create(
+            name='Stanley',
+            quality_tier='premium'
+        )
+        
+        # Création de plusieurs produits dans la même catégorie
+        self.products = []
+        for i in range(5):
+            self.products.append(
+                Product.objects.create(
+                    category=self.category,
+                    brand=self.brand,
+                    name=f'Outil {i+1}',
+                    price=Decimal('19.99'),
+                    stock=i,  # 0, 1, 2, 3, 4
+                    min_stock_alert=3
+                )
+            )
+
+    def test_category_stock_status(self):
+        low_stock_products = check_low_stock(category=self.category)
+        self.assertEqual(len(low_stock_products), 3)  # Les 3 premiers produits
+
+    def test_category_stock_report(self):
+        report = generate_stock_report(category=self.category)
+        self.assertEqual(len(report['low_stock']), 3)
+        self.assertEqual(
+            report['summary']['total_products'],
+            5
+        )
+        self.assertEqual(
+            report['summary']['low_stock_count'],
+            3
+        )
+
+@override_settings(**test_settings)
+class BrandStockAlertsTest(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(
+            name='Outils à main',
+            category_type='hand_tools'
+        )
+        self.brand = Brand.objects.create(
+            name='Stanley',
+            quality_tier='premium'
+        )
+        
+        # Création de produits avec différents niveaux de stock
+        self.products = {
+            'normal': Product.objects.create(
+                category=self.category,
+                brand=self.brand,
+                name='Produit stock normal',
+                price=Decimal('19.99'),
+                stock=10,
+                min_stock_alert=5
+            ),
+            'low': Product.objects.create(
+                category=self.category,
+                brand=self.brand,
+                name='Produit stock bas',
+                price=Decimal('29.99'),
+                stock=2,
+                min_stock_alert=5
+            ),
+            'out': Product.objects.create(
+                category=self.category,
+                brand=self.brand,
+                name='Produit rupture stock',
+                price=Decimal('39.99'),
+                stock=0,
+                min_stock_alert=5
+            )
         }
-        self.test_alert_id = "test_alert_id"
 
-    @patch('main.stock.stock_alert_manager.get_supabase_client')
-    def test_create_stock_alert(self, mock_get_client):
-        """Test la création d'une alerte de stock"""
-        mock_client = MagicMock()
-        mock_response = MagicMock()
-        mock_response.data = [{"id": self.test_alert_id, **self.test_alert_data}]
-        mock_response.error = None
-        
-        mock_query = MagicMock()
-        mock_query.insert.return_value = mock_query
-        mock_query.execute.return_value = mock_response
-        
-        mock_client.table.return_value = mock_query
-        mock_get_client.return_value = mock_client
+    def test_brand_stock_status(self):
+        low_stock_products = check_low_stock(brand=self.brand)
+        self.assertEqual(len(low_stock_products), 2)  # 'low' et 'out'
 
-        result = self.stock_alert_manager.create_alert(self.test_alert_data)
-
-        self.assertTrue(result["success"])
-        self.assertEqual(result["data"]["id"], self.test_alert_id)
-        mock_client.table.assert_called_once_with("stock_alerts")
-
-    @patch('main.stock.stock_alert_manager.get_supabase_client')
-    def test_get_active_alerts(self, mock_get_client):
-        """Test la récupération des alertes actives"""
-        mock_client = MagicMock()
-        mock_response = MagicMock()
-        mock_response.data = [{"id": self.test_alert_id, **self.test_alert_data}]
-        mock_response.error = None
-        
-        mock_query = MagicMock()
-        mock_query.select.return_value = mock_query
-        mock_query.eq.return_value = mock_query
-        mock_query.execute.return_value = mock_response
-        
-        mock_client.table.return_value = mock_query
-        mock_get_client.return_value = mock_client
-
-        result = self.stock_alert_manager.get_active_alerts()
-
-        self.assertTrue(result["success"])
-        self.assertEqual(len(result["data"]), 1)
-        mock_client.table.assert_called_once_with("stock_alerts")
-
-    @patch('main.stock.stock_alert_manager.get_supabase_client')
-    def test_process_alerts(self, mock_get_client):
-        """Test le traitement des alertes de stock"""
-        mock_client = MagicMock()
-        mock_response = MagicMock()
-        mock_response.data = [{
-            "id": self.test_alert_id,
-            **self.test_alert_data,
-            "product": {
-                "id": "test_product_id",
-                "name": "Test Product",
-                "stock": 3
-            }
-        }]
-        mock_response.error = None
-        
-        mock_query = MagicMock()
-        mock_query.select.return_value = mock_query
-        mock_query.eq.return_value = mock_query
-        mock_query.execute.return_value = mock_response
-        
-        mock_client.table.return_value = mock_query
-        mock_get_client.return_value = mock_client
-
-        result = self.stock_alert_manager.process_alerts()
-
-        self.assertTrue(result["success"])
-        self.assertTrue(len(result["processed_alerts"]) > 0)
-        mock_client.table.assert_called_with("stock_alerts")
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_brand_stock_report(self):
+        report = generate_stock_report(brand=self.brand)
+        self.assertEqual(len(report['low_stock']), 2)
+        self.assertEqual(
+            report['summary']['total_products'],
+            3
+        )
+        self.assertEqual(
+            report['summary']['out_of_stock_count'],
+            1
+        )

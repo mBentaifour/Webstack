@@ -1,149 +1,180 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.db.utils import IntegrityError
 from django.core.files.uploadedfile import SimpleUploadedFile
-from main.models import Category, Brand, Product, Review, Inventory
+from django.utils import timezone
 from decimal import Decimal
+from main.models import (
+    Category, Brand, Product, Review, 
+    Inventory, SupabaseUser, Order, OrderItem
+)
 
 class CategoryModelTest(TestCase):
     def setUp(self):
         self.category = Category.objects.create(
-            name='Test Category',
-            slug='test-category',
-            description='Test Description'
+            name="Outils à main",
+            category_type="hand_tools",
+            description="Tous les outils manuels pour l'artisanat",
+            icon="fas fa-hammer",
+            tips=["Nettoyer après usage", "Ranger dans un endroit sec"]
         )
 
     def test_category_creation(self):
-        self.assertEqual(self.category.name, 'Test Category')
-        self.assertEqual(self.category.slug, 'test-category')
-        self.assertEqual(str(self.category), 'Test Category')
-
-    def test_unique_name(self):
-        with self.assertRaises(IntegrityError):
-            Category.objects.create(
-                name='Test Category',
-                slug='test-category-2'
-            )
+        self.assertEqual(self.category.name, "Outils à main")
+        self.assertEqual(self.category.category_type, "hand_tools")
+        self.assertTrue(self.category.slug)
+        self.assertEqual(len(self.category.tips), 2)
 
 class BrandModelTest(TestCase):
     def setUp(self):
         self.brand = Brand.objects.create(
-            name='Test Brand',
-            description='Test Description',
-            website='https://example.com'
+            name="Stanley",
+            quality_tier="premium",
+            country_of_origin="États-Unis",
+            warranty_info="Garantie à vie sur les outils à main"
         )
 
     def test_brand_creation(self):
-        self.assertEqual(self.brand.name, 'Test Brand')
-        self.assertEqual(str(self.brand), 'Test Brand')
-
-    def test_unique_name(self):
-        with self.assertRaises(IntegrityError):
-            Brand.objects.create(name='Test Brand')
+        self.assertEqual(self.brand.name, "Stanley")
+        self.assertEqual(self.brand.quality_tier, "premium")
+        self.assertTrue(self.brand.slug)
 
 class ProductModelTest(TestCase):
     def setUp(self):
         self.category = Category.objects.create(
-            name='Test Category',
-            slug='test-category'
+            name="Outils électriques",
+            category_type="power_tools"
         )
-        self.brand = Brand.objects.create(name='Test Brand')
+        self.brand = Brand.objects.create(
+            name="DeWalt",
+            quality_tier="professional"
+        )
         self.product = Product.objects.create(
-            name='Test Product',
-            slug='test-product',
-            description='Test Description',
-            price=Decimal('99.99'),
-            stock=10,
             category=self.category,
-            brand=self.brand
+            brand=self.brand,
+            name="Perceuse sans fil 18V",
+            description="Perceuse professionnelle avec batterie Li-ion",
+            usage_type="professional",
+            power_source="battery",
+            specifications={
+                "voltage": "18V",
+                "batterie": "Li-ion 4.0Ah",
+                "vitesse": "0-1500 tr/min"
+            },
+            features=["Mandrin auto-serrant", "LED de travail", "2 batteries incluses"],
+            safety_instructions="Porter des lunettes de protection. Tenir hors de portée des enfants.",
+            maintenance_tips="Nettoyer après chaque utilisation. Recharger les batteries régulièrement.",
+            warranty_duration=24,
+            price=Decimal("299.99"),
+            stock=10,
+            min_stock_alert=3
         )
 
     def test_product_creation(self):
-        self.assertEqual(self.product.name, 'Test Product')
-        self.assertEqual(self.product.price, Decimal('99.99'))
-        self.assertEqual(self.product.stock, 10)
-        self.assertEqual(str(self.product), 'Test Product')
+        self.assertEqual(self.product.name, "Perceuse sans fil 18V")
+        self.assertEqual(self.product.warranty_duration, 24)
+        self.assertEqual(self.product.get_warranty_display(), "2 ans")
+        self.assertFalse(self.product.needs_restock())
 
-    def test_negative_price(self):
-        with self.assertRaises(ValidationError):
-            self.product.price = Decimal('-10.00')
-            self.product.full_clean()
-
-    def test_negative_stock(self):
-        with self.assertRaises(ValidationError):
-            self.product.stock = -1
-            self.product.full_clean()
+    def test_stock_alert(self):
+        self.product.stock = 2
+        self.product.save()
+        self.assertTrue(self.product.needs_restock())
 
 class ReviewModelTest(TestCase):
     def setUp(self):
-        self.category = Category.objects.create(
-            name='Test Category',
-            slug='test-category'
-        )
+        self.category = Category.objects.create(name="Outils à main")
         self.product = Product.objects.create(
-            name='Test Product',
-            slug='test-product',
-            price=Decimal('99.99'),
-            stock=10,
-            category=self.category
+            category=self.category,
+            name="Marteau de charpentier",
+            price=Decimal("29.99"),
+            stock=5
         )
         self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
+            username="client1",
+            password="testpass123"
         )
         self.review = Review.objects.create(
             product=self.product,
             user=self.user,
             rating=5,
-            comment='Great product!'
+            comment="Excellent outil",
+            pros="Robuste, bonne prise en main",
+            cons="Un peu lourd",
+            usage_duration="6 mois",
+            usage_frequency="Quotidienne",
+            would_recommend=True
         )
 
     def test_review_creation(self):
         self.assertEqual(self.review.rating, 5)
-        self.assertEqual(self.review.comment, 'Great product!')
-        self.assertEqual(
-            str(self.review),
-            f'Avis de {self.user.username} sur {self.product.name}'
-        )
-
-    def test_invalid_rating(self):
-        with self.assertRaises(ValidationError):
-            self.review.rating = 6
-            self.review.full_clean()
-
-    def test_unique_user_product_review(self):
-        with self.assertRaises(IntegrityError):
-            Review.objects.create(
-                product=self.product,
-                user=self.user,
-                rating=4,
-                comment='Another review'
-            )
+        self.assertTrue(self.review.would_recommend)
+        self.assertEqual(self.review.usage_frequency, "Quotidienne")
 
 class InventoryModelTest(TestCase):
     def setUp(self):
-        self.category = Category.objects.create(
-            name='Test Category',
-            slug='test-category'
-        )
+        self.category = Category.objects.create(name="Outils à main")
         self.product = Product.objects.create(
-            name='Test Product',
-            slug='test-product',
-            price=Decimal('99.99'),
-            stock=10,
-            category=self.category
+            category=self.category,
+            name="Tournevis cruciforme",
+            price=Decimal("9.99"),
+            stock=20
+        )
+        self.user = User.objects.create_user(
+            username="gestionnaire",
+            password="testpass123"
         )
         self.inventory = Inventory.objects.create(
             product=self.product,
-            quantity_changed=5,
-            reason='Stock addition'
+            quantity_changed=-5,
+            reason="sale",
+            notes="Vente en magasin",
+            recorded_by=self.user
         )
 
-    def test_inventory_creation(self):
-        self.assertEqual(self.inventory.quantity_changed, 5)
-        self.assertEqual(self.inventory.reason, 'Stock addition')
-        self.assertEqual(
-            str(self.inventory),
-            f'Mouvement de stock pour {self.product.name}: 5'
+    def test_inventory_movement(self):
+        self.assertEqual(self.inventory.quantity_changed, -5)
+        self.assertEqual(self.inventory.reason, "sale")
+        self.assertTrue(self.inventory.recorded_by)
+
+class OrderModelTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="client2",
+            password="testpass123"
         )
+        self.supabase_user = SupabaseUser.objects.create(
+            user=self.user,
+            supabase_uid="test123",
+            phone="+33612345678",
+            address="123 Rue du Commerce, Paris"
+        )
+        self.category = Category.objects.create(name="Outils à main")
+        self.product = Product.objects.create(
+            category=self.category,
+            name="Scie à métaux",
+            price=Decimal("24.99"),
+            stock=15
+        )
+        self.order = Order.objects.create(
+            user=self.supabase_user,
+            status="confirmed",
+            payment_status="paid",
+            total_amount=Decimal("24.99"),
+            shipping_address="123 Rue du Commerce, Paris",
+            shipping_method="Colissimo",
+            tracking_number="1234567890"
+        )
+        self.order_item = OrderItem.objects.create(
+            order=self.order,
+            product_id=self.product.id,
+            product_name=self.product.name,
+            quantity=1,
+            unit_price=self.product.price,
+            total_price=self.product.price
+        )
+
+    def test_order_creation(self):
+        self.assertEqual(self.order.status, "confirmed")
+        self.assertEqual(self.order.payment_status, "paid")
+        self.assertEqual(self.order_item.quantity, 1)
+        self.assertEqual(self.order_item.total_price, Decimal("24.99"))

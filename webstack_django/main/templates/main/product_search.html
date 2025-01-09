@@ -1,0 +1,107 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Recherche de produits</h2>
+    
+    <!-- Formulaire de recherche -->
+    <form method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="query">Recherche</label>
+                    <input type="text" class="form-control" id="query" name="q" value="{{ query }}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="category">Catégorie</label>
+                    <select class="form-control" id="category" name="category">
+                        <option value="">Toutes les catégories</option>
+                        <option value="hand_tools" {% if category == 'hand_tools' %}selected{% endif %}>Outils à main</option>
+                        <option value="power_tools" {% if category == 'power_tools' %}selected{% endif %}>Outils électriques</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="brand">Marque</label>
+                    <select class="form-control" id="brand" name="brand">
+                        <option value="">Toutes les marques</option>
+                        <option value="Stanley" {% if brand == 'Stanley' %}selected{% endif %}>Stanley</option>
+                        <option value="DeWalt" {% if brand == 'DeWalt' %}selected{% endif %}>DeWalt</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="min_price">Prix minimum</label>
+                    <input type="number" class="form-control" id="min_price" name="min_price" value="{{ min_price }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="max_price">Prix maximum</label>
+                    <input type="number" class="form-control" id="max_price" name="max_price" value="{{ max_price }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="usage_type">Type d'utilisation</label>
+                    <select class="form-control" id="usage_type" name="usage_type">
+                        <option value="">Tous les types</option>
+                        <option value="professional" {% if usage_type == 'professional' %}selected{% endif %}>Professionnel</option>
+                        <option value="diy" {% if usage_type == 'diy' %}selected{% endif %}>Bricolage</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="power_source">Source d'énergie</label>
+                    <select class="form-control" id="power_source" name="power_source">
+                        <option value="">Toutes les sources</option>
+                        <option value="manual" {% if power_source == 'manual' %}selected{% endif %}>Manuel</option>
+                        <option value="electric" {% if power_source == 'electric' %}selected{% endif %}>Électrique</option>
+                        <option value="battery" {% if power_source == 'battery' %}selected{% endif %}>Batterie</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary mt-3">Rechercher</button>
+    </form>
+    
+    <!-- Résultats de la recherche -->
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                {% else %}
+                <img src="{% static 'main/images/no-image.png' %}" class="card-img-top" alt="No image">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                    <p class="card-text"><strong>Prix:</strong> {{ product.price }} €</p>
+                    <p class="card-text"><small class="text-muted">
+                        {{ product.get_usage_type_display }} - 
+                        {{ product.get_power_source_display }}
+                    </small></p>
+                    <a href="{% url 'product-detail' product.slug %}" class="btn btn-primary">Voir détails</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p>Aucun produit ne correspond à votre recherche.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
