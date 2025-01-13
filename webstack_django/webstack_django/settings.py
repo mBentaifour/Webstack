@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,11 +34,32 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000", #Backend
-    "http://127.0.0.1:8000", #Backend
+    "http://localhost:3000",  # React default
+    "http://localhost:5173",  # Vite default
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
 ]
 CORS_ALLOW_ALL_ORIGINS = True  # Pour le développement uniquement
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 # Application definition
 
@@ -48,19 +70,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
+    'drf_yasg',  # Swagger documentation
     'main.apps.MainConfig',  # Notre application principale
     'crispy_forms',
     'crispy_bootstrap4',
-    'corsheaders',
-    'rest_framework',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # CORS middleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -99,17 +122,11 @@ WSGI_APPLICATION = 'webstack_django.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('SUPABASE_DB_NAME'),
-        'USER': os.getenv('SUPABASE_DB_USER'),
-        'PASSWORD': os.getenv('SUPABASE_DB_PASSWORD'),
-        'HOST': os.getenv('SUPABASE_DB_HOST'),
-        'PORT': os.getenv('SUPABASE_DB_PORT'),
-        'OPTIONS': {
-            'application_name': 'webstack_django',
-        },
-    }
+    'default': dj_database_url.parse(
+        os.getenv('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 
@@ -170,6 +187,11 @@ AUTH_USER_MODEL = 'auth.User'  # Utilisation du modèle User par défaut de Djan
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_ANON_KEY = os.getenv('SUPABASE_ANON_KEY')
 SUPABASE_SERVICE_KEY = os.getenv('SUPABASE_SERVICE_KEY')
+
+# Stripe settings
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
 
 # Session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -237,20 +259,37 @@ LOGGING = {
 # Messages settings
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
+# Swagger settings
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'USE_SESSION_AUTH': False,
+    'JSON_EDITOR': True,
+    'SUPPORTED_SUBMIT_METHODS': ['get', 'post', 'put', 'delete', 'patch'],
+}
+
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'main.authentication.SupabaseAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/day',
-        'user': '1000/day'
+        'anon': '100/hour',
+        'user': '1000/hour'
     }
 }

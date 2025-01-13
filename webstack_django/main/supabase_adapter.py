@@ -293,168 +293,55 @@ class SupabaseAdapter:
             return self._handle_error("de la mise à jour du profil", e)
 
     # Fonctions pour les produits
-    def get_products(self, category_id: str = None, brand_id: str = None,
-                    search: str = None, include_inactive: bool = False,
-                    page: int = 1, per_page: int = 20) -> Dict:
-        """Récupère la liste des produits avec filtres et pagination."""
+    def get_products(self) -> List[Dict]:
+        """Récupère tous les produits"""
         try:
-            logger.info(f"Récupération des produits avec les filtres: category={category_id}, brand={brand_id}, search={search}")
-            
-            # Construire la requête de base
-            query = self.supabase.table('products')\
-                .select('*, category:categories(*), brand:brands(*), stock_movements(quantity)')\
-                .eq('is_active', True)
-            
-            # Appliquer les filtres
-            if not include_inactive:
-                query = query.eq('is_active', True)
-            
-            if category_id:
-                query = query.eq('category_id', category_id)
-            
-            if brand_id:
-                query = query.eq('brand_id', brand_id)
-            
-            if search:
-                query = query.ilike('name', f'%{search}%')
-            
-            # Tri
-            if sort == 'price_asc':
-                query = query.order('price', desc=False)
-            elif sort == 'price_desc':
-                query = query.order('price', desc=True)
-            else:
-                query = query.order('name')
-            
-            # Pagination
-            start = (page - 1) * per_page
-            query = query.range(start, start + per_page - 1)
-            
-            response = query.execute()
-            
-            if not response.data:
-                return {
-                    "success": True,
-                    "data": {
-                        "items": [],
-                        "total": 0,
-                        "page": page,
-                        "per_page": per_page
-                    }
-                }
-            
-            # Traiter les résultats
-            products = []
-            for product in response.data:
-                # Calculer le stock actuel
-                stock_movements = product.pop('stock_movements', [])
-                current_stock = sum(movement.get('quantity', 0) for movement in stock_movements)
-                
-                # Ajouter les informations de stock au produit
-                product['current_stock'] = current_stock
-                products.append(product)
-            
-            return {
-                "success": True,
-                "data": {
-                    "items": products,
-                    "total": len(response.data),
-                    "page": page,
-                    "per_page": per_page
-                }
-            }
-            
+            response = self.supabase.table('products').select('*').execute()
+            return response.data
         except Exception as e:
             logger.error(f"Erreur lors de la récupération des produits: {str(e)}")
-            return {
-                "success": False,
-                "error": str(e),
-                "data": {
-                    "items": [],
-                    "total": 0,
-                    "page": page,
-                    "per_page": per_page
-                }
-            }
+            raise
 
-    def get_product_by_id(self, product_id: str) -> Dict:
+    def get_product_by_id(self, product_id: str) -> Optional[Dict]:
         """Récupère un produit par son ID"""
         try:
-            response = self.supabase.table('products')\
-                .select('*, category:categories(*), brand:brands(*)')\
-                .eq('id', product_id)\
-                .single()\
-                .execute()
-            
-            return {"success": True, "data": response.data}
+            response = self.supabase.table('products').select('*').eq('id', product_id).single().execute()
+            return response.data
         except Exception as e:
-            return self._handle_error(f"de la récupération du produit {product_id}", e)
+            logger.error(f"Erreur lors de la récupération du produit {product_id}: {str(e)}")
+            return None
 
-    def create_product(self, data: Dict) -> Dict:
+    def create_product(self, product_data: Dict) -> Dict:
         """Crée un nouveau produit"""
         try:
-            # Validation des champs requis
-            required_fields = ['name', 'price', 'stock', 'category_id', 'brand_id']
-            for field in required_fields:
-                if field not in data:
-                    return {"success": False, "error": f"Le champ {field} est requis"}
+            # Ajout d'un slug basé sur le nom du produit
+            if 'name' in product_data:
+                product_data['slug'] = slugify(product_data['name'])
             
-            # Générer le slug à partir du nom
-            data['slug'] = slugify(data['name'])
+            # Ajout de la date de création
+            product_data['created_at'] = datetime.utcnow().isoformat()
             
-            # Ajouter les timestamps et is_active par défaut
-            data['created_at'] = datetime.utcnow().isoformat()
-            data['updated_at'] = data['created_at']
-            data['is_active'] = data.get('is_active', True)
-            
-            # Vérifier que category_id et brand_id existent
-            category = self.supabase.table('categories').select('id').eq('id', data['category_id']).single().execute()
-            brand = self.supabase.table('brands').select('id').eq('id', data['brand_id']).single().execute()
-            
-            if not category.data:
-                return {"success": False, "error": "Catégorie invalide"}
-            if not brand.data:
-                return {"success": False, "error": "Marque invalide"}
-            
-            response = self.supabase.table('products')\
-                .insert(data)\
-                .execute()
-            
-            return {"success": True, "data": response.data[0]}
+            response = self.supabase.table('products').insert(product_data).execute()
+            return response.data[0]
         except Exception as e:
-            return self._handle_error("de la création du produit", e)
+            logger.error(f"Erreur lors de la création du produit: {str(e)}")
+            raise
 
-    def update_product(self, product_id: str, data: Dict) -> Dict:
+    def update_product(self, product_id: str, product_data: Dict) -> Optional[Dict]:
         """Met à jour un produit existant"""
         try:
-            # Mettre à jour le timestamp
-            data['updated_at'] = datetime.utcnow().isoformat()
+            # Mise à jour du slug si le nom est modifié
+            if 'name' in product_data:
+                product_data['slug'] = slugify(product_data['name'])
             
-            # Si le nom est modifié, mettre à jour le slug
-            if 'name' in data:
-                data['slug'] = slugify(data['name'])
+            # Ajout de la date de mise à jour
+            product_data['updated_at'] = datetime.utcnow().isoformat()
             
-            response = self.supabase.table('products')\
-                .update(data)\
-                .eq('id', product_id)\
-                .execute()
-            
-            return {"success": True, "data": response.data[0]}
+            response = self.supabase.table('products').update(product_data).eq('id', product_id).execute()
+            return response.data[0] if response.data else None
         except Exception as e:
-            return self._handle_error(f"de la mise à jour du produit {product_id}", e)
-
-    def delete_product(self, product_id: str) -> Dict:
-        """Supprime un produit (soft delete)"""
-        try:
-            # Soft delete en mettant is_active à False
-            response = self.supabase.table('products')\
-                .update({'is_active': False, 'updated_at': datetime.utcnow().isoformat()})\
-                .eq('id', product_id)\
-                .execute()
-            
-            return {"success": True, "data": response.data[0]}
-        except Exception as e:
-            return self._handle_error(f"de la suppression du produit {product_id}", e)
+            logger.error(f"Erreur lors de la mise à jour du produit {product_id}: {str(e)}")
+            raise
 
     # Fonctions pour les catégories
     def get_categories_with_count(self):

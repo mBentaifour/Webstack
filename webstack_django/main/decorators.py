@@ -12,9 +12,9 @@ def supabase_auth_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         # Vérifier si nous sommes en mode test
-        if request.META.get('TESTING') or os.environ.get('TESTING') == 'True':
-            # En mode test, on vérifie soit l'authentification Django soit le token Supabase
-            if request.user.is_authenticated or request.session.get('supabase_access_token'):
+        if os.environ.get('TESTING') == 'True':
+            # En mode test, on vérifie si un token de test est présent dans la session
+            if request.session.get('supabase_access_token'):
                 return view_func(request, *args, **kwargs)
             return HttpResponseRedirect(reverse('main:login'))
             

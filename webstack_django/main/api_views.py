@@ -1,15 +1,18 @@
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import action, permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 from supabase import create_client
 import os
 from dotenv import load_dotenv
 from .authentication import SupabaseAuthentication
+import logging
 
 # Charger les variables d'environnement
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 class ProductViewSet(viewsets.ViewSet):
     """
@@ -122,3 +125,55 @@ class ProductViewSet(viewsets.ViewSet):
             return Response(response.data)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+def get_products(request):
+    """Récupère la liste des produits"""
+    try:
+        adapter = SupabaseAdapter()
+        products = adapter.get_products()
+        return Response(products, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération des produits: {str(e)}")
+        return Response(
+            {"error": "Erreur lors de la récupération des produits"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+def get_product_details(request, product_id):
+    """Récupère les détails d'un produit"""
+    try:
+        adapter = SupabaseAdapter()
+        product = adapter.get_product_by_id(product_id)
+        if product:
+            return Response(product, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "Produit non trouvé"},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération du produit: {str(e)}")
+        return Response(
+            {"error": "Erreur lors de la récupération du produit"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_product(request):
+    """Crée un nouveau produit"""
+    try:
+        adapter = SupabaseAdapter()
+        product_data = request.data
+        product = adapter.create_product(product_data)
+        return Response(product, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        logger.error(f"Erreur lors de la création du produit: {str(e)}")
+        return Response(
+            {"error": "Erreur lors de la création du produit"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

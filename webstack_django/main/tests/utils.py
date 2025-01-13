@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from main.models import SupabaseUser
 from main.supabase_auth import SupabaseAuth
 from django.test import Client
-from django.contrib.sessions.middleware import SessionMiddleware
+from django.contrib.auth import authenticate, login
 from django.test.client import RequestFactory
 
 def with_test_auth(f):
@@ -25,7 +25,7 @@ def with_test_auth(f):
         os.environ['SUPABASE_URL'] = 'https://hbqppveyaofcqtqipp.supabase.co'
         os.environ['SUPABASE_KEY'] = 'test-key'
         
-        # Utilisation de l'utilisateur existant
+        # Création ou récupération de l'utilisateur de test
         try:
             user = User.objects.get(username='testuser')
         except User.DoesNotExist:
@@ -39,25 +39,16 @@ def with_test_auth(f):
                 supabase_uid='6742e94f-f8f4-410a-9a5a-6e3f2efb7d55'
             )
         
-        # Création d'un nouveau client de test
+        # Configuration du client de test
         self.client = Client()
         
-        # Login de l'utilisateur
-        logged_in = self.client.login(username='testuser', password='AdminDroguerie2024!')
-        if not logged_in:
-            raise Exception("Could not log in test user")
+        # Authentification de l'utilisateur
+        self.client.force_login(user)
         
         # Configuration de la session
         session = self.client.session
         session['supabase_access_token'] = 'fake_test_token'
-        session['_auth_user_id'] = str(user.id)
-        session['_auth_user_backend'] = 'django.contrib.auth.backends.ModelBackend'
-        session['_auth_user_hash'] = user.get_session_auth_hash()
         session.save()
-        
-        # Ajout des métadonnées de test à l'environnement
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'webstack_django.settings'
-        os.environ['TESTING'] = 'True'
         
         # Mock de la vérification du token
         original_verify = getattr(SupabaseAuth, 'verify_token', None)
