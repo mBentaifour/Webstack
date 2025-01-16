@@ -1,0 +1,124 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold mb-4">{{ title }}</h1>
+        
+        <!-- Formulaire de recherche -->
+        <form method="GET" action="{% url 'main:search' %}" class="flex gap-4 mb-8">
+            <input type="text" 
+                   name="q" 
+                   value="{{ query }}" 
+                   placeholder="Rechercher des produits..."
+                   class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="submit" 
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Rechercher
+            </button>
+        </form>
+    </div>
+
+    <!-- Résultats de recherche -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% if products %}
+            {% for product in products %}
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" 
+                             alt="{{ product.name }}" 
+                             class="w-full h-48 object-cover">
+                    {% else %}
+                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                            <span class="text-gray-500">Pas d'image</span>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">{{ product.name }}</h3>
+                        {% if product.category %}
+                            <p class="text-sm text-gray-600 mb-2">
+                                Catégorie: {{ product.category.name }}
+                            </p>
+                        {% endif %}
+                        <p class="text-blue-600 font-bold">{{ product.price }} €</p>
+                        <a href="{% url 'main:product_detail' product.slug %}" 
+                           class="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Voir le produit
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            {% if query %}
+                <div class="col-span-full text-center py-8">
+                    <p class="text-gray-600">Aucun résultat trouvé pour "{{ query }}"</p>
+                </div>
+            {% else %}
+                <div class="col-span-full text-center py-8">
+                    <p class="text-gray-600">Utilisez la barre de recherche ci-dessus pour trouver des produits</p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<!-- Script pour la recherche en temps réel (optionnel) -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('input[name="q"]');
+    const resultsContainer = document.querySelector('.grid');
+    let searchTimeout;
+
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        const query = this.value;
+
+        searchTimeout = setTimeout(() => {
+            if (query.length >= 2) {
+                fetch(`/api/search/?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateResults(data.data.products);
+                        }
+                    })
+                    .catch(error => console.error('Erreur:', error));
+            }
+        }, 300);
+    });
+
+    function updateResults(products) {
+        resultsContainer.innerHTML = products.length ? 
+            products.map(product => `
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    ${product.image_url 
+                        ? `<img src="${product.image_url}" alt="${product.name}" class="w-full h-48 object-cover">`
+                        : `<div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                            <span class="text-gray-500">Pas d'image</span>
+                           </div>`
+                    }
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">${product.name}</h3>
+                        ${product.category 
+                            ? `<p class="text-sm text-gray-600 mb-2">Catégorie: ${product.category}</p>`
+                            : ''
+                        }
+                        <p class="text-blue-600 font-bold">${product.price} €</p>
+                        <a href="/product/${product.slug}/" 
+                           class="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Voir le produit
+                        </a>
+                    </div>
+                </div>
+            `).join('') 
+            : `<div class="col-span-full text-center py-8">
+                <p class="text-gray-600">Aucun résultat trouvé</p>
+               </div>`;
+    }
+});
+</script>
+{% endblock %}

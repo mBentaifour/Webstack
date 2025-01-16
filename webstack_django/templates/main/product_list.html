@@ -1,0 +1,492 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Nos Produits - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        padding: 2rem 0;
+    }
+
+    .product-card {
+        position: relative;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    }
+
+    .product-image {
+        position: relative;
+        padding-top: 75%;
+        background: #f8f9fa;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image img {
+        transform: scale(1.1);
+    }
+
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
+        text-decoration: none;
+        transform: translateY(20px);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .product-card:hover .action-btn {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .action-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .product-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1;
+    }
+
+    .product-content {
+        padding: 1.5rem;
+    }
+
+    .product-category {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    .product-stock {
+        font-size: 0.875rem;
+        color: #28a745;
+    }
+
+    .product-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0.5rem 0;
+    }
+
+    .rating-stars {
+        color: #ffc107;
+    }
+
+    .filters-sidebar {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+
+    .filter-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-title {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .price-range {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .price-input {
+        width: 100px;
+    }
+
+    .brand-list {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .custom-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+    }
+
+    .custom-checkbox input {
+        margin-right: 0.5rem;
+    }
+
+    .sort-select {
+        padding: 0.5rem;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        background: white;
+    }
+
+    /* Animation des filtres */
+    .filters-sidebar {
+        animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Animation des produits */
+    .product-card {
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Sidebar Filtres -->
+        <div class="col-lg-3 mb-4">
+            <div class="filters-sidebar">
+                <h4 class="mb-4">Filtres</h4>
+                
+                <!-- Catégories -->
+                <div class="filter-section">
+                    <h5 class="filter-title">Catégories</h5>
+                    <div class="custom-checkbox">
+                        <input type="checkbox" id="all-categories">
+                        <label for="all-categories">Toutes les catégories</label>
+                    </div>
+                    {% for category in categories %}
+                    <div class="custom-checkbox">
+                        <input type="checkbox" id="category-{{ category.id }}" 
+                               name="category" value="{{ category.id }}">
+                        <label for="category-{{ category.id }}">{{ category.name }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Prix -->
+                <div class="filter-section">
+                    <h5 class="filter-title">Prix</h5>
+                    <div class="price-range">
+                        <input type="number" class="form-control price-input" placeholder="Min">
+                        <span>-</span>
+                        <input type="number" class="form-control price-input" placeholder="Max">
+                    </div>
+                </div>
+
+                <!-- Marques -->
+                <div class="filter-section">
+                    <h5 class="filter-title">Marques</h5>
+                    <div class="brand-list">
+                        {% for brand in brands %}
+                        <div class="custom-checkbox">
+                            <input type="checkbox" id="brand-{{ brand.id }}" 
+                                   name="brand" value="{{ brand.id }}">
+                            <label for="brand-{{ brand.id }}">{{ brand.name }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Disponibilité -->
+                <div class="filter-section">
+                    <h5 class="filter-title">Disponibilité</h5>
+                    <div class="custom-checkbox">
+                        <input type="checkbox" id="in-stock">
+                        <label for="in-stock">En stock</label>
+                    </div>
+                    <div class="custom-checkbox">
+                        <input type="checkbox" id="on-sale">
+                        <label for="on-sale">En promotion</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary w-100" id="apply-filters">
+                    <i class="fas fa-filter me-2"></i>Appliquer les filtres
+                </button>
+            </div>
+        </div>
+
+        <!-- Liste des Produits -->
+        <div class="col-lg-9">
+            <!-- En-tête -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Nos Produits</h1>
+                <div class="d-flex align-items-center">
+                    <label class="me-2">Trier par:</label>
+                    <select class="sort-select">
+                        <option value="popularity">Popularité</option>
+                        <option value="price-asc">Prix croissant</option>
+                        <option value="price-desc">Prix décroissant</option>
+                        <option value="name">Nom</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grille de Produits -->
+            <div class="product-grid">
+                {% for product in products %}
+                <div class="product-card">
+                    {% if product.on_sale %}
+                    <div class="product-badge">
+                        <span class="badge bg-danger">-{{ product.discount }}%</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="product-image">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/placeholder.jpg' %}" alt="{{ product.name }}">
+                        {% endif %}
+                        <div class="product-overlay">
+                            <div class="product-actions">
+                                <a href="{% url 'main:product_detail' product.slug %}" class="action-btn" 
+                                   title="Voir le produit">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="#" class="action-btn add-to-cart" 
+                                   data-product-id="{{ product.id }}" title="Ajouter au panier">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </a>
+                                <a href="#" class="action-btn add-to-wishlist" 
+                                   data-product-id="{{ product.id }}" title="Ajouter aux favoris">
+                                    <i class="fas fa-heart"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-content">
+                        <div class="product-category">{{ product.category.name }}</div>
+                        <h3 class="product-title">{{ product.name }}</h3>
+                        <div class="product-rating">
+                            <div class="rating-stars">
+                                {% for i in "12345"|make_list %}
+                                <i class="fas fa-star{% if forloop.counter > product.rating %}-o{% endif %}"></i>
+                                {% endfor %}
+                            </div>
+                            <span>({{ product.review_count }})</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="product-price">
+                                {% if product.on_sale %}
+                                <span class="text-decoration-line-through text-muted me-2">
+                                    {{ product.original_price }}€
+                                </span>
+                                {{ product.price }}€
+                                {% else %}
+                                {{ product.price }}€
+                                {% endif %}
+                            </div>
+                            <div class="product-stock">
+                                {% if product.in_stock %}
+                                <i class="fas fa-check-circle text-success"></i> En stock
+                                {% else %}
+                                <i class="fas fa-times-circle text-danger"></i> Rupture
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                    <h3>Aucun produit trouvé</h3>
+                    <p class="text-muted">Essayez de modifier vos filtres de recherche.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation des cartes produits au scroll
+    const productCards = document.querySelectorAll('.product-card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    productCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        observer.observe(card);
+    });
+
+    // Gestion du panier
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            
+            // Animation du bouton
+            this.classList.add('animate__animated', 'animate__rubberBand');
+            setTimeout(() => {
+                this.classList.remove('animate__animated', 'animate__rubberBand');
+            }, 1000);
+
+            // Ici, ajoutez votre logique d'ajout au panier
+        });
+    });
+
+    // Gestion des favoris
+    document.querySelectorAll('.add-to-wishlist').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            
+            // Animation du bouton
+            this.classList.add('animate__animated', 'animate__heartBeat');
+            setTimeout(() => {
+                this.classList.remove('animate__animated', 'animate__heartBeat');
+            }, 1000);
+
+            // Ici, ajoutez votre logique d'ajout aux favoris
+        });
+    });
+
+    // Filtres
+    const applyFilters = document.getElementById('apply-filters');
+    if (applyFilters) {
+        applyFilters.addEventListener('click', function() {
+            // Animation du bouton
+            this.classList.add('animate__animated', 'animate__pulse');
+            setTimeout(() => {
+                this.classList.remove('animate__animated', 'animate__pulse');
+            }, 1000);
+
+            // Ici, ajoutez votre logique de filtrage
+        });
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

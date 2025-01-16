@@ -1,0 +1,142 @@
+:root {
+    --primary-color: #ff4b2b;
+    --secondary-color: #2b2d42;
+    --accent-color: #ffd60a;
+    --text-color: #2b2d42;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+}{% load static %}
+
+<!-- Top Navigation Bar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <!-- Logo et Marque -->
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'main:home' %}">
+            <i class="fas fa-store me-2"></i>
+            <span>Droguerie Express</span>
+        </a>
+
+        <!-- Bouton Toggle pour Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu Principal -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- Accueil -->
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
+                       href="{% url 'main:home' %}">
+                        <i class="fas fa-home me-2"></i>Accueil
+                    </a>
+                </li>
+
+                <!-- Rayons (avec Dropdown) -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if 'category' in request.resolver_match.url_name %}active{% endif %}" 
+                       href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-th-large me-2"></i>Rayons
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for category in nav_categories %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'main:category_detail' category.slug %}">
+                                <i class="fas fa-box me-2"></i>
+                                {{ category.name }}
+                            </a>
+                        </li>
+                        {% empty %}
+                        <li><span class="dropdown-item">Aucun rayon disponible</span></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Barre de Recherche -->
+            <form class="search-form d-flex mx-lg-2" method="GET" action="{% url 'main:search' %}">
+                <div class="input-group">
+                    <input class="form-control" type="search" name="q" placeholder="Rechercher un produit..." 
+                           aria-label="Search" value="{{ request.GET.q }}">
+                    <button class="btn btn-light" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Menu Utilisateur -->
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                <!-- Menu Utilisateur -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-2"></i>{{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'main:dashboard' %}">
+                                <i class="fas fa-tachometer-alt me-2"></i>Tableau de bord
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'main:profile' %}">
+                                <i class="fas fa-user me-2"></i>Mon profil
+                            </a>
+                        </li>
+                        {% if user.is_staff %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'admin:index' %}">
+                                <i class="fas fa-cog me-2"></i>Administration
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:login' %}">
+                        <i class="fas fa-sign-in-alt me-2"></i>Connexion
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:register' %}">
+                        <i class="fas fa-user-plus me-2"></i>Inscription
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Fil d'Ariane -->
+{% if breadcrumb %}
+<nav aria-label="breadcrumb" class="bg-light py-2">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            {% for item in breadcrumb %}
+            {% if not forloop.last %}
+            <li class="breadcrumb-item">
+                <a href="{{ item.url }}">{{ item.title }}</a>
+            </li>
+            {% else %}
+            <li class="breadcrumb-item active" aria-current="page">
+                {{ item.title }}
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ol>
+    </div>
+</nav>
+{% endif %}

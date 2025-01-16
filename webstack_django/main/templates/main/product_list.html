@@ -1,0 +1,223 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Nos Produits - Droguerie Électrique{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Filtres</h5>
+                    <form id="filterForm" method="get" action="{% url 'main:product_list' %}">
+                        <!-- Categories -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Catégories</h6>
+                            {% for category in categories %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="category" 
+                                       value="{{ category.id }}" id="cat{{ category.id }}"
+                                       {% if category.id in selected_category|split:',' %}checked{% endif %}>
+                                <label class="form-check-label d-flex justify-content-between align-items-center" 
+                                       for="cat{{ category.id }}">
+                                    {{ category.name }}
+                                    <span class="badge bg-primary rounded-pill">{{ category.product_count }}</span>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Brands -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Marques</h6>
+                            {% for brand in brands %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="brand" 
+                                       value="{{ brand.id }}" id="brand{{ brand.id }}"
+                                       {% if brand.id in selected_brand|split:',' %}checked{% endif %}>
+                                <label class="form-check-label d-flex justify-content-between align-items-center" 
+                                       for="brand{{ brand.id }}">
+                                    {{ brand.name }}
+                                    <span class="badge bg-secondary rounded-pill">{{ brand.product_count }}</span>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Prix</h6>
+                            <div class="range">
+                                <input type="range" class="form-range" min="0" max="1000" step="10"
+                                       id="priceRange" value="{{ max_price|default:1000 }}">
+                                <div class="d-flex justify-content-between">
+                                    <span>0€</span>
+                                    <span id="priceValue">{{ max_price|default:1000 }}€</span>
+                                </div>
+                                <input type="hidden" name="min_price" id="minPrice" value="{{ min_price|default:0 }}">
+                                <input type="hidden" name="max_price" id="maxPrice" value="{{ max_price|default:1000 }}">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-filter me-2"></i>Appliquer les filtres
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="col-md-9">
+            <!-- Sort Bar -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center">
+                    <span class="me-2">Trier par :</span>
+                    <select class="form-select" name="sort" onchange="this.form.submit()">
+                        <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Plus récents</option>
+                        <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Prix croissant</option>
+                        <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Prix décroissant</option>
+                    </select>
+                </div>
+                <div class="text-muted">
+                    {{ products|length }} produit(s) trouvé(s)
+                </div>
+            </div>
+
+            {% if products %}
+            <div class="row g-4">
+                {% for product in products %}
+                <div class="col-md-4">
+                    <div class="card product-card h-100">
+                        {% if product.stock <= 0 %}
+                        <div class="stock-badge bg-danger">Rupture de stock</div>
+                        {% elif product.stock <= 5 %}
+                        <div class="stock-badge bg-warning">Stock limité</div>
+                        {% endif %}
+
+                        <div class="position-relative">
+                            {% if product.image_url %}
+                            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                            {% else %}
+                            <img src="{% static 'main/images/default-product.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+                            {% endif %}
+
+                            {% if product.promotion_price %}
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-danger">
+                                    -{{ product.discount_percentage|floatformat:0 }}%
+                                </span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">{{ product.name }}</h5>
+                            {% if product.brand %}
+                            <p class="text-muted small mb-2">{{ product.brand.name }}</p>
+                            {% endif %}
+                            <p class="card-text text-muted">{{ product.description|truncatechars:100 }}</p>
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        {% if product.promotion_price %}
+                                        <span class="text-danger fw-bold">{{ product.promotion_price }}€</span>
+                                        <small class="text-muted text-decoration-line-through ms-2">
+                                            {{ product.price }}€
+                                        </small>
+                                        {% else %}
+                                        <span class="price-tag">{{ product.price }}€</span>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{% url 'main:product_detail' product.slug %}" class="btn btn-outline-primary">
+                                        <i class="fas fa-eye me-1"></i>Voir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if show_pagination %}
+            <nav class="mt-4" aria-label="Navigation des pages">
+                <ul class="pagination justify-content-center">
+                    {% if current_page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ current_page|add:'-1' }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                    <li class="page-item {% if p == current_page %}active{% endif %}">
+                        <a class="page-link" href="?page={{ p }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            {{ p }}
+                        </a>
+                    </li>
+                    {% endfor %}
+
+                    {% if current_page < total_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ current_page|add:'1' }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ total_pages }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+            {% else %}
+            <div class="text-center py-5">
+                <img src="{% static 'main/images/no-results.svg' %}" alt="Aucun résultat" class="mb-4" style="max-width: 200px;">
+                <h3>Aucun produit trouvé</h3>
+                <p class="text-muted">Essayez de modifier vos filtres de recherche.</p>
+                <a href="{% url 'main:product_list' %}" class="btn btn-primary">
+                    <i class="fas fa-redo me-2"></i>Réinitialiser les filtres
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Price Range Slider
+    const priceRange = document.getElementById('priceRange');
+    const priceValue = document.getElementById('priceValue');
+    const maxPrice = document.getElementById('maxPrice');
+
+    if (priceRange) {
+        priceRange.addEventListener('input', function() {
+            priceValue.textContent = this.value + '€';
+            maxPrice.value = this.value;
+        });
+    }
+
+    // Auto-submit on filter change
+    document.querySelectorAll('#filterForm input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            document.getElementById('filterForm').submit();
+        });
+    });
+</script>
+{% endblock %}
