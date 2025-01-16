@@ -1,209 +1,107 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from main.models.order import Order, Payment
-from .serializers import OrderSerializer, PaymentSerializer
+from django.shortcuts import get_object_or_404
+from main.models.order import Order, OrderItem
+from main.models.base_models import Product, Category, Brand
+from main.serializers import ProductSerializer, CategorySerializer
+from .serializers import OrderSerializer, OrderItemSerializer
 import stripe
 from django.conf import settings
+from decimal import Decimal
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-class OrderViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint pour gérer les commandes.
-    
-    retrieve:
-    Retourne les détails d'une commande spécifique.
-
-    list:
-    Retourne la liste des commandes de l'utilisateur connecté.
-    Les administrateurs peuvent voir toutes les commandes.
-
-    create:
-    Crée une nouvelle commande.
-    Requiert une liste d'articles (items) avec les quantités.
-
-    update:
-    Met à jour une commande existante.
-    Seuls certains champs peuvent être modifiés une fois la commande créée.
-
-    partial_update:
-    Met à jour partiellement une commande existante.
-
-    delete:
-    Supprime une commande (uniquement si elle n'est pas encore payée).
-    """
-    serializer_class = OrderSerializer
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_staff:
-            return Order.objects.all()
-        return Order.objects.filter(user=user)
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
 
-    @action(detail=True, methods=['post'])
-    def process_payment(self, request, pk=None):
-        """
-        Initie le processus de paiement pour une commande.
-        
-        Crée une intention de paiement Stripe et retourne le client_secret
-        nécessaire pour finaliser le paiement côté client.
-        
-        Paramètres:
-        - pk (int): ID de la commande
-        
-        Retourne:
-        - client_secret: Clé secrète pour le paiement Stripe
-        - payment_id: ID du paiement créé
-        """
-        order = self.get_object()
-        
-        try:
-            # Créer une intention de paiement Stripe
-            payment_intent = stripe.PaymentIntent.create(
-                amount=int(order.total * 100),  # Stripe utilise les centimes
-                currency='eur',
-                metadata={'order_id': order.id}
-            )
-
-            # Créer un enregistrement de paiement
-            payment = Payment.objects.create(
-                order=order,
-                amount=order.total,
-                payment_method='card',
-                transaction_id=payment_intent.id,
-                payment_details={'client_secret': payment_intent.client_secret}
-            )
-
-            return Response({
-                'client_secret': payment_intent.client_secret,
-                'payment_id': payment.id
-            })
-
-        except stripe.error.StripeError as e:
-            return Response({
-                'error': str(e)
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['post'])
-    def confirm_payment(self, request, pk=None):
-        """
-        Confirme le paiement d'une commande.
-        
-        Vérifie le statut du paiement avec Stripe et met à jour
-        le statut de la commande si le paiement est réussi.
-        
-        Paramètres:
-        - pk (int): ID de la commande
-        - payment_intent_id (str): ID de l'intention de paiement Stripe
-        
-        Retourne:
-        - status: Statut de la confirmation ('payment_confirmed' ou erreur)
-        """
-        order = self.get_object()
-        payment_intent_id = request.data.get('payment_intent_id')
-
-        try:
-            # Vérifier le paiement avec Stripe
-            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-
-            if payment_intent.status == 'succeeded':
-                # Mettre à jour la commande et le paiement
-                order.status = 'paid'
-                order.save()
-
-                payment = order.payments.filter(transaction_id=payment_intent_id).first()
-                if payment:
-                    payment.status = 'completed'
-                    payment.save()
-
-                return Response({'status': 'payment_confirmed'})
-            else:
-                return Response({
-                    'error': 'Payment not succeeded'
-                }, status=status.HTTP_400_BAD_REQUEST)
-
-        except stripe.error.StripeError as e:
-            return Response({
-                'error': str(e)
-            }, status=status.HTTP_400_BAD_REQUEST)
+class BrandViewSet(viewsets.ModelViewSet):
+    queryset = Brand.objects.all()
+    serializer_class = CategorySerializer  # Nous utiliserons le même serializer pour l'instant
+    permission_classes = [IsAuthenticated]
 
 class PaymentViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint pour gérer les paiements.
-    
-    retrieve:
-    Retourne les détails d'un paiement spécifique.
-
-    list:
-    Retourne la liste des paiements de l'utilisateur connecté.
-    Les administrateurs peuvent voir tous les paiements.
-
-    create:
-    Crée un nouveau paiement.
-    Généralement créé automatiquement lors du processus de paiement d'une commande.
-
-    update:
-    Met à jour un paiement existant.
-    Réservé aux administrateurs.
-
-    partial_update:
-    Met à jour partiellement un paiement existant.
-    Réservé aux administrateurs.
-
-    delete:
-    Supprime un paiement.
-    Réservé aux administrateurs.
-    """
-    serializer_class = PaymentSerializer
     permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_staff:
-            return Payment.objects.all()
-        return Payment.objects.filter(order__user=user)
-
+    
     @action(detail=True, methods=['post'])
-    def refund(self, request, pk=None):
-        """
-        Effectue le remboursement d'un paiement.
+    def process(self, request, pk=None):
+        order = get_object_or_404(Order, id=pk, user=request.user)
         
-        Crée un remboursement via Stripe et met à jour les statuts
-        du paiement et de la commande associée.
-        
-        Paramètres:
-        - pk (int): ID du paiement
-        - reason (str): Raison du remboursement
-        
-        Retourne:
-        - status: Statut du remboursement ('refunded')
-        - refund_id: ID du remboursement Stripe
-        """
-        payment = self.get_object()
-        reason = request.data.get('reason')
-
         try:
-            # Effectuer le remboursement via Stripe
-            refund = stripe.Refund.create(
-                payment_intent=payment.transaction_id,
-                reason=reason
+            # Créer l'intention de paiement Stripe
+            intent = stripe.PaymentIntent.create(
+                amount=int(order.total * 100),  # Stripe utilise les centimes
+                currency='eur',
+                customer=request.user.stripe_customer_id,
+                metadata={'order_id': str(order.id)}
             )
-
-            # Mettre à jour le statut du paiement
-            payment.status = 'refunded'
-            payment.refund_reason = reason
-            payment.save()
-
-            # Mettre à jour le statut de la commande
-            payment.order.status = 'refunded'
-            payment.order.save()
-
-            return Response({'status': 'refunded', 'refund_id': refund.id})
-
-        except stripe.error.StripeError as e:
+            
+            return Response({
+                'clientSecret': intent.client_secret
+            })
+        except Exception as e:
             return Response({
                 'error': str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
+
+class OrderViewSet(viewsets.ModelViewSet):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+    
+    def perform_create(self, serializer):
+        # Calculer les totaux
+        items_data = self.request.data.get('items', [])
+        subtotal = Decimal('0')
+        
+        # Vérifier le stock
+        for item in items_data:
+            product = get_object_or_404(Product, id=item['product'])
+            if product.stock < item['quantity']:
+                raise serializers.ValidationError(
+                    f"Not enough stock for product {product.name}. "
+                    f"Only {product.stock} available."
+                )
+            subtotal += product.price * Decimal(str(item['quantity']))
+        
+        # Calculer TVA et frais de livraison
+        tax = subtotal * Decimal('0.20')  # TVA 20%
+        shipping_cost = Decimal('0') if subtotal > 50 else Decimal('5.99')
+        total = subtotal + tax + shipping_cost
+        
+        # Créer la commande
+        order = serializer.save(
+            user=self.request.user,
+            subtotal=subtotal,
+            tax=tax,
+            shipping_cost=shipping_cost,
+            total=total
+        )
+        
+        # Créer les items et mettre à jour le stock
+        for item_data in items_data:
+            product = get_object_or_404(Product, id=item_data['product'])
+            quantity = item_data['quantity']
+            
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                quantity=quantity,
+                price=product.price
+            )
+            
+            # Mettre à jour le stock
+            product.stock -= quantity
+            product.save()
+        
+        return order

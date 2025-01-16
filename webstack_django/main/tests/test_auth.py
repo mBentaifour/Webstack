@@ -1,181 +1,111 @@
-import unittest
-from unittest.mock import patch, MagicMock
-from main.auth.auth_manager import AuthManager
-import logging
+from django.test import TestCase
+from django.contrib.auth import get_user_model
+from rest_framework.test import APIClient
+from rest_framework import status
+from django.urls import reverse
 
-# Désactiver les logs pendant les tests
-logging.disable(logging.CRITICAL)
+User = get_user_model()
 
-class TestAuthManager(unittest.TestCase):
+class AuthenticationTests(TestCase):
     def setUp(self):
-        """Configuration initiale pour chaque test"""
-        self.auth_manager = AuthManager()
-        self.test_user = {
-            "email": "test@example.com",
-            "password": "Test123!",
-            "metadata": {
-                "full_name": "Test User",
-                "is_admin": False
-            }
+        self.client = APIClient()
+        self.register_url = reverse('main:api_register')
+        self.login_url = reverse('main:api_login')
+        self.user_data = {
+            'email': 'test@example.com',
+            'username': 'testuser',
+            'password': 'TestPassword123!',
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'phone_number': '+33612345678'
         }
-        self.test_user_id = "test_user_id"
 
-    @patch('main.auth.auth_manager.get_supabase_client')
-    def test_sign_up_success(self, mock_get_client):
-        """Test d'inscription réussie"""
-        # Configuration du mock
-        mock_client = MagicMock()
-        mock_auth = MagicMock()
-        mock_user = MagicMock()
-        mock_user.id = self.test_user_id
-        mock_user.email = self.test_user["email"]
-        mock_response = MagicMock()
-        mock_response.user = mock_user
-        mock_response.error = None
-        mock_auth.sign_up.return_value = mock_response
-        mock_client.auth = mock_auth
-        mock_get_client.return_value = mock_client
+    def test_user_registration(self):
+        """Test l'inscription d'un nouvel utilisateur"""
+        response = self.client.post(self.register_url, self.user_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(User.objects.filter(email=self.user_data['email']).exists())
 
-        # Test
-        result = self.auth_manager.sign_up(
-            self.test_user["email"],
-            self.test_user["password"],
-            self.test_user["metadata"]
+    def test_user_registration_invalid_data(self):
+        """Test l'inscription avec des données invalides"""
+        invalid_data = {
+            'email': 'invalid-email',
+            'password': '123'  # Mot de passe trop court
+        }
+        response = self.client.post(self.register_url, invalid_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_user_login(self):
+        """Test la connexion d'un utilisateur"""
+        # Créer un utilisateur
+        User.objects.create_user(
+            email=self.user_data['email'],
+            username=self.user_data['username'],
+            password=self.user_data['password']
         )
-
-        # Vérifications
-        self.assertTrue(result["success"])
-        self.assertEqual(result["user"]["id"], self.test_user_id)
-        self.assertEqual(result["user"]["email"], self.test_user["email"])
-        mock_auth.sign_up.assert_called_once_with({
-            "email": self.test_user["email"],
-            "password": self.test_user["password"],
-            "options": {
-                "data": self.test_user["metadata"]
-            }
+        
+        # Tenter de se connecter
+        response = self.client.post(self.login_url, {
+            'email': self.user_data['email'],
+            'password': self.user_data['password']
         })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('token', response.data)
 
-    @patch('main.auth.auth_manager.get_supabase_client')
-    def test_sign_in_success(self, mock_get_client):
-        """Test de connexion réussie"""
-        # Configuration du mock
-        mock_client = MagicMock()
-        mock_auth = MagicMock()
-        mock_user = MagicMock()
-        mock_user.id = self.test_user_id
-        mock_user.email = self.test_user["email"]
-        mock_user.user_metadata = self.test_user["metadata"]
-        mock_response = MagicMock()
-        mock_response.user = mock_user
-        mock_response.error = None
-        mock_auth.sign_in_with_password.return_value = mock_response
-        mock_client.auth = mock_auth
-        mock_get_client.return_value = mock_client
+    def test_user_login_wrong_credentials(self):
+        """Test la connexion avec de mauvaises informations d'identification"""
+        response = self.client.post(self.login_url, {
+            'email': 'wrong@example.com',
+            'password': 'WrongPassword123!'
+        })
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        # Test
-        result = self.auth_manager.sign_in(
-            self.test_user["email"],
-            self.test_user["password"]
+class UserProfileTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(
+            email='test@example.com',
+            username='testuser',
+            password='TestPassword123!',
+            first_name='John',
+            last_name='Doe'
         )
+        self.client.force_authenticate(user=self.user)
+        self.profile_url = reverse('main:profile')
 
-        # Vérifications
-        self.assertTrue(result["success"])
-        self.assertEqual(result["user"]["id"], self.test_user_id)
-        self.assertEqual(result["user"]["email"], self.test_user["email"])
-        mock_auth.sign_in_with_password.assert_called_once_with({
-            "email": self.test_user["email"],
-            "password": self.test_user["password"]
-        })
+    def test_get_profile(self):
+        """Test la récupération du profil utilisateur"""
+        response = self.client.get(self.profile_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['email'], self.user.email)
 
-    @patch('main.auth.auth_manager.get_supabase_client')
-    def test_sign_in_failure(self, mock_get_client):
-        """Test d'échec de connexion"""
-        # Configuration du mock
-        mock_client = MagicMock()
-        mock_auth = MagicMock()
-        mock_auth.sign_in_with_password.side_effect = Exception("Invalid credentials")
-        mock_client.auth = mock_auth
-        mock_get_client.return_value = mock_client
+    def test_update_profile(self):
+        """Test la mise à jour du profil utilisateur"""
+        update_data = {
+            'first_name': 'Jane',
+            'last_name': 'Smith',
+            'phone_number': '+33687654321'
+        }
+        response = self.client.patch(self.profile_url, update_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.first_name, update_data['first_name'])
 
-        # Test
-        result = self.auth_manager.sign_in("wrong@email.com", "wrongpass")
-
-        # Vérifications
-        self.assertFalse(result["success"])
-        self.assertIn("error", result)
-        mock_auth.sign_in_with_password.assert_called_once_with({
-            "email": "wrong@email.com",
-            "password": "wrongpass"
-        })
-
-    @patch('main.auth.auth_manager.get_supabase_client')
-    def test_sign_out(self, mock_get_client):
-        """Test de déconnexion"""
-        # Configuration du mock
-        mock_client = MagicMock()
-        mock_auth = MagicMock()
-        mock_response = MagicMock()
-        mock_response.error = None
-        mock_auth.sign_out.return_value = mock_response
-        mock_client.auth = mock_auth
-        mock_get_client.return_value = mock_client
-
-        # Test
-        result = self.auth_manager.sign_out()
-
-        # Vérifications
-        self.assertTrue(result["success"])
-        mock_auth.sign_out.assert_called_once()
-
-    @patch('main.auth.auth_manager.get_supabase_client')
-    def test_get_user_success(self, mock_get_client):
-        """Test de récupération des informations utilisateur"""
-        # Configuration du mock
-        mock_client = MagicMock()
-        mock_auth = MagicMock()
-        mock_user = MagicMock()
-        mock_user.id = self.test_user_id
-        mock_user.email = self.test_user["email"]
-        mock_user.user_metadata = self.test_user["metadata"]
-        mock_response = MagicMock()
-        mock_response.user = mock_user
-        mock_response.error = None
-        mock_auth.get_user.return_value = mock_response
-        mock_client.auth = mock_auth
-        mock_get_client.return_value = mock_client
-
-        # Test
-        user = self.auth_manager.get_user()
-
-        # Vérifications
-        self.assertIsNotNone(user)
-        self.assertEqual(user["id"], self.test_user_id)
-        self.assertEqual(user["email"], self.test_user["email"])
-        mock_auth.get_user.assert_called_once()
-
-    @patch('main.auth.auth_manager.get_supabase_client')
-    def test_is_admin(self, mock_get_client):
-        """Test de vérification du statut admin"""
-        # Configuration du mock
-        mock_client = MagicMock()
-        mock_auth = MagicMock()
-        mock_user = MagicMock()
-        mock_user.id = self.test_user_id
-        mock_user.email = self.test_user["email"]
-        mock_user.user_metadata = {"is_admin": True}
-        mock_response = MagicMock()
-        mock_response.user = mock_user
-        mock_response.error = None
-        mock_auth.get_user.return_value = mock_response
-        mock_client.auth = mock_auth
-        mock_get_client.return_value = mock_client
-
-        # Test
-        is_admin = self.auth_manager.is_admin()
-
-        # Vérifications
-        self.assertTrue(is_admin)
-        mock_auth.get_user.assert_called_once()
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_change_password(self):
+        """Test le changement de mot de passe"""
+        change_password_url = reverse('main:change_password')
+        data = {
+            'old_password': 'TestPassword123!',
+            'new_password': 'NewPassword456!',
+            'confirm_password': 'NewPassword456!'
+        }
+        response = self.client.post(change_password_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Vérifier que le nouveau mot de passe fonctionne
+        self.assertTrue(
+            self.client.login(
+                email='test@example.com',
+                password='NewPassword456!'
+            )
+        )

@@ -8,35 +8,20 @@ from .utils import resize_image, create_thumbnail
 import uuid
 
 class Category(models.Model):
-    CATEGORY_TYPES = [
-        ('hand_tools', 'Outils à main'),
-        ('power_tools', 'Outils électriques'),
-        ('measuring', 'Mesure et traçage'),
-        ('safety', 'Sécurité et protection'),
-        ('hardware', 'Quincaillerie'),
-        ('garden', 'Jardin'),
-        ('workshop', 'Atelier'),
-        ('plumbing', 'Plomberie'),
-        ('electrical', 'Électricité'),
-        ('painting', 'Peinture'),
-    ]
-
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200, verbose_name="Nom")
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    category_type = models.CharField(max_length=50, choices=CATEGORY_TYPES, verbose_name="Type de catégorie")
     description = models.TextField(blank=True, verbose_name="Description")
-    image = models.ImageField(upload_to='categories/', blank=True, null=True)
-    icon = models.CharField(max_length=50, blank=True, help_text="Classe d'icône (ex: fas fa-wrench)")
-    featured_brands = models.JSONField(default=list, blank=True)
-    discount_count = models.IntegerField(default=0)
-    tips = models.JSONField(default=list, blank=True, help_text="Conseils d'utilisation pour cette catégorie")
-    created_at = models.DateTimeField(default=timezone.now)
+    image_url = models.URLField(blank=True, null=True)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='children')
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['name']
+        db_table = 'categories'  # Utilise la table existante dans Supabase
         verbose_name = "Catégorie"
-        verbose_name_plural = 'Catégories'
+        verbose_name_plural = "Catégories"
+        ordering = ['name']
 
     def __str__(self):
         return self.name

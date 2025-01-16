@@ -33,10 +33,10 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(Inventory)
 class InventoryAdmin(admin.ModelAdmin):
-    list_display = ['product', 'quantity', 'last_updated']
-    list_filter = ['last_updated']
+    list_display = ['product', 'quantity', 'updated_at']
+    list_filter = ['updated_at']
     search_fields = ['product__name']
-    readonly_fields = ['last_updated']
+    readonly_fields = ['updated_at']
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):

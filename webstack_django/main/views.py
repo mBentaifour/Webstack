@@ -13,6 +13,8 @@ from .auth_manager import AuthManager, require_auth
 from main.decorators import supabase_auth_required
 import json
 import os
+from rest_framework import viewsets
+from .serializers import ProductSerializer
 
 # Configuration du logging
 logging.basicConfig(level=logging.INFO)
@@ -749,3 +751,10 @@ def product_search(request):
     template = 'main/test_search.html' if os.environ.get('TESTING') == 'True' else 'main/product_search.html'
     
     return render(request, template, context)
+
+class ProductViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows products to be viewed or edited.
+    """
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
