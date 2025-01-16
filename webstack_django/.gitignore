@@ -32,7 +32,9 @@ staticfiles/
 # Environment variables
 .env
 .env.local
-.env.*.local
+.env.*
+!.env.example
+.vercel.env
 
 # IDE
 .idea/
@@ -51,3 +53,7 @@ htmlcov/
 .coverage.*
 coverage.xml
 *.cover
+
+# Test files with secrets
+**/tests/test_orders.py
+**/tests/secrets.py
