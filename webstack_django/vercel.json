@@ -8,28 +8,12 @@
                 "maxLambdaSize": "15mb",
                 "runtime": "python3.9"
             }
-        },
-        {
-            "src": "build.sh",
-            "use": "@vercel/static-build",
-            "config": {
-                "distDir": "staticfiles"
-            }
         }
     ],
     "routes": [
         {
-            "src": "/static/(.*)",
-            "dest": "/static/$1"
-        },
-        {
             "src": "/(.*)",
             "dest": "webstack_django/wsgi.py"
         }
-    ],
-    "env": {
-        "DJANGO_SETTINGS_MODULE": "webstack_django.settings",
-        "DJANGO_DEBUG": "False",
-        "PYTHONPATH": "."
-    }
+    ]
 }
