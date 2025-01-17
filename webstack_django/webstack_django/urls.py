@@ -21,15 +21,19 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
     SpectacularRedocView,
 )
+from main.views.home import home
 
 urlpatterns = [
+    # Vue principale
+    path('', home, name='home'),
+    
     path('admin/', admin.site.urls),
     
-    # API Schema URLs
+    # API Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     
-    # API URLs
+    # Main app URLs
     path('api/', include('main.urls')),
 ]
