@@ -4,7 +4,6 @@ WSGI config for webstack_django project.
 
 import os
 from django.core.wsgi import get_wsgi_application
-from django.http import HttpResponse
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'webstack_django.settings')
 
@@ -43,11 +42,11 @@ def application(environ, start_response):
                         <h1>Django est en ligne sur Vercel !</h1>
                         <p>Cette page confirme que l'application fonctionne correctement.</p>
                         <p>Path: /</p>
+                        <p>Time: """ + str(environ.get('REQUEST_TIME', 'unknown')).encode() + b"""</p>
                     </div>
                 </body>
             </html>
         """]
     
-    # Pour toutes les autres routes, utiliser l'application Django standard
     django_app = get_wsgi_application()
     return django_app(environ, start_response)

@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'corsheaders',
     'main.apps.MainConfig',
+    'core',
 ]
 
 # Custom user model
