@@ -2,6 +2,13 @@
     "version": 2,
     "builds": [
         {
+            "src": "build.sh",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "staticfiles"
+            }
+        },
+        {
             "src": "vercel_app.py",
             "use": "@vercel/python",
             "config": {
@@ -25,5 +32,6 @@
         "PYTHONPATH": "/var/task",
         "DJANGO_DEBUG": "False",
         "DJANGO_ALLOWED_HOSTS": ".vercel.app"
-    }
+    },
+    "buildCommand": "chmod +x build.sh && ./build.sh"
 }
