@@ -1,11 +1,7 @@
 django==4.2.0
-<<<<<<< HEAD
-whitenoise==6.6.0
-=======
 djangorestframework==3.14.0
 django-cors-headers==4.3.0
 drf-spectacular==0.27.0
 python-dotenv==1.0.0
 whitenoise==6.6.0
 gunicorn==21.2.0
->>>>>>> d57e0a80c09fcb4f2f00bb5a2dda33a7531ac9da
