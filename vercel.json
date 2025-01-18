@@ -1,0 +1,14 @@
+{
+    "builds": [
+        {
+            "src": "webstack_django/webstack_django/wsgi.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "webstack_django/webstack_django/wsgi.py"
+        }
+    ]
+}
