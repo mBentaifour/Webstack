@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet
+from .views import ProductViewSet, test_connection
 
 router = DefaultRouter()
 router.register(r'products', ProductViewSet, basename='product')
@@ -10,6 +10,7 @@ app_name = 'main'
 urlpatterns = [
     # API Root
     path('', include(router.urls)),
+    path('test/', test_connection, name='test-connection'),
 ]
 
 # Configuration des médias en développement

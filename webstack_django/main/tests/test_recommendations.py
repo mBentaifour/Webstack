@@ -213,3 +213,4 @@ class RecommendationAnalysisTests(TestCase):
             all_min = min(r['min'] for r in cls.metrics['price_ranges'])
             all_max = max(r['max'] for r in cls.metrics['price_ranges'])
             print(f"\nGamme de prix globale: {all_min} - {all_max}")
+

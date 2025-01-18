@@ -1,0 +1,4 @@
+DJANGO_SETTINGS_MODULE=webstack_django.vercel_settings
+DJANGO_DEBUG=False
+PYTHONPATH=/var/task/webstack_django
+DJANGO_ALLOWED_HOSTS=.vercel.app

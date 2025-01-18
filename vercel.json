@@ -2,23 +2,19 @@
     "version": 2,
     "builds": [
         {
-            "src": "webstack_django/webstack_django/wsgi.py",
-            "use": "@vercel/python"
+            "src": "vercel_app.py",
+            "use": "@vercel/python",
+            "config": { "maxLambdaSize": "15mb" }
         }
     ],
     "routes": [
         {
-            "src": "/static/(.*)",
-            "dest": "/static/$1"
-        },
-        {
             "src": "/(.*)",
-            "dest": "webstack_django/webstack_django/wsgi.py"
+            "dest": "vercel_app.py"
         }
     ],
-    "git": {
-        "deploymentEnabled": {
-            "main": true
-        }
+    "env": {
+        "DJANGO_SETTINGS_MODULE": "webstack_django.settings",
+        "PYTHONPATH": "/var/task"
     }
 }
