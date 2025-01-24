@@ -8,14 +8,7 @@ Configuration
 Environment Variables
 You need to configure the following environment variables in the .env file:
 
-FLASK_SECRET_KEY: A secure random secret key for Flask.
-DATABASE_URL: Path to the database (SQLite).
-MAIL_SERVER: SMTP server (e.g., smtp.gmail.com).
-MAIL_PORT: Mail server port (587 for Gmail).
-MAIL_USE_TLS: Use TLS encryption for mail.
-MAIL_USERNAME: Your email username.
-MAIL_PASSWORD: Your email app password.
-ADMIN_EMAIL: Admin email for managing the project.
+
 
 ## Fonctionnalités principales
 
@@ -34,12 +27,48 @@ Database integration with SQLite.
 Email notifications using Gmail SMTP.
 Secure environment variable management with .env.
 
-Technologies Used
-Back-End: Flask, Python
-Database: SQLite
-Email Service: Gmail SMTP
-Environment Management: .env for environment variables
-Hosting/Development: Local development mode with Flask
+webstack_django/
+├── api/
+│   ├── __init__.py
+│   ├── models.py      # Modèles de données
+│   ├── serializers.py # Sérialiseurs pour l'API
+│   ├── urls.py        # Routes de l'API
+│   └── views.py       # Vues de l'API
+├── core/
+│   ├── __init__.py
+│   ├── settings.py    # Configuration Django
+│   ├── urls.py        # URLs principales
+│   └── wsgi.py        # Configuration WSGI
+├── supabase/
+│   ├── __init__.py
+│   ├── client.py      # Client Supabase
+│   └── auth.py        # Authentification Supabase
+├── .env.example
+├── manage.py
+└── requirements.txt
 
+structure 
 
+propre et focalisée sur l'essentiel :
 
+Django pour l'API REST
+Supabase pour la gestion des données
+Authentification via Supabase
+
+API (/api/) :
+
+models.py : Modèles pour les produits et commandes
+serializers.py : Sérialiseurs pour l'API
+views.py : Vues pour gérer les requêtes API
+urls.py : Configuration des routes
+
+Core (/core/) :
+
+settings.py : Configuration Django
+urls.py : URLs principales
+wsgi.py : Configuration WSGI
+
+Supabase (/supabase/) :
+
+client.py : Client Supabase
+auth.py : Authentification

@@ -2,50 +2,34 @@
 
 ## Overview
 
-This documentation describes the API endpoints for the e-commerce backend. The API follows REST principles and uses JSON for request and response bodies.
+This documentation describes the REST API endpoints for our e-commerce backend. The API is built with Django REST Framework and uses Supabase for authentication and data storage.
 
-## Base URL
+## Base URLs
 
-```
-http://localhost:8000/api/v1/
-```
+- API Base URL: `http://localhost:8000/api/v1/`
+- Supabase URL: `https://hbqpplveyaofcqtuippl.supabase.co`
 
 ## Authentication
 
-The API uses JWT (JSON Web Token) authentication. Include the token in the Authorization header:
+Authentication is handled by Supabase. You need to include the Supabase token in your API requests:
 
 ```http
-Authorization: Bearer <your_token>
+Authorization: Bearer <supabase_token>
 ```
 
-### Authentication Endpoints
+To get the authentication token, use Supabase's authentication methods in your frontend:
 
-#### Login
-```http
-POST /auth/login/
+```javascript
+const { user, session } = await supabase.auth.signIn({
+  email: 'user@example.com',
+  password: 'your_password'
+})
+
+// The access token will be in:
+const token = session.access_token
 ```
 
-Request body:
-```json
-{
-    "email": "user@example.com",
-    "password": "your_password"
-}
-```
-
-Response:
-```json
-{
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-    "user": {
-        "id": 1,
-        "email": "user@example.com",
-        "name": "John Doe"
-    }
-}
-```
-
-## Products
+## Products API
 
 ### List Products
 ```http
@@ -56,11 +40,10 @@ Query parameters:
 - `page`: Page number (default: 1)
 - `page_size`: Items per page (default: 10)
 - `search`: Search term
-- `category`: Filter by category ID
-- `brand`: Filter by brand ID
-- `min_price`: Minimum price
-- `max_price`: Maximum price
-- `in_stock`: Filter in-stock items only (true/false)
+- `category_id`: Filter by category ID
+- `price_min`: Minimum price
+- `price_max`: Maximum price
+- `stock`: Filter by stock availability (true/false)
 
 Response:
 ```json
@@ -70,22 +53,15 @@ Response:
     "previous": null,
     "results": [
         {
-            "id": 1,
+            "id": "550e8400-e29b-41d4-a716-446655440000",
             "name": "Product Name",
-            "slug": "product-name",
             "description": "Product description",
-            "price": "99.99",
+            "price": "29.99",
             "stock": 50,
-            "category": {
-                "id": 1,
-                "name": "Category Name"
-            },
-            "brand": {
-                "id": 1,
-                "name": "Brand Name"
-            },
+            "category_id": "550e8400-e29b-41d4-a716-446655440001",
             "image_url": "https://example.com/image.jpg",
-            "is_active": true
+            "created_at": "2024-01-24T15:44:28+01:00",
+            "updated_at": "2024-01-24T15:44:28+01:00"
         }
     ]
 }
@@ -98,7 +74,7 @@ GET /products/{id}/
 
 Response: Same as single product in list response
 
-## Orders
+## Orders API
 
 ### Create Order
 ```http
@@ -108,254 +84,110 @@ POST /orders/
 Request body:
 ```json
 {
-    "payment_method": "card",
-    "shipping_address": "123 Main St, City, Country",
-    "billing_address": "123 Main St, City, Country",
     "items": [
         {
-            "product": 1,
+            "product_id": "550e8400-e29b-41d4-a716-446655440000",
             "quantity": 2
         }
-    ]
+    ],
+    "shipping_address": {
+        "street": "123 Main St",
+        "city": "City Name",
+        "country": "Country Name",
+        "postal_code": "12345"
+    }
 }
 ```
 
 Response:
 ```json
 {
-    "id": 1,
-    "order_number": "CMD000001",
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "order_number": "ORD-2024-0001",
     "status": "pending",
-    "status_display": "En attente",
-    "payment_method": "card",
-    "payment_method_display": "Carte bancaire",
-    "subtotal": "199.98",
-    "tax": "40.00",
-    "shipping_cost": "0.00",
-    "total": "239.98",
+    "total_amount": "59.98",
     "items": [
         {
-            "id": 1,
-            "product": 1,
+            "product_id": "550e8400-e29b-41d4-a716-446655440000",
             "product_name": "Product Name",
-            "product_price": "99.99",
             "quantity": 2,
-            "unit_price": "99.99",
-            "total_price": "199.98"
+            "unit_price": "29.99",
+            "total_price": "59.98"
         }
-    ]
+    ],
+    "shipping_address": {
+        "street": "123 Main St",
+        "city": "City Name",
+        "country": "Country Name",
+        "postal_code": "12345"
+    },
+    "created_at": "2024-01-24T15:44:28+01:00"
 }
 ```
 
-### Process Payment
+### Get Order Status
 ```http
-POST /orders/{id}/process_payment/
+GET /orders/{id}/
 ```
 
-Response:
-```json
-{
-    "client_secret": "pi_3NqKsP2eZvKYlo2C1gH1YzJO_secret_abcdef",
-    "payment_id": 1
-}
-```
-
-### Confirm Payment
-```http
-POST /orders/{id}/confirm_payment/
-```
-
-Request body:
-```json
-{
-    "payment_intent_id": "pi_3NqKsP2eZvKYlo2C1gH1YzJO"
-}
-```
-
-Response:
-```json
-{
-    "status": "payment_confirmed"
-}
-```
-
-## Payments
-
-### List Payments
-```http
-GET /payments/
-```
-
-Response:
-```json
-{
-    "count": 10,
-    "results": [
-        {
-            "id": 1,
-            "order_number": "CMD000001",
-            "amount": "239.98",
-            "payment_method": "card",
-            "payment_method_display": "Carte bancaire",
-            "status": "completed",
-            "status_display": "Complété",
-            "transaction_id": "pi_3NqKsP2eZvKYlo2C1gH1YzJO",
-            "created_at": "2025-01-13T19:00:00Z"
-        }
-    ]
-}
-```
-
-### Request Refund
-```http
-POST /payments/{id}/refund/
-```
-
-Request body:
-```json
-{
-    "reason": "customer_requested"
-}
-```
-
-Response:
-```json
-{
-    "status": "refunded",
-    "refund_id": "re_3NqKsP2eZvKYlo2C1gH1YzJO"
-}
-```
+Response: Same as order creation response
 
 ## Error Handling
 
 The API uses standard HTTP status codes:
 
 - 200: Success
-- 201: Created
 - 400: Bad Request
 - 401: Unauthorized
 - 403: Forbidden
 - 404: Not Found
-- 500: Server Error
+- 500: Internal Server Error
 
 Error response format:
 ```json
 {
-    "error": "Error message",
-    "detail": "Detailed error description"
-}
-```
-
-## Pagination
-
-List endpoints support pagination with the following format:
-```json
-{
-    "count": 100,
-    "next": "http://localhost:8000/api/v1/endpoint/?page=2",
-    "previous": null,
-    "results": []
-}
-```
-
-## Testing the API
-
-You can test the API using the interactive Swagger documentation at:
-```
-http://localhost:8000/swagger/
-```
-
-Or using the ReDoc documentation at:
-```
-http://localhost:8000/redoc/
-```
-
-## Implementation Example (JavaScript)
-
-```javascript
-// Configuration
-const API_BASE_URL = 'http://localhost:8000/api/v1';
-const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-};
-
-// Create an order
-async function createOrder(orderData) {
-    const response = await fetch(`${API_BASE_URL}/orders/`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(orderData)
-    });
-    return await response.json();
-}
-
-// Process payment
-async function processPayment(orderId) {
-    const response = await fetch(`${API_BASE_URL}/orders/${orderId}/process_payment/`, {
-        method: 'POST',
-        headers
-    });
-    return await response.json();
-}
-
-// Example usage
-async function checkout(items) {
-    try {
-        // 1. Create order
-        const order = await createOrder({
-            payment_method: 'card',
-            shipping_address: '123 Main St',
-            billing_address: '123 Main St',
-            items: items
-        });
-
-        // 2. Process payment
-        const { client_secret } = await processPayment(order.id);
-
-        // 3. Confirm payment with Stripe
-        const { paymentIntent } = await stripe.confirmCardPayment(client_secret, {
-            payment_method: {
-                card: elements.getElement('card')
-            }
-        });
-
-        // 4. Confirm payment on backend
-        const confirmation = await fetch(`${API_BASE_URL}/orders/${order.id}/confirm_payment/`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({
-                payment_intent_id: paymentIntent.id
-            })
-        });
-
-        return confirmation.json();
-    } catch (error) {
-        console.error('Checkout error:', error);
-        throw error;
+    "error": {
+        "code": "ERROR_CODE",
+        "message": "Human readable error message"
     }
 }
 ```
 
 ## Rate Limiting
 
-The API implements rate limiting to prevent abuse:
-- Anonymous users: 100 requests per hour
-- Authenticated users: 1000 requests per hour
+The API has rate limiting enabled:
+- 100 requests per minute for authenticated users
+- 20 requests per minute for unauthenticated users
 
-Rate limit headers are included in responses:
-```http
-X-RateLimit-Limit: 1000
-X-RateLimit-Remaining: 999
-X-RateLimit-Reset: 3600
+## Frontend Integration Example
+
+```javascript
+// Initialize Supabase client
+const supabase = createClient(
+  'https://hbqpplveyaofcqtuippl.supabase.co',
+  'your-anon-key'
+)
+
+// Example function to fetch products
+async function getProducts(page = 1) {
+  const token = (await supabase.auth.getSession()).data.session?.access_token
+  
+  const response = await fetch(
+    `http://localhost:8000/api/v1/products/?page=${page}`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+  
+  return await response.json()
+}
 ```
 
-## Webhooks
+## Need Help?
 
-The API provides webhooks for asynchronous events:
-- Payment successful
-- Payment failed
-- Refund processed
-- Order status updated
-
-To receive webhooks, register your endpoint in the admin interface.
+For technical support or questions about the API:
+- Email: support@example.com
+- Documentation Repository: https://github.com/your-org/api-docs

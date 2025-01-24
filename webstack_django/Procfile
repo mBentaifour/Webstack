@@ -1,1 +1,0 @@
-web: gunicorn webstack_django.wsgi:application --log-file -
