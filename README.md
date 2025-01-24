@@ -1,74 +1,94 @@
-Project Name
+# Webstack API
 
-# Bricolage Express - Guide d'utilisation rapide
+API Django avec authentification Supabase pour la gestion des produits et des commandes.
 
-## Application Web
+## Configuration requise
 
-Configuration
-Environment Variables
-You need to configure the following environment variables in the .env file:
+- Python 3.12+
+- PostgreSQL (via Supabase)
 
+## Installation
 
+1. Cloner le dépôt :
+```bash
+git clone https://github.com/votre-nom/webstack.git
+cd webstack
+```
 
-## Fonctionnalités principales
+2. Créer un environnement virtuel :
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
 
-- 🔍 Recherche de produits
-- 📁 Filtrage par catégorie
-- 🛒 Gestion du panier
-- ⚙️ Administration des produits
+3. Installer les dépendances :
+```bash
+pip install -r requirements.txt
+```
 
+4. Créer un fichier .env avec les variables suivantes :
+```
+SECRET_KEY=votre-cle-secrete
+SUPABASE_URL=votre-url-supabase
+SUPABASE_KEY=votre-cle-supabase
+DB_HOST=votre-host-supabase
+DB_NAME=votre-nom-db
+DB_USER=votre-user-db
+DB_PASSWORD=votre-password-db
+```
 
-License
-This project is licensed under the MIT License. See LICENSE for more details.
+5. Lancer le serveur :
+```bash
+python webstack_django/manage.py runserver
+```
 
-Features
-User authentication and management.
-Database integration with SQLite.
-Email notifications using Gmail SMTP.
-Secure environment variable management with .env.
+## Endpoints API
+
+### Produits
+- `GET /api/v1/products/` - Liste des produits
+- `GET /api/v1/products/{id}/` - Détails d'un produit
+
+### Commandes
+- `GET /api/v1/orders/` - Liste des commandes de l'utilisateur
+- `POST /api/v1/orders/` - Créer une nouvelle commande
+- `GET /api/v1/orders/{id}/` - Détails d'une commande
+
+### Santé
+- `GET /api/health/` - Vérifier l'état de l'API
+
+## Authentification
+
+L'API utilise l'authentification Supabase. Pour accéder aux endpoints, vous devez :
+1. Obtenir un token JWT via Supabase
+2. Inclure le token dans le header : `Authorization: Bearer <votre-token>`
+
+## Structure du projet
+
+```
+webstack_django/
+├── api/                # Application API principale
+├── core/              # Configuration centrale
+├── supabase/          # Client et auth Supabase
+└── webstack_django/   # Configuration du projet
+
+STRUCTURE EXPLICATION 
 
 webstack_django/
-├── api/
-│   ├── __init__.py
-│   ├── models.py      # Modèles de données
-│   ├── serializers.py # Sérialiseurs pour l'API
-│   ├── urls.py        # Routes de l'API
-│   └── views.py       # Vues de l'API
-├── core/
-│   ├── __init__.py
-│   ├── settings.py    # Configuration Django
-│   ├── urls.py        # URLs principales
-│   └── wsgi.py        # Configuration WSGI
-├── supabase/
-│   ├── __init__.py
-│   ├── client.py      # Client Supabase
-│   └── auth.py        # Authentification Supabase
-├── .env.example
-├── manage.py
-└── requirements.txt
-
-structure 
-
-propre et focalisée sur l'essentiel :
-
-Django pour l'API REST
-Supabase pour la gestion des données
-Authentification via Supabase
-
-API (/api/) :
-
-models.py : Modèles pour les produits et commandes
-serializers.py : Sérialiseurs pour l'API
-views.py : Vues pour gérer les requêtes API
-urls.py : Configuration des routes
-
-Core (/core/) :
-
-settings.py : Configuration Django
-urls.py : URLs principales
-wsgi.py : Configuration WSGI
-
-Supabase (/supabase/) :
-
-client.py : Client Supabase
-auth.py : Authentification
+├── api/                    # Application API principale
+│   ├── authentication.py   # Authentification Supabase
+│   ├── models.py          # Modèles de données
+│   ├── serializers.py     # Sérialiseurs
+│   ├── supabase.py        # Client Supabase
+│   ├── urls.py            # Routes API
+│   └── views.py           # Vues API
+│
+├── core/                   # Configuration du projet
+│   ├── settings.py        # Paramètres Django
+│   ├── urls.py            # URLs principales
+│   └── wsgi.py            # Configuration WSGI
+│
+├── .env.example           # Exemple de variables d'environnement
+├── .gitignore             # Fichiers à ignorer
+├── README.md              # Documentation
+└── requirements.txt       # Dépendances

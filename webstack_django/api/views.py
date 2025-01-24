@@ -1,31 +1,44 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Product, Order
-from .serializers import ProductSerializer, OrderSerializer
-from ..supabase.client import get_supabase_client
+from django.conf import settings
+from supabase import create_client
 
-class ProductViewSet(viewsets.ModelViewSet):
-    serializer_class = ProductSerializer
+class ProductViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        supabase = get_supabase_client()
+    def list(self, request):
+        supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
         response = supabase.table('products').select('*').execute()
-        return [Product(**item) for item in response.data]
+        return Response(response.data)
 
-class OrderViewSet(viewsets.ModelViewSet):
-    serializer_class = OrderSerializer
+    def retrieve(self, request, pk=None):
+        supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+        response = supabase.table('products').select('*').eq('id', pk).execute()
+        if not response.data:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(response.data[0])
+
+class OrderViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        supabase = get_supabase_client()
-        user_id = self.request.user.id
+    def list(self, request):
+        supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+        user_id = request.user.id
         response = supabase.table('orders').select('*').eq('user_id', user_id).execute()
-        return [Order(**item) for item in response.data]
+        return Response(response.data)
 
-    def perform_create(self, serializer):
-        supabase = get_supabase_client()
-        user_id = self.request.user.id
-        data = {**serializer.validated_data, 'user_id': user_id}
+    def create(self, request):
+        supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+        user_id = request.user.id
+        data = {**request.data, 'user_id': user_id}
         response = supabase.table('orders').insert(data).execute()
-        return response.data[0]
+        return Response(response.data[0], status=status.HTTP_201_CREATED)
+
+    def retrieve(self, request, pk=None):
+        supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+        user_id = request.user.id
+        response = supabase.table('orders').select('*').eq('id', pk).eq('user_id', user_id).execute()
+        if not response.data:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(response.data[0])

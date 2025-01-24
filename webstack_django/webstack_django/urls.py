@@ -1,19 +1,17 @@
 """
 URL configuration for webstack_django project.
 """
-from django.contrib import admin
 from django.urls import path, include
-from core.views import index
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def health_check(request):
     return Response({"status": "healthy"})
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('admin/', admin.site.urls),
-    path('api/', include('main.urls')),
+    path('', include('core.urls')),
     path('api/health/', health_check, name='health_check'),
 ]

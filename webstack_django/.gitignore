@@ -5,7 +5,6 @@ __pycache__/
 *.so
 .Python
 env/
-build/
 develop-eggs/
 dist/
 downloads/
@@ -34,7 +33,6 @@ staticfiles/
 .env.local
 .env.*
 !.env.example
-.vercel.env
 
 # IDE
 .idea/
@@ -53,7 +51,3 @@ htmlcov/
 .coverage.*
 coverage.xml
 *.cover
-
-# Test files with secrets
-**/tests/test_orders.py
-**/tests/secrets.py
