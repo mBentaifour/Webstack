@@ -1,28 +1,40 @@
-from rest_framework.authentication import BaseAuthentication
-from rest_framework.exceptions import AuthenticationFailed
 from django.conf import settings
-from supabase import create_client
+from django.contrib.auth.models import User
+from rest_framework import authentication
+from rest_framework import exceptions
+from supabase import create_client, Client
 
-class SupabaseAuthentication(BaseAuthentication):
+class SupabaseAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
-        # Get the Authorization header
-        auth_header = request.headers.get('Authorization')
-        if not auth_header or not auth_header.startswith('Bearer '):
+        # Get the token from the request header
+        auth_header = request.META.get('HTTP_AUTHORIZATION', '')
+        if not auth_header.startswith('Bearer '):
             return None
 
-        # Extract the token
         token = auth_header.split(' ')[1]
+        if not token:
+            return None
 
         try:
             # Initialize Supabase client
-            supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+            supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
             
             # Verify the token and get user data
-            user = supabase.auth.get_user(token)
+            user_data = supabase.auth.get_user(token)
             
-            if not user or not user.user:
-                raise AuthenticationFailed('Invalid token')
-            
-            return (user.user, None)
+            if not user_data:
+                raise exceptions.AuthenticationFailed('Invalid token')
+
+            # Get or create Django user
+            user, created = User.objects.get_or_create(
+                username=user_data.user.email,
+                defaults={
+                    'email': user_data.user.email,
+                    'is_active': True
+                }
+            )
+
+            return (user, token)
+
         except Exception as e:
-            raise AuthenticationFailed('Invalid token')
+            raise exceptions.AuthenticationFailed('Invalid token')
