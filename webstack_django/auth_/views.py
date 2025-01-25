@@ -97,7 +97,36 @@ def signup_view(request):
 
 @csrf_exempt
 def signin_view(request):
-    pass
+    """sign in user using email method """
+    if request.method == "POST":
+        try:
+            data = loads(request.body)
+            email = data.get('email')
+            password = data.get('password')
+
+            response = supabase.auth.sign_in_with_password(
+                {
+                    "email": email,
+                    "password": password,
+                }
+            )
+            if hasattr(response, "session") and response.session:
+                access_token = getattr(
+                    response.session, "access_token", None)
+                if access_token:
+                    return JsonResponse({
+                        "message": "Login successful",
+                        "access_token": access_token
+                    }, status=200)
+            else:
+                return JsonResponse({"error": "Invalid username or password"},
+                                    status=401)
+
+        except Exception as e:
+            return JsonResponse({"error": f"An error occurred: {str(e)}"},
+                                status=500)
+    return JsonResponse({"error": "Only POST requests are allowed"}, status=405)
+
 
 @csrf_exempt
 def check_email(request):
