@@ -155,4 +155,11 @@ def check_email(request):
 
 
 def retrieve_session(request):
-    pass
+    """ retrive user session to keep user on session """
+    if request.method == 'GET':
+        try:
+            return supabase.auth.get_session()
+        except Exception as e:
+            return JsonResponse({'error': 'something went wrong '}, status=500)
+    return JsonResponse({"error": "Only POST requests are allowed"},
+                        status=405)
