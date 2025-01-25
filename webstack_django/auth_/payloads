@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Alice Johnson",
+    "email": "alice.johnson@yahoo.com",
+    "country": "US",
+    "mobilePhone": "9876543210",
+    "language": "English",
+    "address1": "456 Elm Street",
+    "address2": "Suite 5A",
+    "password": "password123",
+    "confirmPassword": "password123",
+    "termsAgreed": true
+  },
+  {
+    "name": "Michael Smith",
+    "email": "michael_smith@yahoo.com",
+    "country": "CA",
+    "mobilePhone": "1231231234",
+    "language": "French",
+    "address1": "789 Maple Avenue",
+    "address2": "Apt 12C",
+    "password": "securePass@2024",
+    "confirmPassword": "securePass@2024",
+    "termsAgreed": true
+  },
+  {
+    "name": "Jessica Brown",
+    "email": "jessica_brown92@yahoo.com",
+    "country": "UK",
+    "mobilePhone": "07400112233",
+    "language": "English",
+    "address1": "15 Queen's Road",
+    "address2": "Flat 6",
+    "password": "mySecurePass2023",
+    "confirmPassword": "mySecurePass2023",
+    "termsAgreed": true
+  },
+  {
+    "name": "Robert Wilson",
+    "email": "robertwilson76@yahoo.com",
+    "country": "AU",
+    "mobilePhone": "0412345678",
+    "language": "English",
+    "address1": "23 Ocean View Drive",
+    "address2": "",
+    "password": "topSecret!",
+    "confirmPassword": "topSecret!",
+    "termsAgreed": true
+  },
+  {
+    "name": "Emily Davis",
+    "email": "emilydavis88@yahoo.com",
+    "country": "IN",
+    "mobilePhone": "9876543210",
+    "language": "Hindi",
+    "address1": "101 Ashoka Avenue",
+    "address2": "Near Lotus Park",
+    "password": "safePass#1",
+    "confirmPassword": "safePass#1",
+    "termsAgreed": true
+  },
+  {
+    "name": "James Anderson",
+    "email": "james.anderson2020@yahoo.com",
+    "country": "US",
+    "mobilePhone": "5551234567",
+    "language": "Spanish",
+    "address1": "700 Park Lane",
+    "address2": "",
+    "password": "pass2024$$",
+    "confirmPassword": "pass2024$$",
+    "termsAgreed": true
+  },
+  {
+    "name": "Sophia Martinez",
+    "email": "sophia.martinez@yahoo.com",
+    "country": "MX",
+    "mobilePhone": "5587654321",
+    "language": "Spanish",
+    "address1": "34 Avenida Central",
+    "address2": "",
+    "password": "1234Pass!",
+    "confirmPassword": "1234Pass!",
+    "termsAgreed": true
+  },
+  {
+    "name": "William Taylor",
+    "email": "william_taylor93@yahoo.com",
+    "country": "NZ",
+    "mobilePhone": "0211234567",
+    "language": "English",
+    "address1": "98 Pine Road",
+    "address2": "Flat 3",
+    "password": "superSafe@@",
+    "confirmPassword": "superSafe@@",
+    "termsAgreed": true
+  },
+  {
+    "name": "Isabella Garcia",
+    "email": "isabella.garcia@yahoo.com",
+    "country": "ES",
+    "mobilePhone": "612345678",
+    "language": "Spanish",
+    "address1": "12 Calle Mayor",
+    "address2": "",
+    "password": "secureMe2024",
+    "confirmPassword": "secureMe2024",
+    "termsAgreed": true
+  },
+  {
+    "name": "Daniel Harris",
+    "email": "daniel_harris99@yahoo.com",
+    "country": "ZA",
+    "mobilePhone": "0821234567",
+    "language": "English",
+    "address1": "45 Nelson Street",
+    "address2": "Apt 9B",
+    "password": "uniquePass@2023",
+    "confirmPassword": "uniquePass@2023",
+    "termsAgreed": true
+  }
+]
