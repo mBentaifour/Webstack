@@ -68,3 +68,4 @@ websockets>=13.0
 whitenoise==6.8.2
 black>=23.11.0
 dj-database-url==2.1.0
+gunicorn # production specfiec
