@@ -128,9 +128,31 @@ def signin_view(request):
     return JsonResponse({"error": "Only POST requests are allowed"}, status=405)
 
 
+
+
 @csrf_exempt
 def check_email(request):
-    pass
+    if request.method == "POST":
+        # Parse JSON from the request body
+        try:
+            data = request.POST if request.POST else loads(request.body)
+            email = data.get("email", "").strip()
+
+            # Validate the email format using regex
+            email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+            if not match(email_regex, email):
+                return JsonResponse({"error": "Invalid email format"},
+                                    status=400)
+
+            # Check email existence in the database
+            exists = email_exists(email)
+            return JsonResponse({"exists": exists})
+        except Exception as e:
+            print(f"Error processing request: {e}")
+            return JsonResponse({"error": "Something went wrong"}, status=500)
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=405)
+
 
 def retrieve_session(request):
     pass
