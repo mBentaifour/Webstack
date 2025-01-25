@@ -1,5 +1,17 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.utils import IntegrityError
+from django.contrib.auth.hashers import make_password
+from django.http import JsonResponse
+from dotenv import load_dotenv
+from json import loads
+from supabase import create_client, Client
+from re import match
+from supabase.lib.client_options import ClientOptions
+from os import getenv
+from logging import getLogger, basicConfig, DEBUG
+from .utils.db_get_data import email_exists
+
 
 
 load_dotenv()
