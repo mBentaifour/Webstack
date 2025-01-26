@@ -162,6 +162,8 @@ python manage.py test main.tests
 
 
 
+
+
 # Session Management and Authentication Module by kassem saber Email kamsdonga@gmail.com
 
 This module is responsible for handling **user session management**, **authentication**, and **sign-in/sign-up processes** for the project. The backend is developed using Django and integrates with **Supabase** for user authentication and session management.
@@ -353,4 +355,5 @@ Team contributions:
 - **Backend**: Session management, authentication, sign-up/sign-in (your role).
 - **Frontend**: Integration with backend APIs.
 - **Database**: Configured using **Supabase**.
+
 
