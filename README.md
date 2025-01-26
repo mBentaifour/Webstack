@@ -2,6 +2,42 @@
 
 A robust Django REST API with Supabase authentication for efficient product and order management.
 
+📦 WEBSTACK PROJECT
+├── 🔧 Architecture
+│   ├── Backend: Django REST Framework
+│   ├── Database: Supabase (PostgreSQL)
+│   └── Auth: Supabase JWT
+│
+├── 🗂️ Structure
+│   ├── /webstack_django/
+│   │   ├── settings.py (Configuration Django + Supabase)
+│   │   └── urls.py (Routes principales)
+│   │
+│   ├── /api/
+│   │   ├── models.py (Product, Order)
+│   │   ├── views.py (ProductViewSet, OrderViewSet)
+│   │   ├── serializers.py (ProductSerializer, OrderSerializer)
+│   │   └── authentication.py (SupabaseAuthentication)
+│   │
+│   └── /tests/
+│       ├── test_auth.html (Test d'authentification)
+│       └── test_api.html (Test des endpoints)
+│
+├── 🛣️ API Endpoints
+│   ├── /api/products/ (GET, POST)
+│   ├── /api/products/{id}/ (GET)
+│   └── /api/orders/ (GET, POST)
+│
+├── 🔐 Sécurité
+│   ├── JWT Authentication
+│   ├── Row Level Security (RLS)
+│   └── Variables d'environnement
+│
+└── 📝 Configuration
+    ├── requirements.txt
+    ├── .env
+    └── README.md
+
 ## Features
 
 - Secure authentication using Supabase
@@ -29,7 +65,7 @@ cd webstack
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
+source venv\Scripts\activate  # Windows
 ```
 
 3. Install dependencies:
@@ -119,3 +155,26 @@ webstack_django/
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+## Realization and contribution guidelines:
+1. BACKEND:
+
+```python
+**CONTRIBUTING:  # BENTAIFOUR MOHAMMED   # KASSIM
+
+- Create a Django project and a Supabase database
+- Configure the project to use Supabase
+- Create an API application with authentication and serializers
+- Implement the necessary views and endpoints
+- Test the API using Swagger or ReDoc
+- Document the API using Swagger or ReDoc
+
+FRONTEND:
+```React
+- Create a React or Vue.js frontend application
+- Connect it to the API
+- Implement the necessary components and pages
+- Test the frontend application
+- Document the frontend application using Storybook
+- Deploy the frontend application using Docker or similar
