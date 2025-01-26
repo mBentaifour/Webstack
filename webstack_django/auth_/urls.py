@@ -17,20 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from . import views
 from django.urls import path
-from .views import signin_view, signup_view, check_email
+from .views import signin_view, signup_view, check_email, google_oauth, x_oauth, bing_oauth, retrieve_session
 
 
 urlpatterns = [
     path('signup/', signup_view, name='signup'),
     path('signin/', signin_view, name='signin'),
     path('email_used_check_/', check_email, name='checkEmail'),
-    path('google_signup/', signin_view, name='google_signup'),
-    path('google_signin/', signin_view, name='google_signin'),
-    path('x_signin/', signin_view, name='x_signin'),
-    path('x_signup/', signin_view, name='x_signup'),
-    path('bing_signin/', signin_view, name='bing_signin'),
-    path('bing_signup/', signin_view, name='bing_signup'),
-    path('redirect/', signin_view, name='redirect'),
-    path('check_session/', signin_view, name='check_session'),
-    path('retreivesession/', signin_view, name='retrieve_session'),
+    path('google_signin/', google_oauth, name='signin'),
+    path('google_signup/', google_oauth, name='signin'),
+    path('x_signin/', x_oauth, name='signin'),
+    path('x_signup/', x_oauth, name='signin'),
+    path('bing_signin/', bing_oauth, name='signin'),
+    path('bing_signup/', bing_oauth, name='signin'),
+    path('redirect/', signin_view, name='signin'),
+    path('check_session/', signin_view, name='signin'),
+    path('retreivesession/', retrieve_session, name='signin'),
 ]

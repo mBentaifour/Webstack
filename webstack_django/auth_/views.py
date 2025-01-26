@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.utils import IntegrityError
 from django.contrib.auth.hashers import make_password
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from dotenv import load_dotenv
 from json import loads
 from supabase import create_client, Client
@@ -31,6 +31,7 @@ supabase = create_client(
 # Optional: Configure logging
 logger = getLogger(__name__)
 basicConfig(level=DEBUG)
+link = f"{SUPABASE_URL}/auth/v1/authorize?provider="
 
 
 @csrf_exempt
@@ -144,8 +145,8 @@ def signin_view(request):
 
 @csrf_exempt
 def check_email(request):
+    """check if user already in db """
     if request.method == "POST":
-        # Parse JSON from the request body
         try:
             data = request.POST if request.POST else loads(request.body)
             email = data.get("email", "").strip()
@@ -156,7 +157,6 @@ def check_email(request):
                 return JsonResponse({"error": "Invalid email format"},
                                     status=400)
 
-            # Check email existence in the database
             exists = email_exists(email)
             return JsonResponse({"exists": exists})
         except Exception as e:
@@ -167,7 +167,7 @@ def check_email(request):
 
 @csrf_exempt
 def retrieve_session(request):
-    """ retrive user session to keep user on session """
+    """ retrive user session to keep user on session call whean session about to expire """
     if request.method == 'GET':
         try:
             return supabase.auth.get_session()
@@ -177,3 +177,33 @@ def retrieve_session(request):
                         status=405)
 
 
+
+@csrf_exempt
+def google_oauth(request):
+    """sign in  using oauth by calling supabase link"""
+    if request.method == 'GET':
+        redirect_url = link + 'google'
+        return HttpResponseRedirect(redirect_url)
+    else:
+        return JsonResponse({"error": "Only GET requests are allowed"},
+                            status=405)
+
+@csrf_exempt
+def bing_oauth(request):
+    """sign in  using oauth by calling supabase link"""
+    if request.method == 'GET':
+        redirect_url = link + 'google'
+        return HttpResponseRedirect(redirect_url)
+    else:
+        return JsonResponse({"error": "Only GET requests are allowed"},
+                            status=405)
+
+@csrf_exempt
+def x_oauth(request):
+    """sign in  using oauth by calling supabase link"""
+    if request.method == 'GET':
+        redirect_url = link + 'google'
+        return HttpResponseRedirect(redirect_url)
+    else:
+        return JsonResponse({"error": "Only GET requests are allowed"},
+                            status=405)
