@@ -165,7 +165,7 @@ def check_email(request):
     else:
         return JsonResponse({"error": "Invalid request method"}, status=405)
 
-
+@csrf_exempt
 def retrieve_session(request):
     """ retrive user session to keep user on session """
     if request.method == 'GET':
@@ -175,3 +175,5 @@ def retrieve_session(request):
             return JsonResponse({'error': 'something went wrong '}, status=500)
     return JsonResponse({"error": "Only POST requests are allowed"},
                         status=405)
+
+
