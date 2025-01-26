@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API Webstack</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Test API Webstack</h1>
+
+    <h2>1. Authentification</h2>
+    <input type="email" id="email" placeholder="Email" value="madanitarif@gmail.com">
+    <input type="password" id="password" placeholder="Mot de passe">
+    <button onclick="login()">Se connecter</button>
+    <div id="auth-result"></div>
+
+    <h2>2. Produits</h2>
+    <button onclick="getProducts()">Voir tous les produits</button>
+    <div id="products-result"></div>
+
+    <script>
+        const supabase = supabase.createClient(
+            'https://uiceoqekjbgesxnejvcr.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpY2VvcWVramJnZXN4bmVqdmNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ0MDM5MDMsImV4cCI6MjA0OTk3OTkwM30.8W1SHc-lfXAyXf9JD020PkDW9Zc7hLyp7Pk8tqp3Ym0'
+        );
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) throw error;
+                
+                document.getElementById('auth-result').innerHTML = 'Connecté avec succès!';
+                console.log('Session:', data);
+            } catch (error) {
+                document.getElementById('auth-result').innerHTML = 'Erreur: ' + error.message;
+            }
+        }
+
+        async function getProducts() {
+            try {
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*');
+                
+                if (error) throw error;
+                
+                document.getElementById('products-result').innerHTML = 
+                    '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('products-result').innerHTML = 'Erreur: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

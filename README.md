@@ -1,94 +1,121 @@
 # Webstack API
 
-API Django avec authentification Supabase pour la gestion des produits et des commandes.
+A robust Django REST API with Supabase authentication for efficient product and order management.
 
-## Configuration requise
+## Features
+
+- Secure authentication using Supabase
+- RESTful API endpoints for products and orders
+- PostgreSQL database integration
+- Comprehensive error handling
+- API health monitoring
+- Detailed API documentation
+
+## Requirements
 
 - Python 3.12+
 - PostgreSQL (via Supabase)
+- Node.js 18+ (for frontend integration)
 
 ## Installation
 
-1. Cloner le dépôt :
+1. Clone the repository:
 ```bash
-git clone https://github.com/votre-nom/webstack.git
+git clone https://github.com/your-name/webstack.git
 cd webstack
 ```
 
-2. Créer un environnement virtuel :
+2. Create a virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
 ```
 
-3. Installer les dépendances :
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Créer un fichier .env avec les variables suivantes :
+4. Create a .env file with the following variables:
 ```
-SECRET_KEY=votre-cle-secrete
-SUPABASE_URL=votre-url-supabase
-SUPABASE_KEY=votre-cle-supabase
-DB_HOST=votre-host-supabase
-DB_NAME=votre-nom-db
-DB_USER=votre-user-db
-DB_PASSWORD=votre-password-db
+SECRET_KEY=your-secret-key
+SUPABASE_URL=your-supabase-url
+SUPABASE_KEY=your-supabase-key
+DB_HOST=your-supabase-host
+DB_NAME=your-db-name
+DB_USER=your-db-user
+DB_PASSWORD=your-db-password
 ```
 
-5. Lancer le serveur :
+5. Run database migrations:
 ```bash
-python webstack_django/manage.py runserver
+python manage.py migrate
 ```
 
-## Endpoints API
+6. Start the development server:
+```bash
+python manage.py runserver
+```
 
-### Produits
-- `GET /api/v1/products/` - Liste des produits
-- `GET /api/v1/products/{id}/` - Détails d'un produit
+## API Documentation
 
-### Commandes
-- `GET /api/v1/orders/` - Liste des commandes de l'utilisateur
-- `POST /api/v1/orders/` - Créer une nouvelle commande
-- `GET /api/v1/orders/{id}/` - Détails d'une commande
+For detailed API documentation, please refer to [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
 
-### Santé
-- `GET /api/health/` - Vérifier l'état de l'API
+### Quick Endpoint Reference
 
-## Authentification
+#### Products
+- `GET /api/v1/products/` - List all products
+- `GET /api/v1/products/{id}/` - Get product details
+- `POST /api/v1/products/` - Create a new product
+- `PUT /api/v1/products/{id}/` - Update a product
+- `DELETE /api/v1/products/{id}/` - Delete a product
 
-L'API utilise l'authentification Supabase. Pour accéder aux endpoints, vous devez :
-1. Obtenir un token JWT via Supabase
-2. Inclure le token dans le header : `Authorization: Bearer <votre-token>`
+#### Orders
+- `GET /api/v1/orders/` - List user orders
+- `POST /api/v1/orders/` - Create a new order
+- `GET /api/v1/orders/{id}/` - Get order details
 
-## Structure du projet
+#### Health Check
+- `GET /api/health/` - Check API status
+
+## Authentication
+
+The API uses Supabase authentication. To access the endpoints:
+1. Obtain a JWT token from Supabase
+2. Include the token in the header: `Authorization: Bearer <your-token>`
+
+## Project Structure
 
 ```
 webstack_django/
-├── api/                # Application API principale
-├── core/              # Configuration centrale
-├── supabase/          # Client et auth Supabase
-└── webstack_django/   # Configuration du projet
-
-STRUCTURE EXPLICATION 
-
-webstack_django/
-├── api/                    # Application API principale
-│   ├── authentication.py   # Authentification Supabase
-│   ├── models.py          # Modèles de données
-│   ├── serializers.py     # Sérialiseurs
-│   ├── supabase.py        # Client Supabase
-│   ├── urls.py            # Routes API
-│   └── views.py           # Vues API
+├── api/                    # Main API application
+│   ├── authentication.py   # Supabase authentication
+│   ├── models.py          # Data models
+│   ├── serializers.py     # Serializers
+│   ├── supabase.py        # Supabase client
+│   ├── urls.py            # API routes
+│   └── views.py           # API views
 │
-├── core/                   # Configuration du projet
-│   ├── settings.py        # Paramètres Django
-│   ├── urls.py            # URLs principales
-│   └── wsgi.py            # Configuration WSGI
+├── core/                   # Project configuration
+│   ├── settings.py        # Django settings
+│   ├── urls.py            # Main URLs
+│   └── wsgi.py            # WSGI configuration
 │
-├── .env.example           # Exemple de variables d'environnement
-├── .gitignore             # Fichiers à ignorer
+├── .env.example           # Environment variables example
+├── .gitignore             # Ignored files
 ├── README.md              # Documentation
-└── requirements.txt       # Dépendances
+└── requirements.txt       # Dependencies
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

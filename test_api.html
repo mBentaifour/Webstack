@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API Webstack</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 0 20px; }
+        .card { border: 1px solid #ddd; padding: 20px; margin: 10px 0; border-radius: 5px; }
+        button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #45a049; }
+        input, textarea { width: 100%; padding: 8px; margin: 5px 0; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Test API Webstack</h1>
+
+    <!-- Authentication -->
+    <div class="card">
+        <h2>1. Authentification</h2>
+        <input type="email" id="email" placeholder="Email" value="madanitarif@gmail.com">
+        <input type="password" id="password" placeholder="Mot de passe">
+        <button onclick="login()">Se connecter</button>
+        <pre id="auth_result"></pre>
+    </div>
+
+    <!-- Products -->
+    <div class="card">
+        <h2>2. Produits</h2>
+        <button onclick="getProducts()">Voir tous les produits</button>
+        <pre id="products_result"></pre>
+    </div>
+
+    <!-- Single Product -->
+    <div class="card">
+        <h2>3. Détail d'un produit</h2>
+        <input type="text" id="product_id" placeholder="ID du produit">
+        <button onclick="getProduct()">Voir le produit</button>
+        <pre id="product_result"></pre>
+    </div>
+
+    <!-- Create Order -->
+    <div class="card">
+        <h2>4. Créer une commande</h2>
+        <input type="number" id="total_amount" placeholder="Montant total">
+        <input type="text" id="status" placeholder="Statut" value="pending">
+        <button onclick="createOrder()">Créer la commande</button>
+        <pre id="order_result"></pre>
+    </div>
+
+    <!-- List Orders -->
+    <div class="card">
+        <h2>5. Mes commandes</h2>
+        <button onclick="getOrders()">Voir mes commandes</button>
+        <pre id="orders_result"></pre>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://hbqpplveyaofcqtuippl.supabase.co';
+        const SUPABASE_KEY = 'sba_c188289c9339dfcd34ca16db70e5d0cf9b439d5a';
+        const API_URL = 'http://localhost:8000/api';
+        
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        let access_token = null;
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                access_token = data.session.access_token;
+                const result = {
+                    message: 'Connexion réussie !',
+                    access_token: access_token.slice(0, 20) + '...',
+                    user: data.user
+                };
+
+                document.getElementById('auth_result').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('auth_result').textContent = 'Erreur : ' + error.message;
+            }
+        }
+
+        async function fetchAPI(endpoint, options = {}) {
+            if (access_token) {
+                options.headers = {
+                    ...options.headers,
+                    'Authorization': `Bearer ${access_token}`
+                };
+            }
+            const response = await fetch(`${API_URL}${endpoint}`, options);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        }
+
+        async function getProducts() {
+            try {
+                const products = await fetchAPI('/products/');
+                document.getElementById('products_result').textContent = JSON.stringify(products, null, 2);
+            } catch (error) {
+                document.getElementById('products_result').textContent = 'Erreur : ' + error.message;
+            }
+        }
+
+        async function getProduct() {
+            const id = document.getElementById('product_id').value;
+            try {
+                const product = await fetchAPI(`/products/${id}/`);
+                document.getElementById('product_result').textContent = JSON.stringify(product, null, 2);
+            } catch (error) {
+                document.getElementById('product_result').textContent = 'Erreur : ' + error.message;
+            }
+        }
+
+        async function createOrder() {
+            const total_amount = document.getElementById('total_amount').value;
+            const status = document.getElementById('status').value;
+            try {
+                const order = await fetchAPI('/orders/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        total_amount: parseFloat(total_amount),
+                        status: status
+                    })
+                });
+                document.getElementById('order_result').textContent = JSON.stringify(order, null, 2);
+            } catch (error) {
+                document.getElementById('order_result').textContent = 'Erreur : ' + error.message;
+            }
+        }
+
+        async function getOrders() {
+            try {
+                const orders = await fetchAPI('/orders/');
+                document.getElementById('orders_result').textContent = JSON.stringify(orders, null, 2);
+            } catch (error) {
+                document.getElementById('orders_result').textContent = 'Erreur : ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
