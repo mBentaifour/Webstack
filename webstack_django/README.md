@@ -162,198 +162,175 @@ python manage.py test main.tests
 
 
 
+# Authentication and Session Management Module
+**Developed by Kassem Saber**
+_Email: kamsdonga@gmail.com_
 
+This module provides robust **authentication** and **session management** functionalities for Django projects. It supports traditional email/password-based authentication, OAuth integrations, and session persistence, ensuring seamless integration with modern frontend frameworks.
 
-# Session Management and Authentication Module by kassem saber Email kamsdonga@gmail.com
+## Key Features
 
-This module is responsible for handling **user session management**, **authentication**, and **sign-in/sign-up processes** for the project. The backend is developed using Django and integrates with **Supabase** for user authentication and session management.
-
-## Features
-
-- **Sign-Up**: Users can register with email, password, and additional metadata.
-- **Sign-In**: Authentication using email and password.
-- **Session Management**: Retrieve user sessions for persistent logins.
-- **Email Check**: Validate if an email address is already registered.
-- **CSRF Protection**: Ensures secure requests via Django's built-in CSRF middleware.
-- **Validation**: Comprehensive validation for email format, password match, and required terms agreement.
+- **User Registration (Sign-Up)**: Handles email/password registration with input validation and metadata storage.
+- **User Login (Sign-In)**: Secure authentication using email and password.
+- **OAuth Integration**: Easy-to-extend third-party login via Google, Bing, and others.
+- **Session Management**: Retrieve user sessions for persistent authentication.
+- **Email Validation**: Check if an email is already registered in the system.
+- **Secure APIs**: Ensures CSRF protection and follows best security practices.
 
 ---
 
 ## File Structure
 
-### 1. `settings.py`
-Contains the configurations for the Django project, including:
-- Installed apps.
-- Middleware setup.
-- CORS and CSRF configurations for secure frontend-backend communication.
-- Supabase credentials for authentication.
+### **1. `settings.py`**
+- Contains configurations for:
+  - Installed Django apps and middleware.
+  - Supabase integration credentials (`SUPABASE_KEY`, `SUPABASE_URL`).
+  - CSRF and CORS settings for secure communication with the frontend.
 
-### 2. `urls.py`
-Defines the URL routes for authentication-related APIs:
-- `api/auth/signup/`: Handles user sign-up.
-- `api/auth/signin/`: Handles user sign-in.
-- `api/email_used_check_/`: Checks if an email is already registered.
-- Additional routes for third-party login and session retrieval.
+### **2. `urls.py`**
+- Defines routes for authentication APIs, including:
+  - `/signup/`: User registration.
+  - `/signin/`: User login.
+  - `/email_used_check_/`: Check if an email exists.
+  - `/google_signin/`, `/bing_signin/`, etc.: OAuth login endpoints.
+  - `/retreivesession/`: Retrieve session details.
 
-### 3. `views.py`
-Implements the core logic for the following:
-- **`signup_view`**: Handles user registration with input validation and Supabase integration.
-- **`signin_view`**: Handles user authentication with email and password.
-- **`retrieve_session`**: Retrieves the user session to maintain a persistent state.
-- **`check_email`**: Validates email format and checks its existence in the database.
+### **3. `views.py`**
+- Core logic for authentication and session management, including:
+  - **`signup_view`**: Handles user registration with Supabase.
+  - **`signin_view`**: Verifies user credentials and provides session tokens.
+  - **`check_email`**: Validates and checks email existence in the database.
+  - **OAuth Handlers**: Redirect users to third-party login providers like Google.
+
+### **4. `utils/db_get_data.py`**
+- Helper functions for database operations, including:
+  - **`email_exists`**: Checks if an email is already registered.
+  - **`check_jwt`**: Validates JWT tokens for session security.
 
 ---
 
-## Installation and Setup
+## Setup and Integration
 
-1. **Clone the Repository**:
+### **1. Installation**
+1. Clone the repository:
    ```bash
    git clone <repository-url>
    cd <project-directory>
    ```
 
-2. **Install Dependencies**:
-   Ensure `Django`, `supabase`, and other required packages are installed:
+2. Install dependencies:
    ```bash
-   pip install django supabase
+   pip install -r requirements.txt
    ```
 
-3. **Configure Environment Variables**:
-   Add the following to your `.env` file:
-   ```
-   SUPABASE_KEY=<your_supabase_key>
-   SUPABASE_URL=<your_supabase_url>
-   ```
-
-4. **Run Migrations**:
-   ```bash
-   python manage.py migrate
-   ```
-
-5. **Start the Development Server**:
-   ```bash
-   python manage.py runserver
+3. Configure environment variables in `.env`:
+   ```env
+   SUPABASE_URL=<your-supabase-url>
+   SUPABASE_KEY=<your-supabase-key>
+   SUPABASE_SEC_JWT=<your-supabase-secret-jwt>
+   USER=<database-user>
+   PASSWORD=<database-password>
+   HOST=<database-host>
+   PORT=<database-port>
+   DBNAME=<database-name>
    ```
 
----
-
-## API Endpoints
-
-### 1. **Sign-Up**
-**URL**: `/api/auth/signup/`  
-**Method**: `POST`  
-**Body Parameters**:
-```json
-{
-  "name": "John Doe",
-  "email": "johndoe@example.com",
-  "password": "password123",
-  "confirmPassword": "password123",
-  "language": "en",
-  "country": "USA",
-  "mobilePhone": "1234567890",
-  "address1": "123 Main St",
-  "address2": "Apt 4",
-  "termsAgreed": true
-}
+### **2. Run the Server**
+Start the Django development server:
+```bash
+python manage.py runserver
 ```
-**Response**:
-- Success:  
+
+### **3. API Endpoints**
+
+#### **Sign-Up**
+- **URL**: `/signup/`
+- **Method**: `POST`
+- **Request Body**:
   ```json
-  { "message": "User created successfully", "access_token": "token_here" }
+  {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "password": "password123",
+    "confirmPassword": "password123",
+    "termsAgreed": true
+  }
   ```
-- Failure:  
+- **Response**:
   ```json
-  { "error": "Passwords do not match" }
+  { "message": "User created successfully", "access_token": "<token>" }
   ```
 
-### 2. **Sign-In**
-**URL**: `/api/auth/signin/`  
-**Method**: `POST`  
-**Body Parameters**:
-```json
-{
-  "email": "johndoe@example.com",
-  "password": "password123"
-}
-```
-**Response**:
-- Success:  
+#### **Sign-In**
+- **URL**: `/signin/`
+- **Method**: `POST`
+- **Request Body**:
   ```json
-  { "message": "Login successful", "access_token": "token_here" }
+  { "email": "john.doe@example.com", "password": "password123" }
   ```
-- Failure:  
+- **Response**:
   ```json
-  { "error": "Invalid username or password" }
+  { "message": "Login successful", "access_token": "<token>" }
   ```
 
-### 3. **Check Email**
-**URL**: `/api/email_used_check_/`  
-**Method**: `POST`  
-**Body Parameters**:
-```json
-{ "email": "johndoe@example.com" }
-```
-**Response**:
-- Email Exists:  
-  ```json
-  { "exists": true }
-  ```
-- Email Does Not Exist:  
-  ```json
-  { "exists": false }
-  ```
+#### **OAuth Login**
+- **URL**: `/google_signin/` (for Google)
+- **Method**: `GET`
+- **Response**: Redirects to Google OAuth URL.
 
-### 4. **Retrieve Session**
-**URL**: `/api/auth/retreivesession/`  
-**Method**: `GET`  
-**Response**:
-- Success:  
+#### **Session Retrieval**
+- **URL**: `/retreivesession/`
+- **Method**: `GET`
+- **Response**:
   ```json
   { "session": { ... } }
   ```
-- Failure:  
-  ```json
-  { "error": "something went wrong" }
-  ```
 
 ---
 
-## Security Considerations
+## Security Best Practices
 
 1. **Environment Variables**:
-   Ensure `SUPABASE_KEY` and `SUPABASE_URL` are securely stored in `.env` and never exposed.
+   Ensure sensitive keys (e.g., `SUPABASE_KEY`, `SUPABASE_SEC_JWT`) are never hardcoded.
 
-2. **Production Settings**:
-   - Set `DEBUG = False` in production.
-   - Use strong, secret keys for `SECRET_KEY`.
+2. **Production Readiness**:
+   - Set `DEBUG = False`.
+   - Use a strong secret key for `SECRET_KEY`.
 
-3. **CSRF and CORS**:
-   Properly configure `CSRF_TRUSTED_ORIGINS` and `CORS_ALLOWED_ORIGINS` to match your frontend domain.
+3. **Secure Communication**:
+   Properly configure `CSRF_TRUSTED_ORIGINS` and `CORS_ALLOWED_ORIGINS` for your frontend domain.
+
+4. **OAuth Links**:
+   Ensure OAuth providers are trusted and configured securely in Supabase.
 
 ---
 
-## Testing
+## Contributing
 
-Use tools like **Postman** or **cURL** to test the endpoints. For example:
+Contributions to improve this module are welcome! Contact **kamsdonga@gmail.com** for queries or suggestions.
+
+---
+
+## Example Testing (Using cURL)
+
+Test the sign-up endpoint:
 ```bash
-curl -X POST http://localhost:8000/api/auth/signup/ \
+curl -X POST http://localhost:8000/signup/ \
 -H "Content-Type: application/json" \
 -d '{
-  "email": "test@example.com",
+  "name": "John Doe",
+  "email": "john.doe@example.com",
   "password": "password123",
   "confirmPassword": "password123",
   "termsAgreed": true
 }'
 ```
 
----
-
-## Contributions
-
-Team contributions:
-- **Backend**: Session management, authentication, sign-up/sign-in (your role).
-- **Frontend**: Integration with backend APIs.
-- **Database**: Configured using **Supabase**.
-
-
+Test the email existence check:
+```bash
+curl -X POST http://localhost:8000/email_used_check_/ \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "john.doe@example.com"
+}'
+```
