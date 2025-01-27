@@ -11,7 +11,7 @@ load_dotenv()
 
 SUPABASE_SECRET_J = os.getenv("SUPABASE_SEC_JWT")
 USER = os.getenv("USER")
-PASSWORD = quote_plus(os.getenv("PASSWORD"))  # URL-encode the password
+PASSWORD = quote_plus(os.getenv("PASSWORD"))
 HOST = os.getenv("HOST")
 PORT = os.getenv("PORT")
 DBNAME = os.getenv("DBNAME")
